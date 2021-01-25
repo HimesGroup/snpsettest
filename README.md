@@ -6,7 +6,7 @@ set-based association test using GWAS summary statistics. This package is
 currently in alpha testing.
 
 ```R
-+remotes::install_github("HimesGroup/snpsettest")
+remotes::install_github("HimesGroup/snpsettest")
 ```
 
 ## TODO
