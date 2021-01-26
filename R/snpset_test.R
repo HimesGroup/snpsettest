@@ -21,7 +21,6 @@
 ##' - top.snp.p = The smallest p-value within a set of SNPs
 ##' @export
 ##' @importFrom data.table setDT rbindlist :=
-##' @importFrom CompQuadForm davies
 ##' @importFrom Matrix nearPD
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
