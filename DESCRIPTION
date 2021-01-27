@@ -18,3 +18,5 @@ Imports:
     bigsnpr,
     data.table,
     Matrix
+Depends: 
+    R (>= 3.6.0)
