@@ -1,3 +1,6 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/HimesGroup/snpsettest/workflows/R-CMD-check/badge.svg)](https://github.com/HimesGroup/snpsettest/actions)
+<!-- badges: end -->
 
 # snpsettest
 
