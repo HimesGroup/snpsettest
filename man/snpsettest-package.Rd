@@ -4,7 +4,7 @@
 \name{snpsettest-package}
 \alias{snpsettest}
 \alias{snpsettest-package}
-\title{snpsettest: A set-based association test using GWAS summary statistics for complex-traits}
+\title{snpsettest: A Set-Based Association Test using GWAS Summary Statistics for Complex-Traits}
 \description{
 The goal of 'snpsettest' is to provide simple tools to compute
              SNP-set level p-values using GWAS summary statistics. The primary

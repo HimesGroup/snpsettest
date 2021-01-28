@@ -33,8 +33,9 @@ A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
 \itemize{
 \item set.id = a name of SNP set
 \item p = a set-based p value
-\item n.snp = the number of SNPs in a set of SNPs
-\item n.snp.clumped = the number of SNPs in a set of SNPs after LD clumping
+\item n.snp = the number of SNPs in an intersection of set input and the
+reference data
+\item n.snp.clumped = the number of SNPs in a set after LD clumping
 \item top.snp.id = SNP ID with the smallest p-value within a set of SNPs
 \item top.snp.p = The smallest p-value within a set of SNPs
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/snp_ref_attach.R
 \name{snp_ref_attach}
 \alias{snp_ref_attach}
-\title{Attach a "bigSNP" reference set from backing files into R.}
+\title{Attach a "bigSNP" reference set from backing files into R}
 \usage{
 snp_ref_attach(rdsfile)
 }
