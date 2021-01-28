@@ -4,6 +4,7 @@
 \alias{snp_readBed}
 \title{Read PLINK files into a "bigSNP"}
 \description{
-\code{\link[bigsnpr]{snp_readBed}} for more details.
+Simply re-exporting \code{bigsnpr::snp_readBed()} to end-users.
+See \code{\link[bigsnpr:snp_readBed]{bigsnpr::snp_readBed()}} for more details.
 }
 \keyword{internal}

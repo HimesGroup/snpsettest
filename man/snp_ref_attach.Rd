@@ -23,5 +23,5 @@ ID with a format: (chr)\emph{(pos)}(allele1)_(allele2). The updated IDs are save
 to \code{rdsfile}.
 }
 \seealso{
-\code{\link[bigsnpr]{snp_attach}} for more details.
+\code{\link[bigsnpr:snp_attach]{bigsnpr::snp_attach()}} for more details.
 }

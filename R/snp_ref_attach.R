@@ -11,7 +11,7 @@
 ##' @param rdsfile A path of ".rds" which stores the `bigSNP` object.
 ##' @return A `bigSNP` object.
 ##' @export
-##' @seealso \code{\link[bigsnpr]{snp_attach}} for more details.
+##' @seealso [bigsnpr::snp_attach()] for more details.
 snp_ref_attach <- function(rdsfile) {
 
   ## convert a file path to canonical form
