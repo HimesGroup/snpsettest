@@ -1,4 +1,4 @@
-##' Attach a "bigSNP" reference set from backing files into R.
+##' Attach a "bigSNP" reference set from backing files into R
 ##'
 ##' This is a wrapper function for `bigsnpr::snp_attach()` with additional
 ##' validations.
