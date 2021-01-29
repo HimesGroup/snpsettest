@@ -8,18 +8,17 @@ harmonize_sumstats(
   sumstats,
   bigsnpobj,
   join_by_id_only = FALSE,
-  remove_ambiguous_snps = TRUE
+  check_strand_flip = TRUE
 )
 }
 \arguments{
-\item{sumstats}{A data frame with columns: "snp.id", "chr", "pos", "a0",
-"a1" and "p".
+\item{sumstats}{A data frame with columns: "snp.id", "chr", "pos", "a1",
+"a2" and "p".
 \itemize{
 \item snp.id = SNP ID (e.g., rs numbers)
 \item chr =  chromosome (must be integer)
 \item pos =  base-pair position (must be integer)
-\item a0 = the first allele
-\item a1 = the second allele
+\item a1, a2 = allele codes (allele order is not important)
 \item p = p value of SNP
 }
 
@@ -30,13 +29,16 @@ It could have only two columns "snp.id" and "p" if \code{join_by_id_only = TRUE}
 \item{join_by_id_only}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, SNP matching will be
 performed by SNP IDs only. Default is \code{FALSE}.}
 
-\item{remove_ambiguous_snps}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, the output
-removes ambiguous A/T and G/C SNPs for which the strand is not obvious. If
-the GWAS genotype data ifself is used as the reference data, it would be
-safe to set \code{FALSE}. Default is \code{TRUE}.}
+\item{check_strand_flip}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, the function 1)
+removes ambiguous A/T and G/C SNPs for which the strand is not obvious,
+and 2) attempts to find additional matching entries by flipping allele
+codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype data ifself is
+used as the reference data, it would be safe to set \code{FALSE}. With
+\code{join_by_id_only = TRUE}, it simply determines whether to remove ambiguous
+SNPs. Default is \code{TRUE}.}
 }
 \value{
-A data frame with columns: "snp.id", "chr", "pos", "a0", "a1" and
+A data frame with columns: "snp.id", "chr", "pos", "a1", "a2" and
 "p".
 }
 \description{

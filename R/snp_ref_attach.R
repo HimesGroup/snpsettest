@@ -11,6 +11,7 @@
 ##' @param rdsfile A path of ".rds" which stores the `bigSNP` object.
 ##' @return A `bigSNP` object.
 ##' @export
+##' @importFrom vctrs vec_duplicate_detect
 ##' @seealso [bigsnpr::snp_attach()] for more details.
 snp_ref_attach <- function(rdsfile) {
 
@@ -38,16 +39,18 @@ snp_ref_attach <- function(rdsfile) {
   if (anyDuplicated(bigsnpobj$map$marker.ID) > 0L) {
     warning2(paste0(
       "Some SNP IDs in reference data are not unique. ",
-      "They will be replaced with new IDs 'CHR_POS_A0_A1'.",
+      "They will be replaced with new IDs 'CHR_POS_A1_A2'.",
     ))
     dup_idx <- get_duplicate_indice(bigsnpobj$map$marker.ID)
     bigsnpobj$map$marker.ID[dup_idx] <- paste(
       bigsnpobj$map$chromosome[dup_idx],
-      bigsnpobj$map$physical.pos[dup_idx],
+      ## as.integer for preventing paste with e notation (e.g., 2e+07)
+      as.integer(bigsnpobj$map$physical.pos[dup_idx]),
       bigsnpobj$map$allele2[dup_idx],
       bigsnpobj$map$allele1[dup_idx],
         sep = "_"
       )
+
     if (anyDuplicated(bigsnpobj$map$marker.ID)) {
       stop2(paste0(
         "Cannot assign unique IDs by base-pair coordinate and allele codes. ",

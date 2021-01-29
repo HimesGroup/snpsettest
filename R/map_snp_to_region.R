@@ -30,9 +30,6 @@ map_snp_to_region <- function(info_snp, info_region,
                               extend_region_start = 20L,
                               extend_region_end = 20L,
                               only_sets=FALSE) {
-  ## for global variable problem due to non-standard evaluation
-  ## pre-assign NULL at the top of function.
-  ## region.id <- snp.id <- chr <- pos <- NULL
 
   is_df(info_snp)
   is_df(info_region)
@@ -95,36 +92,15 @@ map_snp_to_region <- function(info_snp, info_region,
              old = c("start", "end", "i.start"),
              new = c("region.adj.start", "region.adj.end", "pos"))
 
-    ## mapped[, chr := as.integer(chr)]
-    ## vkeep <- c("region.id", "region.start", "region.end",
-    ##                "region.adj.start", "region.adj.end",
-    ##                "snp.id", "chr", "pos")
     vkeep <- c("snp.id", "chr", "pos",
                "region.id", "region.start", "region.end",
                "region.adj.start", "region.adj.end")
 
-    ## vjoin <- c("snp.id", "chr", "pos")
-    ## map_info <- mapped[, vkeep, with = FALSE][info_snp[, chr := as.character(chr)], on = vjoin]
-    ## setorder(, chr, region.start, region.end, na.last = TRUE)
 
     list(sets = snp_sets,
          map = setDF(setorder(mapped[, vkeep, with = FALSE],
                               chr, region.start, region.end, pos,
                               na.last = TRUE)))
   }
-  ## if (simplify) {
-  ##   ## mapped[!is.na(region.id), c("region.id", "snp.id")]
-  ##   lapply(split(mapped[!is.na(region.id), c("snp.id", "region.id")],
-  ##                by = "region.id", keep.by = FALSE),
-  ##          function(x) unname(unlist(x)))
-  ## } else {
-  ##   setnames(mapped,
-  ##            old = c("start", "end", "i.start"),
-  ##            new = c("region.adj.start", "region.adj.end", "pos"))
-  ##   mapped[, chr := as.integer(chr)]
-  ##   keep_cols <- c("region.id", "region.adj.start", "region.adj.end",
-  ##                  "snp.id", "chr", "pos")
 
-  ##   mapped[, keep_cols, with = FALSE][info_snp, on = c("snp.id", "chr", "pos")]
-  ## }
  }
