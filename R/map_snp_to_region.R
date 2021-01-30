@@ -15,15 +15,15 @@
 ##' - start = start position of genomic region
 ##' - end =  end position of genomic region
 ##' @param extend_region_start A single non-negative integer, allowing for a
-##'   certain kb window before the region to be included. Default is 20.
+##'   certain kb window before the region to be included. Default is 20 (= 20kb).
 ##' @param extend_region_end A single non-negative integer, allowing for a
-##'   certain kb window after the region to be included. Default is 20.
-##' @param only_sets `TRUE`or `FALSE`. If `TRUE`, sets of SNPs for individual
+##'   certain kb window after the region to be included. Default is 20 (= 20kb).
+##' @param only_sets `TRUE` or `FALSE`. If `TRUE`, sets of SNPs for individual
 ##'   regions are returned, otherwise both sets and mapping information are
 ##'   returned. Default is `FALSE`.
 ##' @return A nested list containing following components:
 ##' - sets: a named list where each index represents a separate set of SNPs
-##' - map: a data frame including genomic mapping information
+##' - map: a data frame containing SNP mapping information
 ##' @export
 ##' @importFrom data.table data.table foverlaps setDT setDF setnames setorder :=
 map_snp_to_region <- function(info_snp, info_region,

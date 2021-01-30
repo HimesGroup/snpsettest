@@ -22,7 +22,7 @@ SNPs.}
 
 \item{missing_in_geno}{\code{TRUE} or \code{FALSE}. It determines if genotypes in the
 reference data have missing values. If \code{TRUE}, missing genotypes are
-imputed by the mode of each SNP. Default is 'TRUE'.}
+imputed by the mode of each SNP. Default is \code{TRUE}.}
 
 \item{thr_rs}{A LD clumping threshold over the squared correlation between
 two SNPs. Default is 0.8.}

@@ -1,12 +1,12 @@
 ##' Attach a "bigSNP" reference set from backing files into R
 ##'
 ##' This is a wrapper function for `bigsnpr::snp_attach()` with additional
-##' validations.
+##' validations for \code{\link{snpset_test}}.
 ##'
 ##' It ensures chromosome codes and base-pair positions are integers. If there
 ##' are duplicate SNP IDs in the reference set, it attempts to assign an unique
-##' ID with a format: (chr)_(pos)_(allele1)_(allele2). The updated IDs are saved
-##' to `rdsfile`.
+##' ID with a pattern: chr_pos_a1_a2. The updated IDs are saved back to
+##' `rdsfile`.
 ##'
 ##' @param rdsfile A path of ".rds" which stores the `bigSNP` object.
 ##' @return A `bigSNP` object.

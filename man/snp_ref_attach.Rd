@@ -14,13 +14,13 @@ A \code{bigSNP} object.
 }
 \description{
 This is a wrapper function for \code{bigsnpr::snp_attach()} with additional
-validations.
+validations for \code{\link{snpset_test}}.
 }
 \details{
 It ensures chromosome codes and base-pair positions are integers. If there
 are duplicate SNP IDs in the reference set, it attempts to assign an unique
-ID with a format: (chr)\emph{(pos)}(allele1)_(allele2). The updated IDs are saved
-to \code{rdsfile}.
+ID with a pattern: chr_pos_a1_a2. The updated IDs are saved back to
+\code{rdsfile}.
 }
 \seealso{
 \code{\link[bigsnpr:snp_attach]{bigsnpr::snp_attach()}} for more details.

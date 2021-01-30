@@ -30,12 +30,12 @@ and "end".
 }}
 
 \item{extend_region_start}{A single non-negative integer, allowing for a
-certain kb window before the region to be included. Default is 20.}
+certain kb window before the region to be included. Default is 20 (= 20kb).}
 
 \item{extend_region_end}{A single non-negative integer, allowing for a
-certain kb window after the region to be included. Default is 20.}
+certain kb window after the region to be included. Default is 20 (= 20kb).}
 
-\item{only_sets}{\code{TRUE}or \code{FALSE}. If \code{TRUE}, sets of SNPs for individual
+\item{only_sets}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, sets of SNPs for individual
 regions are returned, otherwise both sets and mapping information are
 returned. Default is \code{FALSE}.}
 }
@@ -43,7 +43,7 @@ returned. Default is \code{FALSE}.}
 A nested list containing following components:
 \itemize{
 \item sets: a named list where each index represents a separate set of SNPs
-\item map: a data frame including genomic mapping information
+\item map: a data frame containing SNP mapping information
 }
 }
 \description{

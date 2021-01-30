@@ -1,8 +1,10 @@
 ##  define global variables due to non-standard evaluations
 utils::globalVariables(
-         c("snp.id", "chr", "pos", "a0", "a1",
+         c("snp.id", "chr", "pos", "a1", "a2",
            "region.id", "region.start", "region.end",
-           "p", "i.p", "chisq", "i.chisq")
+           "p", "i.p", "chisq", "i.chisq",
+           "a1_R", "a2_R", "a1_F", "a2_F", "a1_RF", "a2_RF",
+           "patterns", "variable")
        )
 
 stop2 <- function(...) {

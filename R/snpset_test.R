@@ -8,7 +8,7 @@
 ##'   SNPs.
 ##' @param missing_in_geno `TRUE` or `FALSE`. It determines if genotypes in the
 ##'   reference data have missing values. If `TRUE`, missing genotypes are
-##'   imputed by the mode of each SNP. Default is 'TRUE'.
+##'   imputed by the mode of each SNP. Default is `TRUE`.
 ##' @param thr_rs A LD clumping threshold over the squared correlation between
 ##'   two SNPs. Default is 0.8.
 ##' @return A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
@@ -31,7 +31,7 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
   hsumstats_label <- deparse(substitute(hsumstats))
 
   is_df(hsumstats)
-  has_columns(hsumstats, c("snp.id", "chr", "pos", "a0", "a1", "p"))
+  has_columns(hsumstats, c("snp.id", "chr", "pos", "a1", "a2", "p"))
   check_class(bigsnpobj, "bigSNP")
   is_named_list(snp_sets)
   is_number_between(thr_rs, 0L, 1L, "thr_rs")
@@ -41,7 +41,7 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
   }
 
   message2(
-    "\n-----\n%s variants are found in %s",
+    "\n-----\n%s variants are found in %s.",
     format(nrow(hsumstats), big.mark = ","),
     hsumstats_label
   )

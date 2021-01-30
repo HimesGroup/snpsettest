@@ -17,6 +17,7 @@ RoxygenNote: 7.1.1
 Imports: 
     bigsnpr,
     data.table,
-    Matrix
+    Matrix,
+    vctrs
 Depends: 
     R (>= 3.6.0)
