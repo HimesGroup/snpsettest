@@ -10,7 +10,7 @@
 ##'   reference data have missing values. If `TRUE`, missing genotypes are
 ##'   imputed by the mode of each SNP. Default is `TRUE`.
 ##' @param thr_rs A LD clumping threshold over the squared correlation between
-##'   two SNPs. Default is 0.8.
+##'   two SNPs. Default is 0.9.
 ##' @param method A method to compute a set-level p value.
 ##' @return A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
 ##'   "top.snp.id" and "top.snp.p"
@@ -26,7 +26,7 @@
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
                         missing_in_geno = TRUE,
-                        thr_rs = 0.8,
+                        thr_rs = 0.9,
                         method = c("davies", "saddle")) {
 
   hsumstats_label <- deparse(substitute(hsumstats))
@@ -154,7 +154,7 @@ set_test <- function(info_snp, G_noNA, snp_set, set_name, thr_rs,
 }
 
 clumping <- function(info_snp, G_noNA, snp_set,
-                     thr_r2 = 0.8) {
+                     thr_r2 = 0.9) {
   check_class(G_noNA, "FBM.code256")
   ind_exclude <- clumping_exclude_indices(
     info_snp$snp.id, snp_set
