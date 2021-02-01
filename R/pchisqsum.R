@@ -4,7 +4,6 @@
 ##' Kuonen's saddlepoint approximations (Kuonen 1999). If it failed,
 ##' Satterthwaite's approximation is used as a fallback.
 ##'
-##' @export
 ##' @noRd
 pchisqsum <- function (x, df, a, lower.tail = TRUE) {
   sat <- satterthwaite(a, df)
