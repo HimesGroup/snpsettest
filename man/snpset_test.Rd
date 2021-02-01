@@ -9,7 +9,8 @@ snpset_test(
   bigsnpobj,
   snp_sets,
   missing_in_geno = TRUE,
-  thr_rs = 0.8
+  thr_rs = 0.8,
+  method = c("davies", "saddle")
 )
 }
 \arguments{

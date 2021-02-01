@@ -83,7 +83,7 @@ is_integer_vector <- function(x, tol = .Machine$double.eps) {
            error = function(e) invisible(FALSE))
 }
 
-is_positive_definite <- function(ev, tol = 1e-7, symmetric = TRUE) {
+is_positive_definite <- function(ev, tol = 1e-7) {
   ## test the smallest of eigenvalue is negative or almost zero
   n <- length(ev)
   cutoff <- tol * abs(ev[1])

@@ -2,11 +2,11 @@
 
 export(harmonize_sumstats)
 export(map_snp_to_region)
+export(pchisqsum)
 export(snp_readBed)
 export(snp_ref_attach)
 export(snpset_test)
 import(bigsnpr)
-importFrom(Matrix,nearPD)
 importFrom(bigsnpr,snp_readBed)
 importFrom(bigsnpr,snp_readBed2)
 importFrom(data.table,":=")

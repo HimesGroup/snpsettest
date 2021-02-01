@@ -22,11 +22,11 @@
 ##' - top.snp.p = The smallest p-value within a set of SNPs
 ##' @export
 ##' @importFrom data.table setDT rbindlist :=
-##' @importFrom Matrix nearPD
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
                         missing_in_geno = TRUE,
-                        thr_rs = 0.8) {
+                        thr_rs = 0.8,
+                        method = c("davies", "saddle")) {
 
   hsumstats_label <- deparse(substitute(hsumstats))
 
@@ -35,6 +35,7 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
   check_class(bigsnpobj, "bigSNP")
   is_named_list(snp_sets)
   is_number_between(thr_rs, 0L, 1L, "thr_rs")
+  method <- match.arg(method)
 
   if (inherits(hsumstats, "data.table")) {
     setDT(hsumstats)
@@ -45,7 +46,7 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
     format(nrow(hsumstats), big.mark = ","),
     hsumstats_label
   )
-  message2("%s set-based tests will be performed.",
+  message2("%s set-based association tests will be performed.",
            format(length(snp_sets), big.mark = ","))
 
   hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
@@ -73,7 +74,8 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
   rbindlist(
     Map(
       function(x, i) {
-      set_test(info_snp, G, G_noNA, snp_set = x, set_name = i, thr_rs = thr_rs)
+        set_test(info_snp, G, snp_set = x, set_name = i, thr_rs = thr_rs,
+                 method = method)
     },
     snp_sets,
     names(snp_sets)
@@ -81,8 +83,10 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
   )
 }
 
-set_test <- function(info_snp, G, G_noNA, snp_set, set_name, thr_rs) {
+set_test <- function(info_snp, G_noNA, snp_set, set_name, thr_rs,
+                     pd_tol = 1e-7, method = c("davies", "saddle")) {
 
+  method <- match.arg(method)
   message2("+++ Testing: %s with %s SNPs +++",
            set_name,
            format(length(snp_set), big.mark = ","))
@@ -111,30 +115,36 @@ set_test <- function(info_snp, G, G_noNA, snp_set, set_name, thr_rs) {
   stopifnot(top_snp_id %in% info_snp$snp.id[cor_ind])
 
   t_obs <- sum(info_snp$chisq[cor_ind])
-  cor_mat <- bigsnpr::snp_cor(G, ind.col = cor_ind, size = Inf)
+  ## although bigsnpr::snp_cor() can be performed with missing values, it is
+  ## avoided here since correlation mat computed with pairwise deletion of
+  ## missing values often cause negative eigen values.
+  cor_mat <- bigsnpr::snp_cor(G_noNA, ind.col = cor_ind, size = Inf)
   ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
 
-  if(!is_positive_definite(ev)) {
-    message2(
-      paste0("- Sample correlation matrix is not positive-definite. ",
-             "Find the nearest positive definite matrix.")
-    )
-    ev <- nearPD(cor_mat, corr = TRUE, only.values = TRUE)
+  ## replacing negative or "almost zero" eigen values with a tolerance (adapted
+  ## from sfsmisc::posdefify() though Matrix::realPD() may be a better solution).
+  ev[ev < pd_tol] <- pd_tol
+
+  if (method == "davies") {
+    out <- davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-9)
+    p <- out$Qq
+    if (out$ifault > 0L) {
+      ## use saddle method if davies method failed
+      p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
+    }
+  }  else {
+    p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
   }
 
-  out <- davies(t_obs, lambda = ev, h = rep(1, length(cor_ind)),
-                lim = 1e6, acc = 1e-9)
-  message2("- P: %g", out$Qq)
-  data.table(set.id = set_name, p = out$Qq, n.snp = length(snp_ind),
+  message2("- P: %g", p)
+  data.table(set.id = set_name, p = p, n.snp = length(snp_ind),
              n.snp.clumped = length(cor_ind),
-             top.snp.id = top_snp_id, top.snp.p = top_snp_p,
-             convergence = out$ifault == 0L)
+             top.snp.id = top_snp_id, top.snp.p = top_snp_p)
 }
 
 clumping <- function(info_snp, G_noNA, snp_set,
                      thr_r2 = 0.8) {
   check_class(G_noNA, "FBM.code256")
-
   ind_exclude <- clumping_exclude_indices(
     info_snp$snp.id, snp_set
   )
