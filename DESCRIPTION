@@ -21,3 +21,7 @@ Imports:
     vctrs
 Depends: 
     R (>= 3.6.0)
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

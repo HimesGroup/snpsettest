@@ -1,0 +1,97 @@
+---
+title: "A set-based association test in snpsettest"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{A set-based association test in snpsettest}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+A set-based association test in the **snpsettest** package uses the sum of
+squared normally distributed variables as a test statistic that are transformed
+via SNP-level p-values. The same test has been used in
+[VEGAS](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896770/) (**ve**rsatile
+**g**ene-based **a**ssociation **s**tudy) and it also can be seen as a special
+case of [SKAT](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3135811/#app3)
+(**s**equence **k**ernel **a**ssociation **t**est) where weights to the variants
+are all of the same (i.e., unweighted SKAT). While the VEGAS software used a
+simulation-based approach to compute a set-level p-value, it can be calculated
+with other methods.
+
+Letting a set of $Z$ scores of individual SNPs $z_i$ for $i \in 1:p$ within a
+set $s$, the test statistic $Q_s$ is
+
+$$Q_s = \sum_{i=1}^p z_i^2$$
+
+Here, $Z = \{z_1,...,z_p\}'$ is a vector of multivariate normal distribution
+with a mean vector $\mu$ and a covariance matrix $\Sigma$ in which $\Sigma$
+represents linkage disequilibrium (LD) among SNPs. To test a set-level
+association, we are interested in the null distribution of $Q_s$.
+
+Let $Y = \Sigma^{-\frac12}Z$ (instead of $\Sigma^{-\frac12}$, we could use any
+decomposition that satisfies $\Sigma = AA'$ with a $p \times p$ non-singular
+matrix $A$ such that $Y = A^{-1}Z$). Then,
+
+$$
+\begin{gathered}
+E(Y) = \Sigma^{-\frac12} \mu \\
+Var(Y) = \Sigma^{-\frac12}\Sigma\Sigma^{-\frac12} = I_p \\
+Y \sim N(\Sigma^{-\frac12} \mu,~I_p)
+\end{gathered}
+$$
+
+Now, we posit $U = \Sigma^{-\frac12}(Z - \mu)$ so that
+
+$$U \sim N(\mathbf{0}, I_p),~~U = Y - \Sigma^{-\frac12}\mu$$
+
+and express test statistic $Q_s$ as a quadratic form as follow:
+
+$$
+\begin{aligned}
+  Q_s &= \sum_{i=1}^p z_i^2 = Z'I_pZ = Y'\Sigma^{\frac12}I_p\Sigma^{\frac12}Y \\
+      &= (U + \Sigma^{-\frac12}\mu)'\Sigma(U + \Sigma^{-\frac12}\mu)
+\end{aligned}
+$$
+
+With the spectral theorem, $\Sigma$ can be decomposed as follow:
+
+$$
+\begin{gathered}
+\Sigma = P\Lambda P' \\ \Lambda = \mathbf{diag}(\lambda_1,...,\lambda_p),~~P'P
+= PP' = I_p
+\end{gathered}
+$$
+
+where $P$ is an orthogonal matrix. If we set $X = P'U$, X is a vector of
+independent standard normal variable $X \sim N(\mathbf{0}, I_p)$ since
+
+$$E(X) = P'E(U) = \mathbf{0},~~Var(X) = P'Var(U)P = P'I_pP = I_p$$
+
+$$
+\begin{aligned}
+  Q_s &= (U + \Sigma^{-\frac12}\mu)'\Sigma(U + \Sigma^{-\frac12}\mu) \\
+  &= (U + \Sigma^{-\frac12}\mu)'P\Lambda P'(U + \Sigma^{-\frac12}\mu) \\
+  &= (X + P'\Sigma^{-\frac12}\mu)'\Lambda (X + P'\Sigma^{-\frac12}\mu)
+\end{aligned}
+$$
+
+Under the null hypothesis, $\mu$ is typically assumed to be $\mathbf{0}$. Hence,
+
+$$Q_s = X'\Lambda X = \sum_{i=1}^p \lambda_i x_i^2$$
+
+where $X = \{x_1,...,x_p\}'$. Thus, the null distribution of $Q_s$ is a linear
+combination of independent chi-square variables $x_i^2 \sim \chi_{(1)}^2$ (i.e.,
+central quadratic form of normal variables). For computing a probability with a
+scalar $q$,
+
+$$Pr(Q_s > q)$$
+
+several methods have been proposed, such as [Davies
+method](https://www.jstor.org/stable/2346911?seq=1#metadata_info_tab_contents)
+and [Kuonen's saddlepoint
+approximations](https://www.jstor.org/stable/2673596?seq=1#metadata_info_tab_contents).
+Compared to a simulation-based approach, these methods are more computationally
+efficient, and thus, used in the **snpsettest** package.
+
+
+
