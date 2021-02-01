@@ -44,7 +44,7 @@ Now, we posit $U = \Sigma^{-\frac12}(Z - \mu)$ so that
 
 $$U \sim N(\mathbf{0}, I_p),~~U = Y - \Sigma^{-\frac12}\mu$$
 
-and express test statistic $Q_s$ as a quadratic form as follow:
+and express the test statistic $Q_s$ as a quadratic form as follow:
 
 $$
 \begin{aligned}
@@ -62,7 +62,7 @@ $$
 \end{gathered}
 $$
 
-where $P$ is an orthogonal matrix. If we set $X = P'U$, X is a vector of
+where $P$ is an orthogonal matrix. If we set $X = P'U$, $X$ is a vector of
 independent standard normal variable $X \sim N(\mathbf{0}, I_p)$ since
 
 $$E(X) = P'E(U) = \mathbf{0},~~Var(X) = P'Var(U)P = P'I_pP = I_p$$
