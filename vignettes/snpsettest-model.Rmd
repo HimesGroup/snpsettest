@@ -1,5 +1,6 @@
 ---
 title: "A set-based association test in snpsettest"
+author: "Jaehyun Joo"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{A set-based association test in snpsettest}
