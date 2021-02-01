@@ -27,13 +27,15 @@ imputed by the mode of each SNP. Default is \code{TRUE}.}
 
 \item{thr_rs}{A LD clumping threshold over the squared correlation between
 two SNPs. Default is 0.8.}
+
+\item{method}{A method to compute a set-level p value.}
 }
 \value{
 A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
 "top.snp.id" and "top.snp.p"
 \itemize{
 \item set.id = a name of SNP set
-\item p = a set-based p value
+\item p = a set-level p value
 \item n.snp = the number of SNPs in an intersection of set input and the
 reference data
 \item n.snp.clumped = the number of SNPs in a set after LD clumping

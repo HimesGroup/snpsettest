@@ -11,10 +11,11 @@
 ##'   imputed by the mode of each SNP. Default is `TRUE`.
 ##' @param thr_rs A LD clumping threshold over the squared correlation between
 ##'   two SNPs. Default is 0.8.
+##' @param method A method to compute a set-level p value.
 ##' @return A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
 ##'   "top.snp.id" and "top.snp.p"
 ##' - set.id = a name of SNP set
-##' - p = a set-based p value
+##' - p = a set-level p value
 ##' - n.snp = the number of SNPs in an intersection of set input and the
 ##' reference data
 ##' - n.snp.clumped = the number of SNPs in a set after LD clumping
@@ -137,9 +138,19 @@ set_test <- function(info_snp, G_noNA, snp_set, set_name, thr_rs,
   }
 
   message2("- P: %g", p)
-  data.table(set.id = set_name, p = p, n.snp = length(snp_ind),
-             n.snp.clumped = length(cor_ind),
-             top.snp.id = top_snp_id, top.snp.p = top_snp_p)
+  if (thr_rs < 1L) {
+    data.table(
+      set.id = set_name, p = p, n.snp = length(snp_ind),
+      n.snp.clumped = length(cor_ind),
+      top.snp.id = top_snp_id, top.snp.p = top_snp_p
+    )
+  } else {
+    data.table(
+      set.id = set_name, p = p, n.snp = length(snp_ind),
+      top.snp.id = top_snp_id, top.snp.p = top_snp_p
+    )
+  }
+
 }
 
 clumping <- function(info_snp, G_noNA, snp_set,
