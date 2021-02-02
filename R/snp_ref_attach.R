@@ -39,7 +39,7 @@ snp_ref_attach <- function(rdsfile) {
   if (anyDuplicated(bigsnpobj$map$marker.ID) > 0L) {
     warning2(paste0(
       "Some SNP IDs in reference data are not unique. ",
-      "They will be replaced with new IDs 'CHR_POS_A1_A2'."
+      "They will be replaced with new IDs: 'chr_pos_a1_a2'."
     ))
     dup_idx <- get_duplicate_indice(bigsnpobj$map$marker.ID)
     bigsnpobj$map$marker.ID[dup_idx] <- paste(
