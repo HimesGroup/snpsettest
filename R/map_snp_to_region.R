@@ -42,7 +42,7 @@ map_snp_to_region <- function(info_snp, info_region,
     stop2("SNP IDs should be unique.")
   }
 
-  if (anyDuplicated(info_region$region.id) < 0L) {
+  if (anyDuplicated(info_region$region.id) > 0L) {
     warning2(
       paste0(
         "Some region IDs have multiple intervals. ",

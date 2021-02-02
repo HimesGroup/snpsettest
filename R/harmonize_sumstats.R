@@ -111,8 +111,8 @@ harmonize_sumstats <- function(sumstats, bigsnpobj,
 
   stopifnot(anyDuplicated(sumstats$snp.id) == 0L) # safety check
 
-  message2("\n%s variants have been matched in total.",
-          format(nrow(sumstats), big.mark = ","))
+  ## message2("\n%s variants have been matched in total.",
+  ##         format(nrow(sumstats), big.mark = ","))
 
   tryCatch(sumstats[, c("snp.id", "chr", "pos", "a1", "a2", "p")],
            error = function(e) invisible())
