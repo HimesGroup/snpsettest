@@ -131,6 +131,6 @@ session with `snp_ref_attach` function.
 
 ```{r attach ref data, eval = FALSE}
 # attach the bigSNP object to R session
-snp_ref_attach("/path/to/EUR_phase3_nodup.rds")
+ref_1kg_eur <- snp_ref_attach("/path/to/EUR_phase3_nodup.rds")
 ```
 
