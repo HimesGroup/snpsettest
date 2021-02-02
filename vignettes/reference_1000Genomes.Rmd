@@ -1,0 +1,136 @@
+---
+title: "Processing 1000 Genomes data for set-based association tests"
+author: "Jaehyun Joo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Processing 1000 Genomes data for set-based association tests}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+A set-based association test in the **snpsettest** package requires reference
+data to infer pairwise linkage disequilibrium (LD) values between variants in a
+set. This vignette shows how to use 1000 Genomes data as the reference dataset
+for set-based association tests.
+
+## Prerequisites
+
+[PLINK 2.0](https://www.cog-genomics.org/plink/2.0/) and [PLINK
+1.9](https://www.cog-genomics.org/plink/1.9/) are required to process the 1000
+Genomes dataset. The 1000 Genomes phase 3 dataset (GRCh37) is available in
+PLINK2 binary format at [PLINK 2.0
+Resources](https://www.cog-genomics.org/plink/2.0/resources#1kg_phase3). For
+quick start, download the three boldface links within the web page. For example,
+in the terminal, type the following:
+
+```{bash 1000 Genomes download, eval = FALSE}
+# The links in here may be changed in future
+# "-O" to specify output file name
+wget -O all_phase3.psam "https://www.dropbox.com/s/yozrzsdrwqej63q/phase3_corrected.psam?dl=1"
+wget -O all_phase3.pgen.zst "https://www.dropbox.com/s/afvvf1e15gqzsqo/all_phase3.pgen.zst?dl=1"
+wget -O all_phase3.pvar.zst "https://www.dropbox.com/s/op9osq6luy3pjg8/all_phase3.pvar.zst?dl=1"
+```
+
+Of note, genomic positions in GRCh38 are also available
+[here](http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/)
+in VCF format, which can be converted to PLINK formats.
+
+## Choose an appropriate population
+
+Patterns of LD could vary among racial/ethnic groups, and thus, it is important
+to choose an appropriate population to perform set-based association tests with
+GWAS summary statistics. For example, if your GWAS is based on European descent,
+you may want to keep **EUR** samples as described in the "all_phase3.psam" file.
+
+```{bash filter out by populations, eval = FALSE}
+# decompress pgen.zst to pgen
+plink2 --zst-decompress all_phase3.pgen.zst > all_phase3.pgen
+
+# create a file to filter out samples with PLINK
+# you may choose another population instead of EUR
+awk 'NR == 1 || $5 == "EUR"' all_phase3.psam | cut -f1 > EUR_1000G_samples.txt
+
+# "vzs" modifier to directly operate with pvar.zst
+# "--keep" keeps sample IDs listed in the file
+# "--snps-only" keeps only SNPs
+# "--chr 1-22" excludes all variants not on the listed chromosomes
+# "--output-chr 26" ensures numeric chromosome codes
+# "--set-missing-var-id" replaces missing IDs with a pattern
+plink2 --pfile all_phase3 vzs \
+       --keep EUR_1000G_samples.txt \
+       --snps-only \
+       --chr 1-22 \
+       --output-chr 26 \
+       --set-missing-var-ids '@_#_$1_$2' \
+       --make-pgen \
+       --out EUR_phase3
+```
+
+## Convert the 1000 Genomes data to PLINK 1 binary format
+
+The PLINK 2 files need to be converted to the PLINK 1 binary format.
+
+```{bash PLINK 2 to 1, eval = FALSE}
+# "--max-alleles 2": PLINK 1 does not allow multi-allelic variants
+# "--maf 0.005" filters out variants by minor allele frequency (to reduce size)
+plink2 --pfile EUR_phase3 \
+       --max-alleles 2 \
+       --maf 0.005 \
+       --make-bed \
+       --out EUR_phase3
+```
+
+This command will produce the binary fileset "EUR\_phase3.bed +
+EUR\_phase3.bim + EUR\_phase3.fam".
+
+## Remove duplicate SNPs
+
+Some SNPs in the dataset may share the same base-pair position and allele codes.
+Those duplicates should be merged or removed.
+
+```{bash duplicates, eval = FALSE}
+# find duplicates and return variant IDs with PLINK 1
+plink --bfile EUR_phase3 --list-duplicate-vars ids-only suppress-first \
+      --out EUR_phase3
+      
+# remove duplicates; don't have to do  this if duplicates were not found.
+plink --bfile EUR_phase3 --exclude EUR_phase3.dupvar \
+      --make-bed \
+      --out EUR_phase3_nodup
+```
+
+## Create a bigSNP object
+
+The **snpsettest** uses a bigSNP class from the
+[**bigsnpr**](https://privefl.github.io/bigsnpr/) package, which utilizes
+memory-mapping for accessing data matrices stored on disk instead of RAM.
+`bigsnpr::snp_readBed` reads bed/bim/fam files into a bigSNP object and
+creates backing files (\*.bk and \*.rds) for the cache of the bigSNP object.
+The conversion process could take a few minutes (depending on your system),
+but you don't have to do this step more than once.
+
+```{r create bigSNP, eval = FALSE}
+# attaching snpsettest will re-expose bigsnpr::snp_readBed() to end-users
+library(snpsettest)
+
+# read bed/bim/fam files; backing files will be created in the same folder
+snp_readBed("/path/to/EUR_phase3_nodup.bed")
+```
+
+Once the backing files are created, the bigSNP object can be loaded in any R
+session with `snp_ref_attach` function.
+
+```{r attach ref data, eval = FALSE}
+# attach the bigSNP object to R session
+snp_ref_attach("/path/to/EUR_phase3_nodup.rds")
+```
+
