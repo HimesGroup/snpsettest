@@ -44,7 +44,6 @@ harmonize_sumstats <- function(sumstats, bigsnpobj,
   is_tf(check_strand_flip, "check_strand_flip")
   is_tf(join_by_id_only, "join_by_id_only")
 
-  setDT(sumstats, key = "chr")
   info_snp <- get_snp_info(bigsnpobj)
 
   if (join_by_id_only) {
@@ -58,8 +57,6 @@ harmonize_sumstats <- function(sumstats, bigsnpobj,
     sumstats <- info_snp[sumstats[, c("snp.id", "p")],
                          on = "snp.id", nomatch = 0]
     stopifnot(anyDuplicated(sumstats) == 0L) ## safety check
-    message2("%s IDs are found in reference data.",
-             format(nrow(sumstats), big.mark = ","))
 
     if (check_strand_flip) {
       sumstats <-  setorder(remove_ambiguous_snps(sumstats), chr, pos)
