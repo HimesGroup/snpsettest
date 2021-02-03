@@ -165,6 +165,7 @@ clumping <- function(info_snp, G_noNA, snp_set,
     S = info_snp$chisq,
     infos.chr = info_snp$chr,
     infos.pos = info_snp$pos,
+    size = 1000,
     exclude = ind_exclude,
   )
 }

@@ -102,7 +102,7 @@ Those duplicates should be merged or removed.
 plink --bfile EUR_phase3 --list-duplicate-vars ids-only suppress-first \
       --out EUR_phase3
       
-# remove duplicates; don't have to do  this if duplicates were not found.
+# remove duplicates; don't have to do this if duplicates were not found.
 plink --bfile EUR_phase3 --exclude EUR_phase3.dupvar \
       --make-bed \
       --out EUR_phase3_nodup
