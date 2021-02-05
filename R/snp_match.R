@@ -45,13 +45,7 @@ snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
 }
 
 flip_strand <- function(allele) {
-  data.table::fcase(
-                allele == "A", "T",
-                allele == "C", "G",
-                allele == "T", "A",
-                allele == "G", "C",
-                default =  NA_character_
-              )
+  chartr("ACTG", "TGAC", allele)
 }
 
 remove_ambiguous_snps <- function(sumstats) {

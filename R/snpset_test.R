@@ -154,7 +154,7 @@ set_test <- function(info_snp, G_noNA, snp_set, set_name, thr_rs,
 }
 
 clumping <- function(info_snp, G_noNA, snp_set,
-                     thr_r2 = 0.9) {
+                     thr_r2) {
   check_class(G_noNA, "FBM.code256")
   ind_exclude <- clumping_exclude_indices(
     info_snp$snp.id, snp_set
