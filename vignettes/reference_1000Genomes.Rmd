@@ -57,7 +57,7 @@ plink2 --zst-decompress all_phase3.pgen.zst > all_phase3.pgen
 
 # create a file to filter out samples with PLINK
 # you may choose another population instead of EUR
-awk 'NR == 1 || $5 == "EUR"' all_phase3.psam | cut -f1 > EUR_1000G_samples.txt
+awk 'NR == 1 || $5 == "EUR" {print $1}' all_phase3.psam > EUR_1000G_samples.txt
 
 # "vzs" modifier to directly operate with pvar.zst
 # "--keep" keeps sample IDs listed in the file
