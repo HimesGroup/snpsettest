@@ -9,15 +9,15 @@
 ##' and reverse reference alleles. For matched entries, the SNP IDs in summary
 ##' data are replaced with the ones in the reference data.
 ##'
-##' @param sumstats A data frame with columns: "snp.id", "chr", "pos", "a1",
-##'   "a2" and "p".
-##' - snp.id = SNP ID (e.g., rs numbers)
+##' @param sumstats A data frame with columns: "id", "chr", "pos", "A1",
+##'   "A2" and "p".
+##' - id = SNP ID (e.g., rs numbers)
 ##' - chr =  chromosome (must be integer)
 ##' - pos =  base-pair position (must be integer)
-##' - a1, a2 = allele codes (allele order is not important)
+##' - A1, A2 = allele codes (allele order is not important)
 ##' - p = p value of SNP
 ##'
-##' It could have only two columns "snp.id" and "p" if `join_by_id_only = TRUE`.
+##' It could have only two columns "id" and "p" if `join_by_id_only = TRUE`.
 ##' @param bigsnpobj A `bigSNP` object created using the reference data.
 ##' @param check_strand_flip `TRUE` or `FALSE`. If `TRUE`, the function 1)
 ##'   removes ambiguous A/T and G/C SNPs for which the strand is not obvious,
@@ -28,91 +28,86 @@
 ##'   SNPs. Default is `TRUE`.
 ##' @param join_by_id_only `TRUE` or `FALSE`. If `TRUE`, SNP matching will be
 ##'   performed by SNP IDs only. Default is `FALSE`.
-##' @return A data frame with columns: "snp.id", "chr", "pos", "a1", "a2" and
+##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 ##'   "p".
 ##' @export
-##' @importFrom data.table setDT setnames rbindlist :=
-harmonize_sumstats <- function(sumstats, bigsnpobj,
-                               join_by_id_only = FALSE,
+##' @importFrom data.table setDT setnames :=
+harmonize_sumstats <- function(sumstats, x,
+                               match_by_id = FALSE,
                                check_strand_flip = TRUE
                                ) {
 
-  sumstats_label <- deparse(substitute(sumstats))
+  ## save data input name for error message
+  sumstats_name <- deparse(substitute(sumstats))
 
+  ## assert function args
   is_df(sumstats)
-  check_class(bigsnpobj, "bigSNP")
+  is_bed_matrix(x)
   is_tf(check_strand_flip, "check_strand_flip")
-  is_tf(join_by_id_only, "join_by_id_only")
+  is_tf(match_by_id, "match_by_id")
 
-  info_snp <- get_snp_info(bigsnpobj)
-
-  if (join_by_id_only) {
-    has_columns(sumstats, c("snp.id", "p"))
-    if (anyDuplicated(sumstats$snp.id) > 0) {
-      stop2(paste0("Duplicate SNP IDs are found in %s. ",
-                   "If join_by_id_only = TRUE, IDs should be unique."),
-            sumstats_label)
-    }
-
-    sumstats <- info_snp[sumstats[, c("snp.id", "p")],
-                         on = "snp.id", nomatch = 0]
-    stopifnot(anyDuplicated(sumstats) == 0L) ## safety check
-
-    if (check_strand_flip) {
-      sumstats <-  setorder(remove_ambiguous_snps(sumstats), chr, pos)
-    }
-
-    message2("%s variants have been matched.",
-             format(nrow(sumstats), big.mark = ","))
-
-  } else {
-    has_columns(sumstats, c("chr", "pos", "a1", "a2", "p"))
-    if (anyDuplicated(sumstats[, c("chr", "pos", "a1", "a2")])) {
-      stop2(paste0("Some variants in %s ",
-                   "share the same physical position and allele codes. ",
-                   "Remove duplicate SNPs first."),
-            sumstats_label)
-    }
-
-    ###############################
-    ## per chromosome processing ##
-    ###############################
-    ## sumstats <- split(
-    ##   sumstats[, c("chr", "pos", "a1", "a2", "p")],
-    ##   by = "chr"
-    ## )
-    ## sumstats <- rbindlist(Map(
-    ##   function(x, i) {
-    ##     message2("+++ Processing: chromosome %s +++", i)
-    ##     tryCatch(snp_match(
-    ##       x,
-    ##       info_snp = info_snp,
-    ##       check_strand_flip = check_strand_flip
-    ##     ), error = function(e) {
-    ##       message2("No variant has been matched.")
-    ##       NULL
-    ##     })
-    ##   },
-    ##   sumstats,
-    ##   names(sumstats)
-    ## ))
-
-    sumstats <- tryCatch(
-      snp_match(sumstats, info_snp,
-                check_strand_flip = check_strand_flip),
-      error = function(e) {
-        message2("No variant has been matched.")
-        NULL
-      })
+  ## make data.table object
+  if (!inherits(sumstats, "data.table")) {
+    setDT(sumstats)
+  }
+  if (!inherits(x@snps, "data.table")) {
+    setDT(x@snps)
   }
 
-  stopifnot(anyDuplicated(sumstats$snp.id) == 0L) # safety check
+  if (match_by_id) {
+    ## check mandatory columns for `ID` matching
+    has_columns(sumstats, c("id", "p"))
 
-  ## message2("\n%s variants have been matched in total.",
-  ##         format(nrow(sumstats), big.mark = ","))
+    ## input SNP IDs must be unique
+    if (anyDuplicated(sumstats$id) > 0L) {
+      stop(
+        "Duplicate SNP IDs are found in ",
+        "'", sumstats_name, "'. ",
+        "If '", sumstats_name, "' ",
+        "is being matched by `id`, SNP IDs must be unique.",
+        call. = FALSE
+      )
+    }
 
-  tryCatch(sumstats[, c("snp.id", "chr", "pos", "a1", "a2", "p")],
-           error = function(e) invisible())
+    message(pretty_num(nrow(sumstats)), " variants to be matched.")
+
+    ## inner join
+    sumstats <- x@snps[sumstats[, .(id, p)], on = .(id), nomatch = NULL]
+
+    ## quick safety check; not strictly necessary
+    stopifnot(anyDuplicated(sumstats) == 0L)
+
+    ## remove ambiguous SNPs and sort
+    if (check_strand_flip) {
+      message(pretty_num(nrow(sumstats)), " SNP IDs are shared.")
+      sumstats <- remove_ambiguous_snps(sumstats)
+      setorder(sumstats, chr, pos) # order by chr & pos
+    }
+
+    message(pretty_num(nrow(sumstats)),
+            " variants have been matched.")
+
+  } else {
+    ## check mandatory columns for `chr:pos:A1:A2` matching
+    has_columns(sumstats, c("chr", "pos", "A1", "A2", "p"))
+
+    ## input `chr:pos:A1:A2` combination must be unique
+    if (anyDuplicated(sumstats[, .(chr, pos, A1, A2)])) {
+      stop(
+        "Some variants in ",
+        "'", sumstats_name, "' ",
+        "share the same physical position and allele codes. ",
+        "Remove duplicate SNPs in ",
+        "'", sumstats_name, "'.",
+        call. = FALSE
+      )
+    }
+
+    ## matching taking into account allele swaps (optionally strand flip)
+    sumstats <- snp_match(sumstats, x@snps, check_strand_flip)
+  }
+
+  sumstats[, .(id, chr, pos, A1, A2, p)]
 
 }
 

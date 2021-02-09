@@ -4,7 +4,7 @@
 ##' @importFrom data.table data.table setDT setnames
 ##' @noRd
 get_snp_info <- function(bigsnpobj) {
-  check_class(bigsnpobj, "bigSNP")
+  assert_class(bigsnpobj, "bigSNP")
   info_snp <- bigsnpobj$map
   setDT(info_snp)
   setnames(info_snp,

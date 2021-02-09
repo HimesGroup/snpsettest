@@ -24,54 +24,50 @@
 ##' @export
 ##' @importFrom data.table setDT rbindlist :=
 ##' @importFrom stats qchisq
-snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
+snpset_test <- function(hsumstats, x, snp_sets,
                         missing_in_geno = TRUE,
-                        thr_rs = 0.9,
+                        ## thr_rs = 1,
                         method = c("davies", "saddle")) {
 
-  hsumstats_label <- deparse(substitute(hsumstats))
+  hsumstats_name <- deparse(substitute(hsumstats))
 
   is_df(hsumstats)
-  has_columns(hsumstats, c("snp.id", "chr", "pos", "a1", "a2", "p"))
-  check_class(bigsnpobj, "bigSNP")
+  is_bed_matrix(x)
+  has_columns(hsumstats, c("id", "chr", "pos", "A1", "A2", "p"))
   is_named_list(snp_sets)
-  is_number_between(thr_rs, 0L, 1L, "thr_rs")
+  ## is_number_between(thr_rs, 0L, 1L, "thr_rs")
   method <- match.arg(method)
 
-  if (inherits(hsumstats, "data.table")) {
+  if (!inherits(hsumstats, "data.table")) {
+    setDT(hsumstats)
+  }
+  if (!inherits(m@snps, "data.table")) {
     setDT(hsumstats)
   }
 
-  message2(
-    "\n-----\n%s variants are found in %s.",
-    format(nrow(hsumstats), big.mark = ","),
-    hsumstats_label
-  )
-  message2("%s set-based association tests will be performed.",
-           format(length(snp_sets), big.mark = ","))
+  message("\n-----\n",
+          pretty_num(nrow(hsumstats)),
+          " variants are found in ",
+          hsumstats_name,
+          ".")
+  message(pretty_num(length(snp_sets)),
+          " set-based association tests will be performed.")
 
+  ## compute chisq stat from p
   hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
 
-  message2("Preparing the reference data...")
-  info_snp <- get_snp_info(bigsnpobj)
+  message("Preparing the reference data...")
+  info_snp <- x@snps[, .(id, chr, pos, A1, A2)]
   info_snp[hsumstats, on = intersect(names(info_snp), names(hsumstats)),
            `:=`(p = i.p, chisq = i.chisq)]
 
-  G <- bigsnpobj$genotypes
-  if (missing_in_geno) {
-    G_noNA <- bigsnpr::snp_fastImputeSimple(G, method = "mode")
-  } else {
-    G_noNA <- G # same mem address
-  }
-
-  ## temporary safety check
-  stopifnot(identical(ncol(G), nrow(info_snp)))
-  stopifnot(identical(info_snp$snp.id, bigsnpobj$map$marker.ID))
-  stopifnot(identical(info_snp$chr, bigsnpobj$map$chromosome))
-  stopifnot(identical(info_snp$pos, bigsnpobj$map$physical.pos))
+  ## quick safety check; not strictly necessary
+  stopifnot(identical(info_snp$id, x@snps$id))
+  stopifnot(identical(info_snp$chr, x@snps$chr))
+  stopifnot(identical(info_snp$pos, x@snps$pos))
 
   ## perform set tests
-  message2("Starting set-based association tests.\n-----\n")
+  message("Starting set-based association tests.\n-----\n")
   rbindlist(
     Map(
       function(x, i) {
@@ -155,7 +151,7 @@ set_test <- function(info_snp, G_noNA, snp_set, set_name, thr_rs,
 
 clumping <- function(info_snp, G_noNA, snp_set,
                      thr_r2) {
-  check_class(G_noNA, "FBM.code256")
+  assert_class(G_noNA, "FBM.code256")
   ind_exclude <- clumping_exclude_indices(
     info_snp$snp.id, snp_set
   )

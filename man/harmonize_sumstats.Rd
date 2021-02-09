@@ -4,30 +4,20 @@
 \alias{harmonize_sumstats}
 \title{Harmonizing GWAS summary to reference data}
 \usage{
-harmonize_sumstats(
-  sumstats,
-  bigsnpobj,
-  join_by_id_only = FALSE,
-  check_strand_flip = TRUE
-)
+harmonize_sumstats(sumstats, x, match_by_id = FALSE, check_strand_flip = TRUE)
 }
 \arguments{
-\item{sumstats}{A data frame with columns: "snp.id", "chr", "pos", "a1",
-"a2" and "p".
+\item{sumstats}{A data frame with columns: "id", "chr", "pos", "A1",
+"A2" and "p".
 \itemize{
-\item snp.id = SNP ID (e.g., rs numbers)
+\item id = SNP ID (e.g., rs numbers)
 \item chr =  chromosome (must be integer)
 \item pos =  base-pair position (must be integer)
-\item a1, a2 = allele codes (allele order is not important)
+\item A1, A2 = allele codes (allele order is not important)
 \item p = p value of SNP
 }
 
-It could have only two columns "snp.id" and "p" if \code{join_by_id_only = TRUE}.}
-
-\item{bigsnpobj}{A \code{bigSNP} object created using the reference data.}
-
-\item{join_by_id_only}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, SNP matching will be
-performed by SNP IDs only. Default is \code{FALSE}.}
+It could have only two columns "id" and "p" if \code{join_by_id_only = TRUE}.}
 
 \item{check_strand_flip}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, the function 1)
 removes ambiguous A/T and G/C SNPs for which the strand is not obvious,
@@ -36,9 +26,14 @@ codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype data ifself is
 used as the reference data, it would be safe to set \code{FALSE}. With
 \code{join_by_id_only = TRUE}, it simply determines whether to remove ambiguous
 SNPs. Default is \code{TRUE}.}
+
+\item{bigsnpobj}{A \code{bigSNP} object created using the reference data.}
+
+\item{join_by_id_only}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, SNP matching will be
+performed by SNP IDs only. Default is \code{FALSE}.}
 }
 \value{
-A data frame with columns: "snp.id", "chr", "pos", "a1", "a2" and
+A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 "p".
 }
 \description{

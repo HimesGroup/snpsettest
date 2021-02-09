@@ -1,9 +1,9 @@
 ##  define global variables due to non-standard evaluations
 utils::globalVariables(
-         c("snp.id", "chr", "pos", "a1", "a2",
+         c("id", "chr", "pos", "A1", "A2",
            "region.id", "region.start", "region.end",
            "p", "i.p", "chisq", "i.chisq",
-           "a1_R", "a2_R", "a1_F", "a2_F", "a1_RF", "a2_RF",
+           "A1_S", "A2_S", "A1_F", "A2_F", "A1_SF", "A2_SF",
            "patterns", "variable")
        )
 
@@ -31,10 +31,20 @@ has_columns <- function(df, columns) {
   }
 }
 
-check_class <- function(x, class) {
-  x_label <- deparse(substitute(x))
-  if (!inherits(x, class)) {
-    stop2("%s is not an object of class: '%s'.", x_label, class)
+assert_class <- function(obj, class) {
+  obj_name <- deparse(substitute(obj))
+  if (!inherits(obj, class)) {
+    stop(obj_name, " is not an object of class: '", class, "'",
+         call. = FALSE)
+  }
+}
+
+is_bed_matrix <- function(obj) {
+  obj_name <- deparse(substitute(obj))
+  ## Possibly `methods::is()` function would be more appropriate since
+  ## bed.matrix is S4 class
+  if (!inherits(obj, "bed.matrix")) {
+    stop(obj_name, " is not a bed.matrix", call. = FALSE)
   }
 }
 
@@ -45,9 +55,9 @@ is_df <- function(df) {
   }
 }
 
-is_tf <- function(x, arg) {
+is_tf <- function(x, arg_name) {
   if (!(is.logical(x) && length(x) == 1L && !is.na(x))) {
-    stop2("'%s' must be TRUE or FALSE.", arg)
+    stop("'", arg_name, "' must be TRUE or FALSE.", call. = FALSE)
   }
 }
 
@@ -81,6 +91,10 @@ is_integer_vector <- function(x, tol = .Machine$double.eps) {
   }
   tryCatch(all(sapply(x, is_wholenumber, tol = tol)),
            error = function(e) invisible(FALSE))
+}
+
+pretty_num <- function(x, ...) {
+  prettyNum(x, big.mark = ",", scientific = FALSE, ...)
 }
 
 is_positive_definite <- function(ev, tol = 1e-7) {
