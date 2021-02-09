@@ -38,7 +38,7 @@ snpset_test <- function(hsumstats, bigsnpobj, snp_sets,
   is_number_between(thr_rs, 0L, 1L, "thr_rs")
   method <- match.arg(method)
 
-  if (inherits(hsumstats, "data.table")) {
+  if (!inherits(hsumstats, "data.table")) {
     setDT(hsumstats)
   }
 
