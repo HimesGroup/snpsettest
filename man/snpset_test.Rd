@@ -4,22 +4,17 @@
 \alias{snpset_test}
 \title{Set-based association tests.}
 \usage{
-snpset_test(
-  hsumstats,
-  bigsnpobj,
-  snp_sets,
-  missing_in_geno = TRUE,
-  thr_rs = 0.9,
-  method = c("davies", "saddle")
-)
+snpset_test(hsumstats, x, snp_sets, method = c("davies", "saddle"))
 }
 \arguments{
 \item{hsumstats}{A data frame processed by \code{\link{harmonize_sumstats}}.}
 
-\item{bigsnpobj}{A \code{bigSNP} object created from the reference data.}
-
 \item{snp_sets}{A named list where each index represents a separate set of
 SNPs.}
+
+\item{method}{A method to compute a set-level p value.}
+
+\item{bigsnpobj}{A \code{bigSNP} object created from the reference data.}
 
 \item{missing_in_geno}{\code{TRUE} or \code{FALSE}. It determines if genotypes in the
 reference data have missing values. If \code{TRUE}, missing genotypes are
@@ -27,8 +22,6 @@ imputed by the mode of each SNP. Default is \code{TRUE}.}
 
 \item{thr_rs}{A LD clumping threshold over the squared correlation between
 two SNPs. Default is 0.9.}
-
-\item{method}{A method to compute a set-level p value.}
 }
 \value{
 A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",

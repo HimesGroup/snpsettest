@@ -25,8 +25,6 @@
 ##' @importFrom data.table setDT rbindlist :=
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, x, snp_sets,
-                        missing_in_geno = TRUE,
-                        ## thr_rs = 1,
                         method = c("davies", "saddle")) {
 
   hsumstats_name <- deparse(substitute(hsumstats))
@@ -35,14 +33,16 @@ snpset_test <- function(hsumstats, x, snp_sets,
   is_bed_matrix(x)
   has_columns(hsumstats, c("id", "chr", "pos", "A1", "A2", "p"))
   is_named_list(snp_sets)
-  ## is_number_between(thr_rs, 0L, 1L, "thr_rs")
   method <- match.arg(method)
+
+  old <- options(gaston.auto.set.stats = TRUE)
 
   if (!inherits(hsumstats, "data.table")) {
     setDT(hsumstats)
   }
+  ## necessary ?
   if (!inherits(m@snps, "data.table")) {
-    setDT(hsumstats)
+    setDT(m@snps)
   }
 
   message("\n-----\n",
@@ -53,119 +53,111 @@ snpset_test <- function(hsumstats, x, snp_sets,
   message(pretty_num(length(snp_sets)),
           " set-based association tests will be performed.")
 
+  ## shrink hsumstats by removing SNPs not in test sets
+  ## may not be good for memory usage since it makes a copy of hsumstats
+  snps_in_sets <- unique(unlist(snp_sets))
+  hsumstats <- hsumstats[id %in% snps_in_sets, ]
+
+  ## check any SNPs in hsumstats have missing genotypes in bed.matrix
+  id_ind <- match_cpp(id_ind, x@snps$id)
+  missing_in_geno <- any(gaston::test.snp(x[, id_ind], callrate < 1L))
+
+  ## if missing values exist, z-standardize genotypes so that:
+  ## replacing NA with 0 == imputing missing genotypes by the mean dosage
+  if (missing_in_geno) {
+    ## x <- set.stats(x)
+    gaston::standardize(x) <- "mu_sigma" # propagate to subset
+  }
+
+  ## could also get a subset of bed.matrix but think more about it...
+
   ## compute chisq stat from p
   hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
-
-  message("Preparing the reference data...")
-  info_snp <- x@snps[, .(id, chr, pos, A1, A2)]
-  info_snp[hsumstats, on = intersect(names(info_snp), names(hsumstats)),
-           `:=`(p = i.p, chisq = i.chisq)]
-
-  ## quick safety check; not strictly necessary
-  stopifnot(identical(info_snp$id, x@snps$id))
-  stopifnot(identical(info_snp$chr, x@snps$chr))
-  stopifnot(identical(info_snp$pos, x@snps$pos))
 
   ## perform set tests
   message("Starting set-based association tests.\n-----\n")
   rbindlist(
     Map(
-      function(x, i) {
-        set_test(info_snp, G, snp_set = x, set_name = i, thr_rs = thr_rs,
-                 method = method)
-    },
-    snp_sets,
-    names(snp_sets)
+      function(snp_set, set_id) {
+        set_test(hsumstats, x, snp_set, set_id,
+                 missing_in_geno = missing_in_geno, method = method)
+      },
+      snp_sets,
+      names(snp_sets)
     )
   )
 }
 
-set_test <- function(info_snp, G_noNA, snp_set, set_name, thr_rs,
+set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
                      pd_tol = 1e-7, method = c("davies", "saddle")) {
 
-  method <- match.arg(method)
-  message2("+++ Testing: %s with %s SNPs +++",
-           set_name,
-           format(length(snp_set), big.mark = ","))
-  snp_ind <- which(info_snp$snp.id %in% snp_set)
-  n_diff <- length(snp_set) - length(snp_ind)
-  if (n_diff > 0L) {
-    message2(paste0("- %s SNPs in %s are not found in the reference data ",
-                    "and will be ignored."),
-             format(n_diff, big.mark = ","), set_name)
-  }
-  set_dat <- info_snp[snp_ind, ]
-  set_min_ind <- which.min(set_dat$p)
-  top_snp_p <- set_dat$p[set_min_ind]
-  top_snp_id <- set_dat$snp.id[set_min_ind]
+  ## assertion is not needed since this function is only used internally.
+  ## method <- match.arg(method)
 
-  if (thr_rs < 1L) {
-    cor_ind <- clumping(info_snp, G_noNA, snp_set, thr_rs)
-    message2("- %s SNPs are retained after LD clumping.",
-             format(length(cor_ind), big.mark = ","))
-  } else {
-    cor_ind <- which(info_snp$snp.id %in% snp_set)
+  snp_ind <- match_cpp(snp_set, hsumstats$id)
+  if (length(snp_ind) == 0L) {
+    message("+++ Skipping ", set_id, ": no variants to test +++")
+    return(NULL)
   }
 
-  ## security check: SNP with the smallest p must be retained after LD clumping
-  stopifnot(all(info_snp$snp.id[cor_ind] %in% snp_set))
-  stopifnot(top_snp_id %in% info_snp$snp.id[cor_ind])
+  set_df <- hsumstats[snp_ind, ]
+  set_p_min_ind <- which.min(set_df$p)
+  top_snp_id <- set_df$id[set_p_min_ind]
+  top_snp_p <- set_df$p[set_p_min_ind]
 
-  t_obs <- sum(info_snp$chisq[cor_ind])
-  ## although bigsnpr::snp_cor() can be performed with missing values, it is
-  ## avoided here since correlation mat computed with pairwise deletion of
-  ## missing values often cause negative eigen values.
-  cor_mat <- bigsnpr::snp_cor(G_noNA, ind.col = cor_ind, size = Inf)
+  message(
+    "+++ Testing: ", set_id, " with ", pretty_num(nrow(set_df)),
+    " SNPs +++"
+  )
+
+  ## use set_df$id instead of snp_set for testing; there could be redundant SNPs
+  ## in snp_set where they are not fond in hsumstats but possibly in ref data.
+  cor_ind <- match_cpp(set_df$id, x@snps$id)
+
+  ## extract genotype matrix; when missing_in_geno = `TRUE`, a returned matrix
+  ## is z-standardized.
+  ## although correlation mat could computed with pairwise deletion of missing
+  ## values, it often cause negative eigen values so we prefer imputation.
+  geno <- gaston::as.matrix(m[, cor_ind])
+  if (missing_in_geno) {
+    geno[is.na(geno)] <- 0
+  }
+  cor_mat <- cor_cpp(geno)
+  ## cor_mat <- gaston::LD(m[, cor_ind], c(1, ncol(m[, cor_ind])), measure = "r")
+
+  ## quick safety check
+  stopifnot(colnames(cor_mat) == rownames(cor_mat) &
+            colnames(cor_mat) == set_df$id)
+
+
+  ## get eigenvalues
   ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
 
   ## replacing negative or "almost zero" eigen values with a tolerance (adapted
-  ## from sfsmisc::posdefify() though Matrix::realPD() may be a better solution).
+  ## from sfsmisc::posdefify though Matrix::realPD may be a better solution).
   ev[ev < pd_tol] <- pd_tol
+  t_obs <- sum(set_df$chisq)
 
   if (method == "davies") {
-    out <- davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-9)
-    p <- out$Qq
-    if (out$ifault > 0L) {
-      ## use saddle method if davies method failed
-      p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
-    }
-  }  else {
+    p <- tryCatch(
+      davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-8)$Qq,
+      warning = function(w) {
+        message("- Davies method failed to produce a meaningful results. ",
+                "Use Saddlepoint approximation instead.")
+        pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
+      }
+    )
+  } else {
     p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
   }
 
-  message2("- P: %g", p)
-  if (thr_rs < 1L) {
-    data.table(
-      set.id = set_name, p = p, n.snp = length(snp_ind),
-      n.snp.clumped = length(cor_ind),
-      top.snp.id = top_snp_id, top.snp.p = top_snp_p
-    )
-  } else {
-    data.table(
-      set.id = set_name, p = p, n.snp = length(snp_ind),
-      top.snp.id = top_snp_id, top.snp.p = top_snp_p
-    )
-  }
+  ## print set-based association p
+  message("- P: ", prettyNum(p))
 
-}
-
-clumping <- function(info_snp, G_noNA, snp_set,
-                     thr_r2) {
-  assert_class(G_noNA, "FBM.code256")
-  ind_exclude <- clumping_exclude_indices(
-    info_snp$snp.id, snp_set
+  ## return output
+  data.frame(
+    set.id = set_id, p = p, n.snp = length(snp_ind),
+    top.snp.id = top_snp_id, top.snp.p = top_snp_p
   )
-  bigsnpr::snp_clumping(
-    G = G_noNA,
-    thr.r2 = thr_r2,
-    S = info_snp$chisq,
-    infos.chr = info_snp$chr,
-    infos.pos = info_snp$pos,
-    size = 1000,
-    exclude = ind_exclude,
-  )
-}
 
-clumping_exclude_indices <- function(superset, set) {
-  which(!(superset %in% set))
 }

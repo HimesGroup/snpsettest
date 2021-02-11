@@ -13,9 +13,9 @@ map_snp_to_region(
 )
 }
 \arguments{
-\item{info_snp}{A data frame with columns: "snp.id", "chr", and "pos".
+\item{info_snp}{A data frame with columns: "id", "chr", and "pos".
 \itemize{
-\item snp.id = an unique identifier (e.g., rs numbers)
+\item id = an unique identifier (e.g., rs numbers)
 \item chr = chromosome
 \item pos = base-pair position
 }}

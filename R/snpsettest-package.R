@@ -1,4 +1,5 @@
 ##' @keywords internal
 ##' @useDynLib snpsettest, .registration = TRUE
-##' @import bigsnpr
+##' @importFrom Rcpp sourceCpp
+##' @import gaston
 "_PACKAGE"
