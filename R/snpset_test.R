@@ -35,8 +35,6 @@ snpset_test <- function(hsumstats, x, snp_sets,
   is_named_list(snp_sets)
   method <- match.arg(method)
 
-  old <- options(gaston.auto.set.stats = TRUE)
-
   if (!inherits(hsumstats, "data.table")) {
     setDT(hsumstats)
   }
@@ -55,21 +53,26 @@ snpset_test <- function(hsumstats, x, snp_sets,
 
   ## shrink hsumstats by removing SNPs not in test sets
   ## may not be good for memory usage since it makes a copy of hsumstats
+  ## could also get a subset of bed.matrix but think more about it...
   snps_in_sets <- unique(unlist(snp_sets))
   hsumstats <- hsumstats[id %in% snps_in_sets, ]
 
   ## check any SNPs in hsumstats have missing genotypes in bed.matrix
-  id_ind <- match_cpp(id_ind, x@snps$id)
-  missing_in_geno <- any(gaston::test.snp(x[, id_ind], callrate < 1L))
+  id_ind <- match_cpp(hsumstats$id, x@snps$id)
+  missing_in_geno <- any(gaston::test.snps(x[, id_ind], callrate < 1L))
 
   ## if missing values exist, z-standardize genotypes so that:
   ## replacing NA with 0 == imputing missing genotypes by the mean dosage
-  if (missing_in_geno) {
-    ## x <- set.stats(x)
-    gaston::standardize(x) <- "mu_sigma" # propagate to subset
+  ## Z-standardization was done with read_reference_bed but check once again.
+  if (missing_in_geno & !x@standardize_mu_sigma) {
+    tryCatch(
+      gaston::standardize(x) <- "mu_sigma", # propagate to subset by columns
+      error = function(e) {
+        x <- gaston::set.stats(x)
+        gaston:: standardize(x) <- "mu_sigma"
+      }
+    )
   }
-
-  ## could also get a subset of bed.matrix but think more about it...
 
   ## compute chisq stat from p
   hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
@@ -118,7 +121,7 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   ## is z-standardized.
   ## although correlation mat could computed with pairwise deletion of missing
   ## values, it often cause negative eigen values so we prefer imputation.
-  geno <- gaston::as.matrix(m[, cor_ind])
+  geno <- gaston::as.matrix(x[, cor_ind])
   if (missing_in_geno) {
     geno[is.na(geno)] <- 0
   }
