@@ -4,10 +4,20 @@
 \alias{read_reference_bed}
 \title{Read in reference PLINK Bed file.}
 \usage{
-read_reference_bed(path, ...)
+read_reference_bed(
+  path,
+  check_monomorphic = TRUE,
+  check_duplicates = TRUE,
+  ...
+)
 }
 \arguments{
 \item{path}{path to the .bed file}
+
+\item{check_monomorphic}{check monomorphic SNPs and remove them if exists}
+
+\item{check_duplicates}{check duplicate SNPs by ID and genomic position, and
+remove them if exists}
 
 \item{...}{passed to \link[gaston:read.bed.matrix]{gaston::read.bed.matrix}}
 }

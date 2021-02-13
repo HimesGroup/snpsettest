@@ -22,7 +22,6 @@
 ##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
 ##' - top.snp.p = The smallest p-value within a set of SNPs
 ##' @export
-##' @importFrom data.table setDT rbindlist :=
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, x, snp_sets,
                         method = c("davies", "saddle")) {
@@ -94,7 +93,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
 set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
                      pd_tol = 1e-7, method = c("davies", "saddle")) {
 
-  ## assertion is not needed since this function is only used internally.
+  ## assertion is not necessary since this function is only used internally.
   ## method <- match.arg(method)
 
   snp_ind <- match_cpp(snp_set, hsumstats$id)
@@ -114,13 +113,13 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   )
 
   ## use set_df$id instead of snp_set for testing; there could be redundant SNPs
-  ## in snp_set where they are not fond in hsumstats but possibly in ref data.
+  ## in snp_set where they are not found in hsumstats but possibly in ref data.
   cor_ind <- match_cpp(set_df$id, x@snps$id)
 
   ## extract genotype matrix; when missing_in_geno = `TRUE`, a returned matrix
   ## is z-standardized.
-  ## although correlation mat could computed with pairwise deletion of missing
-  ## values, it often cause negative eigen values so we prefer imputation.
+  ## although correlation could be computed with pairwise deletion of missing
+  ## values, it often causes negative eigenvalues so we prefer imputation.
   geno <- gaston::as.matrix(x[, cor_ind])
   if (missing_in_geno) {
     geno[is.na(geno)] <- 0

@@ -31,7 +31,6 @@
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 ##'   "p".
 ##' @export
-##' @importFrom data.table setDT setnames :=
 harmonize_sumstats <- function(sumstats, x,
                                match_by_id = FALSE,
                                check_strand_flip = TRUE

@@ -25,7 +25,6 @@
 ##' - sets: a named list where each index represents a separate set of SNPs
 ##' - map: a data frame containing SNP mapping information
 ##' @export
-##' @importFrom data.table data.table foverlaps setDT setDF setnames setorder :=
 map_snp_to_region <- function(info_snp, info_region,
                               extend_region_start = 20L,
                               extend_region_end = 20L,

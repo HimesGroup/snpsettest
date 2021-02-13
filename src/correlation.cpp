@@ -1,8 +1,6 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::depends(RcppArmadillo)]]
-
-//' @export
 // [[Rcpp::export]]
 arma::mat cor_cpp(const arma::mat& mat) {
   arma::mat cor_mat(mat.n_cols, mat.n_cols);
