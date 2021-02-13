@@ -17,8 +17,11 @@
 ##' - A1, A2 = allele codes (allele order is not important)
 ##' - p = p value of SNP
 ##'
-##' It could have only two columns "id" and "p" if `join_by_id_only = TRUE`.
-##' @param bigsnpobj A `bigSNP` object created using the reference data.
+##' It could have only two columns "id" and "p" if `match_by_id = TRUE`.
+##' @param x A `bed.matrix` object created using the reference data.
+##' @param match_by_id `TRUE` or `FALSE`. If `TRUE`, SNP matching will be
+##'   performed by SNP IDs instead of base-pair position and allele codes.
+##'   Default is `FALSE`.
 ##' @param check_strand_flip `TRUE` or `FALSE`. If `TRUE`, the function 1)
 ##'   removes ambiguous A/T and G/C SNPs for which the strand is not obvious,
 ##'   and 2) attempts to find additional matching entries by flipping allele
@@ -26,8 +29,7 @@
 ##'   used as the reference data, it would be safe to set `FALSE`. With
 ##'   `join_by_id_only = TRUE`, it simply determines whether to remove ambiguous
 ##'   SNPs. Default is `TRUE`.
-##' @param join_by_id_only `TRUE` or `FALSE`. If `TRUE`, SNP matching will be
-##'   performed by SNP IDs only. Default is `FALSE`.
+
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 ##'   "p".
 ##' @export

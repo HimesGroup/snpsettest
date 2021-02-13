@@ -3,14 +3,9 @@
 ##' Perform set-based association tests between multiple sets of SNPs and a
 ##' phenotype using GWAS summary statistics.
 ##' @param hsumstats A data frame processed by \code{\link{harmonize_sumstats}}.
-##' @param bigsnpobj A `bigSNP` object created from the reference data.
+##' @param x A `bed.matrix` object created from the reference data.
 ##' @param snp_sets A named list where each index represents a separate set of
 ##'   SNPs.
-##' @param missing_in_geno `TRUE` or `FALSE`. It determines if genotypes in the
-##'   reference data have missing values. If `TRUE`, missing genotypes are
-##'   imputed by the mode of each SNP. Default is `TRUE`.
-##' @param thr_rs A LD clumping threshold over the squared correlation between
-##'   two SNPs. Default is 0.9.
 ##' @param method A method to compute a set-level p value.
 ##' @return A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
 ##'   "top.snp.id" and "top.snp.p"
@@ -38,8 +33,8 @@ snpset_test <- function(hsumstats, x, snp_sets,
     setDT(hsumstats)
   }
   ## necessary ?
-  if (!inherits(m@snps, "data.table")) {
-    setDT(m@snps)
+  if (!inherits(x@snps, "data.table")) {
+    setDT(x@snps)
   }
 
   message("\n-----\n",
