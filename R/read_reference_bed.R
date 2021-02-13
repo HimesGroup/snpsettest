@@ -11,7 +11,7 @@ read_reference_bed <- function(path,
                                check_duplicates = TRUE,
                                ...) {
 
-  ## to get basic stats for bed file
+  ## To get basic stats for bed file
   op <- options(gaston.auto.set.stats = TRUE)
 
   path <- normalizePath(path)
@@ -21,7 +21,7 @@ read_reference_bed <- function(path,
       stop("Bed file not found.")
     }
   }
-  ## remove extension
+  ## Remove .bed extension
   path <- tools::file_path_sans_ext(path)
   x <- gaston::read.bed.matrix(basename = path, ...)
 
@@ -50,15 +50,15 @@ read_reference_bed <- function(path,
   }
 
   ## Z-standardize genotype matrix
-  ## if missing values exist in genotypes, we can impute them by;
+  ## If missing values exist in genotypes, we can impute them by;
   ## replacing NA with 0 -> imputing missing genotypes by the mean dosage
   gaston::standardize(x) <- "mu_sigma"
   message("Genotype matrix is standardized by ",
           "means and genotypic standard deviations.")
 
-  ## reset options
+  ## Reset options
   options(op)
 
-  ## return bed.matrix
+  ## Return bed.matrix
   x
 }

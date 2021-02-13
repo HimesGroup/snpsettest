@@ -78,7 +78,7 @@ map_snp_to_region <- function(info_snp, info_region,
 
   mapped <- foverlaps(snpdat, regiondat, type = "within")
 
-  ## unique function is necessary since non-overlapping regions with the same
+  ## Unique function is necessary since non-overlapping regions with the same
   ## region.id can be overlapped by start:end position adjustment.
   ## e.g. RNU6-1: chr14 32202044:32202150 & 32203163:32203269
   ## (14:32183309) is doubly counted with region adj 20kb

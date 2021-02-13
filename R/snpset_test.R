@@ -45,17 +45,17 @@ snpset_test <- function(hsumstats, x, snp_sets,
   message(pretty_num(length(snp_sets)),
           " set-based association tests will be performed.")
 
-  ## shrink hsumstats by removing SNPs not in test sets
-  ## may not be good for memory usage since it makes a copy of hsumstats
-  ## could also get a subset of bed.matrix but think more about it...
+  ## Shrink hsumstats by removing SNPs not in test sets
+  ## May not be good for memory usage since it makes a copy of hsumstats
+  ## Could also get a subset of bed.matrix but think more about it...
   snps_in_sets <- unique(unlist(snp_sets))
   hsumstats <- hsumstats[id %in% snps_in_sets, ]
 
-  ## check any SNPs in hsumstats have missing genotypes in bed.matrix
+  ## Check any SNPs in hsumstats have missing genotypes in bed.matrix
   id_ind <- match_cpp(hsumstats$id, x@snps$id)
   missing_in_geno <- any(gaston::test.snps(x[, id_ind], callrate < 1L))
 
-  ## if missing values exist, z-standardize genotypes so that:
+  ## If missing values exist, z-standardize genotypes so that:
   ## replacing NA with 0 == imputing missing genotypes by the mean dosage
   ## Z-standardization was done with read_reference_bed but check once again.
   if (missing_in_geno & !x@standardize_mu_sigma) {
@@ -68,10 +68,10 @@ snpset_test <- function(hsumstats, x, snp_sets,
     )
   }
 
-  ## compute chisq stat from p
+  ## Compute Chi-square stat from p
   hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
 
-  ## perform set tests
+  ## Perform set tests
   message("Starting set-based association tests.\n-----\n")
   rbindlist(
     Map(
@@ -88,7 +88,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
 set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
                      pd_tol = 1e-7, method = c("davies", "saddle")) {
 
-  ## assertion is not necessary since this function is only used internally.
+  ## Assertion is not necessary since this function is only used internally.
   ## method <- match.arg(method)
 
   snp_ind <- match_cpp(snp_set, hsumstats$id)
@@ -107,32 +107,28 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
     " SNPs +++"
   )
 
-  ## use set_df$id instead of snp_set for testing; there could be redundant SNPs
+  ## Use set_df$id instead of snp_set for testing; there could be redundant SNPs
   ## in snp_set where they are not found in hsumstats but possibly in ref data.
   cor_ind <- match_cpp(set_df$id, x@snps$id)
 
-  ## extract genotype matrix; when missing_in_geno = `TRUE`, a returned matrix
-  ## is z-standardized.
-  ## although correlation could be computed with pairwise deletion of missing
+  ## Extract genotype matrix; when missing_in_geno = `TRUE`, a returned matrix
+  ## is imputed by mean dosage.
+  ## Although correlation could be computed with pairwise deletion of missing
   ## values, it often causes negative eigenvalues so we prefer imputation.
   geno <- gaston::as.matrix(x[, cor_ind])
   if (missing_in_geno) {
-    geno[is.na(geno)] <- 0
+    geno[is.na(geno)] <- 0 # remember geno is the Z-standardized matrix
   }
   cor_mat <- cor_cpp(geno)
-  ## cor_mat <- gaston::LD(m[, cor_ind], c(1, ncol(m[, cor_ind])), measure = "r")
 
-  ## quick safety check
-  stopifnot(colnames(cor_mat) == rownames(cor_mat) &
-            colnames(cor_mat) == set_df$id)
-
-
-  ## get eigenvalues
+  ## Get eigenvalues
   ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
 
-  ## replacing negative or "almost zero" eigen values with a tolerance (adapted
-  ## from sfsmisc::posdefify though Matrix::realPD may be a better solution).
+  ## Replacing negative or "almost zero" eigen values with a tolerance (adapted
+  ## from sfsmisc::posdefify).
   ev[ev < pd_tol] <- pd_tol
+
+  ## Calculate a test-statistic
   t_obs <- sum(set_df$chisq)
 
   if (method == "davies") {
@@ -148,10 +144,10 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
     p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
   }
 
-  ## print set-based association p
+  ## Print set-based association p
   message("- P: ", prettyNum(p))
 
-  ## return output
+  ## Return output
   data.frame(
     set.id = set_id, p = p, n.snp = length(snp_ind),
     top.snp.id = top_snp_id, top.snp.p = top_snp_p

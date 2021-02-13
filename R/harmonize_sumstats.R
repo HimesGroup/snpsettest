@@ -38,16 +38,16 @@ harmonize_sumstats <- function(sumstats, x,
                                check_strand_flip = TRUE
                                ) {
 
-  ## save data input name for error message
+  ## Save the names of data input for error message
   sumstats_name <- deparse(substitute(sumstats))
 
-  ## assert function args
+  ## Assert function arguments
   is_df(sumstats)
   is_bed_matrix(x)
   is_tf(check_strand_flip, "check_strand_flip")
   is_tf(match_by_id, "match_by_id")
 
-  ## make data.table object
+  ## Make data.table object
   if (!inherits(sumstats, "data.table")) {
     setDT(sumstats)
   }
@@ -56,10 +56,10 @@ harmonize_sumstats <- function(sumstats, x,
   }
 
   if (match_by_id) {
-    ## check mandatory columns for `ID` matching
+    ## Check mandatory columns for `ID` matching
     has_columns(sumstats, c("id", "p"))
 
-    ## input SNP IDs must be unique
+    ## Input SNP IDs must be unique
     if (anyDuplicated(sumstats$id) > 0L) {
       stop(
         "Duplicate SNP IDs are found in ",
@@ -72,13 +72,13 @@ harmonize_sumstats <- function(sumstats, x,
 
     message(pretty_num(nrow(sumstats)), " variants to be matched.")
 
-    ## inner join
+    ## Inner join
     sumstats <- x@snps[sumstats[, .(id, p)], on = .(id), nomatch = NULL]
 
-    ## quick safety check; not strictly necessary
+    ## Quick safety check; not strictly necessary
     stopifnot(anyDuplicated(sumstats) == 0L)
 
-    ## remove ambiguous SNPs and sort
+    ## Remove ambiguous SNPs and sort
     if (check_strand_flip) {
       message(pretty_num(nrow(sumstats)), " SNP IDs are shared.")
       sumstats <- remove_ambiguous_snps(sumstats)
@@ -89,10 +89,10 @@ harmonize_sumstats <- function(sumstats, x,
             " variants have been matched.")
 
   } else {
-    ## check mandatory columns for `chr:pos:A1:A2` matching
+    ## Check mandatory columns for `chr:pos:A1:A2` matching
     has_columns(sumstats, c("chr", "pos", "A1", "A2", "p"))
 
-    ## input `chr:pos:A1:A2` combination must be unique
+    ## Input `chr:pos:A1:A2` combination must be unique
     if (anyDuplicated(sumstats[, .(chr, pos, A1, A2)])) {
       stop(
         "Some variants in ",
@@ -104,10 +104,11 @@ harmonize_sumstats <- function(sumstats, x,
       )
     }
 
-    ## matching taking into account allele swaps (optionally strand flip)
+    ## Matching taking into account ref allele swaps (optionally strand flip)
     sumstats <- snp_match(sumstats, x@snps, check_strand_flip)
   }
 
+  ## Return
   sumstats[, .(id, chr, pos, A1, A2, p)]
 
 }
