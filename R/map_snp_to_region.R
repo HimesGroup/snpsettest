@@ -30,6 +30,8 @@ map_snp_to_region <- function(info_snp, info_region,
                               extend_region_end = 20L,
                               only_sets=FALSE) {
 
+  info_snp_name <- deparse(substitute(info_snp))
+
   is_df(info_snp)
   is_df(info_region)
   has_columns(info_snp, c("id", "chr", "pos"))
@@ -38,7 +40,8 @@ map_snp_to_region <- function(info_snp, info_region,
   is_nonnegative_number(extend_region_end, "extend_region_end")
 
   if (anyDuplicated(info_snp$id) > 0L) {
-    stop("SNP IDs must be unique.", call. = FALSE)
+    stop("SNP IDs in ", "'", info_snp_name, "'", " must be unique.",
+         call. = FALSE)
   }
 
   if (anyDuplicated(info_region$region.id) > 0L) {
@@ -84,7 +87,7 @@ map_snp_to_region <- function(info_snp, info_region,
                      function(x) unique(unname(unlist(x))))
 
   if (only_sets) {
-    snp_sets
+    list(sets = snp_sets)
   } else {
     setnames(mapped,
              old = c("start", "end", "i.start"),
@@ -93,7 +96,6 @@ map_snp_to_region <- function(info_snp, info_region,
     vkeep <- c("id", "chr", "pos",
                "region.id", "region.start", "region.end",
                "region.adj.start", "region.adj.end")
-
 
     list(sets = snp_sets,
          map = setDF(setorder(mapped[, vkeep, with = FALSE],
