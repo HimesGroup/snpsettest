@@ -4,8 +4,8 @@
 ##' typical usage would be to annotate SNPs onto their neighboring genes to
 ##' perform gene-based tests.
 ##'
-##' @param info_snp A data frame with columns: "snp.id", "chr", and "pos".
-##' - snp.id = an unique identifier (e.g., rs numbers)
+##' @param info_snp A data frame with columns: "id", "chr", and "pos".
+##' - id = an unique identifier (e.g., rs numbers)
 ##' - chr = chromosome
 ##' - pos = base-pair position
 ##' @param info_region A data frame with columns: "region.id", "chr", "start",
@@ -25,36 +25,37 @@
 ##' - sets: a named list where each index represents a separate set of SNPs
 ##' - map: a data frame containing SNP mapping information
 ##' @export
-##' @importFrom data.table data.table foverlaps setDT setDF setnames setorder :=
 map_snp_to_region <- function(info_snp, info_region,
                               extend_region_start = 20L,
                               extend_region_end = 20L,
                               only_sets=FALSE) {
 
+  info_snp_name <- deparse(substitute(info_snp))
+
   is_df(info_snp)
   is_df(info_region)
-  has_columns(info_snp, c("snp.id", "chr", "pos"))
+  has_columns(info_snp, c("id", "chr", "pos"))
   has_columns(info_region, c("region.id", "chr", "start", "end"))
   is_nonnegative_number(extend_region_start, "extend_region_start")
   is_nonnegative_number(extend_region_end, "extend_region_end")
 
-  if (anyDuplicated(info_snp$snp.id) > 0L) {
-    stop2("SNP IDs should be unique.")
+  if (anyDuplicated(info_snp$id) > 0L) {
+    stop("SNP IDs in ", "'", info_snp_name, "'", " must be unique.",
+         call. = FALSE)
   }
 
   if (anyDuplicated(info_region$region.id) > 0L) {
-    warning2(
-      paste0(
-        "Some region IDs have multiple intervals. ",
-        "For those regions, SNPs belonging to any of these intervals ",
-        "will be merged into a single set. ",
-        "If you don't want this behavior, please assign unique IDs."
-      )
+    warning(
+      "Some region IDs have multiple intervals. ",
+      "For those regions, SNPs mapped to any of these intervals ",
+      "will be merged into a single set. ",
+      "If you don't want this behavior, please assign unique IDs.",
+      call. = FALSE, immediate. = TRUE
     )
   }
 
   snpdat <- data.table(
-    snp.id = as.character(info_snp$snp.id),
+    id = as.character(info_snp$id),
     chr = as.character(info_snp$chr),
     start = as.integer(info_snp$pos),
     end = as.integer(info_snp$pos),
@@ -77,25 +78,24 @@ map_snp_to_region <- function(info_snp, info_region,
 
   mapped <- foverlaps(snpdat, regiondat, type = "within")
 
-  ## unique function is necessary since non-overlapping regions with the same
+  ## Unique function is necessary since non-overlapping regions with the same
   ## region.id can be overlapped by start:end position adjustment.
   ## e.g. RNU6-1: chr14 32202044:32202150 & 32203163:32203269
   ## (14:32183309) is doubly counted with region adj 20kb
-  snp_sets <- lapply(split(mapped[!is.na(region.id), c("snp.id", "region.id")],
+  snp_sets <- lapply(split(mapped[!is.na(region.id), .(id, region.id)],
                            by = "region.id", keep.by = FALSE),
                      function(x) unique(unname(unlist(x))))
 
   if (only_sets) {
-    snp_sets
+    list(sets = snp_sets)
   } else {
     setnames(mapped,
              old = c("start", "end", "i.start"),
              new = c("region.adj.start", "region.adj.end", "pos"))
 
-    vkeep <- c("snp.id", "chr", "pos",
+    vkeep <- c("id", "chr", "pos",
                "region.id", "region.start", "region.end",
                "region.adj.start", "region.adj.end")
-
 
     list(sets = snp_sets,
          map = setDF(setorder(mapped[, vkeep, with = FALSE],
