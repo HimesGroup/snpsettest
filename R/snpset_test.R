@@ -119,6 +119,8 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   if (missing_in_geno) {
     geno[is.na(geno)] <- 0 # remember geno is the Z-standardized matrix
   }
+  ## browser()
+  ## cor_mat <- gaston::LD(x[, cor_ind], c(1, ncol(x[, cor_ind])), measure = "r")
   cor_mat <- cor_cpp(geno)
 
   ## Get eigenvalues

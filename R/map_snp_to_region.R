@@ -50,7 +50,7 @@ map_snp_to_region <- function(info_snp, info_region,
       "For those regions, SNPs mapped to any of these intervals ",
       "will be merged into a single set. ",
       "If you don't want this behavior, please assign unique IDs.",
-      call. = FALSE
+      call. = FALSE, immediate. = TRUE
     )
   }
 
