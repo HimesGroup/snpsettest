@@ -111,41 +111,49 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   ## in snp_set where they are not found in hsumstats but possibly in ref data.
   cor_ind <- match_cpp(set_df$id, x@snps$id)
 
-  ## Extract genotype matrix; when missing_in_geno = `TRUE`, a returned matrix
-  ## is imputed by mean dosage.
-  ## Although correlation could be computed with pairwise deletion of missing
-  ## values, it often causes negative eigenvalues so we prefer imputation.
-  geno <- gaston::as.matrix(x[, cor_ind])
-  if (missing_in_geno) {
-    geno[is.na(geno)] <- 0 # remember geno is the Z-standardized matrix
-  }
-  ## browser()
-  ## cor_mat <- gaston::LD(x[, cor_ind], c(1, ncol(x[, cor_ind])), measure = "r")
-  cor_mat <- cor_cpp(geno)
+  if (length(cor_ind) == 1L) {
 
-  ## Get eigenvalues
-  ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
+    ## If only one SNP in a set, the set-based association p would be top_snp_p
+    p <- top_snp_p
 
-  ## Replacing negative or "almost zero" eigen values with a tolerance (adapted
-  ## from sfsmisc::posdefify).
-  ev[ev < pd_tol] <- pd_tol
-
-  ## Calculate a test-statistic
-  t_obs <- sum(set_df$chisq)
-
-  if (method == "davies") {
-    p <- tryCatch(
-      davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-8)$Qq,
-      warning = function(w) {
-        message("- Davies method failed to produce a meaningful results. ",
-                "Use Saddlepoint approximation instead.")
-        pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
-      }
-    )
   } else {
-    p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
-  }
 
+    ## Extract genotype matrix; when missing_in_geno = `TRUE`, a returned matrix
+    ## is imputed by mean dosage.
+    ## Although correlation could be computed with pairwise deletion of missing
+    ## values, it often causes negative eigenvalues so we prefer imputation.
+    geno <- gaston::as.matrix(x[, cor_ind])
+    if (missing_in_geno) {
+      geno[is.na(geno)] <- 0 # remember geno is the Z-standardized matrix
+    }
+
+    cor_mat <- cor_cpp(geno)
+
+    ## Get eigenvalues
+    ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
+
+    ## Replacing negative or "almost zero" eigen values with a tolerance
+    ## (adapted from sfsmisc::posdefify).
+    ev[ev < pd_tol] <- pd_tol
+
+    ## Calculate a test-statistic
+    t_obs <- sum(set_df$chisq)
+    if (method == "davies") {
+      p <- tryCatch(
+        davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-8)$Qq,
+        warning = function(w) {
+          message(
+            "- Davies method failed to produce a meaningful results. ",
+            "Use Saddlepoint approximation instead."
+          )
+          pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
+        }
+      )
+    } else {
+      p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
+    }
+
+  }
   ## Print set-based association p
   message("- P: ", prettyNum(p))
 
