@@ -4,7 +4,6 @@
 ##' is a modified version of [bigsnpr::snp_match()], which removed unnecessary
 ##' requirements for set-based tests and improved speed with [data.table] syntax.
 ##' @noRd
-##' @importFrom data.table melt setorder
 snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
 
   ## comment out assertions since this function is used only internally

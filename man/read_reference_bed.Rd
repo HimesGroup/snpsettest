@@ -7,9 +7,9 @@
 read_reference_bed(path, ...)
 }
 \arguments{
-\item{path}{path to the .bed file}
+\item{path}{A path to the .bed file}
 
-\item{...}{further arguments used in \link[gaston:read.bed.matrix]{gaston::read.bed.matrix}}
+\item{...}{Further arguments used in \link[gaston:read.bed.matrix]{gaston::read.bed.matrix}}
 }
 \description{
 Read in reference PLINK Bed file.

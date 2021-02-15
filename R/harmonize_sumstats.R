@@ -55,7 +55,28 @@ harmonize_sumstats <- function(sumstats, x,
     setDT(x@snps)
   }
 
+  message("-----")
+  message("Checking the reference data for harmonization...")
+  ## Check monomorphic SNPs in the reference data
+  ref_monomorphic <- which(x@sigma == 0) # due to possible heterozyguous mono (maf = 0.05)
+  message("Found ", length(ref_monomorphic),
+          " monomoprhic SNPs in the reference data.")
+
   if (match_by_id) {
+
+    ## Check duplicate SNP IDs in the reference data.
+    ref_dup <- which(duplicated(x@snps$id))
+    ## ref_dup <- gaston::SNP.duplicated(x, "id")
+    message("Found ", length(ref_dup),
+            " duplicate SNP IDs in the reference data.")
+
+    ## Get the indices of SNPs to exclude from ref-sumstats harmonization
+    ref_remove_ind <- unique(c(ref_monomorphic, ref_dup))
+    ref_keep_ind <- setdiff(seq_len(ncol(x)), ref_remove_ind)
+    message("Excluded ", length(ref_remove_ind),
+            " SNPs from the harmonization.")
+    message("-----")
+
     ## Check mandatory columns for `ID` matching
     has_columns(sumstats, c("id", "p"))
 
@@ -70,10 +91,12 @@ harmonize_sumstats <- function(sumstats, x,
       )
     }
 
+    message("Checking the GWAS summary statistics...")
     message(pretty_num(nrow(sumstats)), " variants to be matched.")
 
     ## Inner join
-    sumstats <- x@snps[sumstats[, .(id, p)], on = .(id), nomatch = NULL]
+    sumstats <- x@snps[ref_keep_ind, ][sumstats[, .(id, p)], on = .(id),
+                                        nomatch = NULL]
 
     ## Quick safety check; not strictly necessary
     stopifnot(anyDuplicated(sumstats) == 0L)
@@ -89,6 +112,24 @@ harmonize_sumstats <- function(sumstats, x,
             " variants have been matched.")
 
   } else {
+
+    ## Check duplicate SNP IDs in the reference data.
+    ref_dup <- which(duplicated((x@snps[, .(chr, pos, A1, A2)])))
+    ## ref_dup <- gaston::SNP.duplicated(x, "chr:pos:alleles")
+    message("Found ", length(ref_dup),
+            " duplicate SNPs in the reference data",
+            " by base-pair position and alleles codes.")
+
+    ## Get the indices of SNPs to exclude from ref-sumstats harmonization
+    ref_remove_ind <- unique(c(ref_monomorphic, ref_dup))
+    ref_keep_ind <- setdiff(seq_len(ncol(x)), ref_remove_ind)
+    message(
+      "Excluded ", length(ref_remove_ind), " SNPs from the harmonization."
+    )
+    message("-----")
+
+    message("Checking the GWAS summary statistics...")
+
     ## Check mandatory columns for `chr:pos:A1:A2` matching
     has_columns(sumstats, c("chr", "pos", "A1", "A2", "p"))
 
@@ -97,7 +138,7 @@ harmonize_sumstats <- function(sumstats, x,
       stop(
         "Some variants in ",
         "'", sumstats_name, "' ",
-        "share the same physical position and allele codes. ",
+        "share the same base-pair position and allele codes. ",
         "Remove duplicate SNPs in ",
         "'", sumstats_name, "'.",
         call. = FALSE
@@ -105,7 +146,7 @@ harmonize_sumstats <- function(sumstats, x,
     }
 
     ## Matching taking into account ref allele swaps (optionally strand flip)
-    sumstats <- snp_match(sumstats, x@snps, check_strand_flip)
+    sumstats <- snp_match(sumstats, x@snps[ref_keep_ind, ], check_strand_flip)
   }
 
   ## Return

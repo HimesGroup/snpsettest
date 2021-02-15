@@ -20,27 +20,6 @@ read_reference_bed <- function(path, ...) {
   path <- tools::file_path_sans_ext(path)
   x <- gaston::read.bed.matrix(basename = path, ...)
 
-  ## Find monomorphic SNPs
-  monomorphic <- x@sigma == 0 # due to possible heterozyguous mono (maf = 0.05)
-  if (any(monomorphic)) {
-    message("Removed ", sum(monomorphic), " monomoprhic SNPs.")
-    x <- x[, !monomorphic]
-  }
-
-  ## Find duplicate SNP IDs
-  id_dup <- gaston::SNP.duplicated(x, "id")
-
-  ## Find duplicate SNPs by base-pair and allele codes
-  position_allele_dup <- gaston::SNP.duplicated(x, "chr:pos:alleles")
-
-  ## Remove duplicates
-  remove_ind <- unique(c(id_dup, position_allele_dup))
-  if (length(remove_ind) > 0L) {
-    keep_ind <- setdiff(seq_len(ncol(x)), remove_ind)
-    message("Removed ", length(remove_ind), " duplicate SNPs.")
-    x <- x[, keep_ind]
-  }
-
   ## Z-standardize genotype matrix
   ## If missing values exist in genotypes, we can impute them by;
   ## replacing NA with 0 -> imputing missing genotypes by the mean dosage
