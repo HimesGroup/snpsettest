@@ -27,12 +27,12 @@
 ##'   additional matching entries by flipping allele codes (i.e., A->T, T->A,
 ##'   C->G, G->A). Only applies when `match_by_id = FALSE`. If the GWAS
 ##'   genotype data ifself is used as the reference data, it would be safe to
-##'   set `FALSE`. Default is `TRUE`.
+##'   set `FALSE`. Default is `FALSE`.
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and "p".
 ##' @export
 harmonize_sumstats <- function(sumstats, x,
                                match_by_id = TRUE,
-                               check_strand_flip = TRUE
+                               check_strand_flip = FALSE
                                ) {
 
   ## Save the names of data input for error message
