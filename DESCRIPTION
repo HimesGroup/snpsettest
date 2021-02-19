@@ -25,3 +25,5 @@ VignetteBuilder: knitr
 LinkingTo: 
     Rcpp,
     RcppArmadillo
+Depends: 
+    R (>= 2.10)
