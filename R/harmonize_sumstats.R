@@ -9,32 +9,29 @@
 ##' and reverse reference alleles. For matched entries, the SNP IDs in summary
 ##' data are replaced with the ones in the reference data.
 ##'
-##' @param sumstats A data frame with columns: "id", "chr", "pos", "A1",
-##'   "A2" and "p".
+##' @param sumstats A data frame with two columns: "id" and "p".
 ##' - id = SNP ID (e.g., rs numbers)
+##' - p = p value of SNP
+
+##' If `match_by_id = FALSE`, it requires additional columns: "chr", "pos", "A1"
+##' and "A2".
 ##' - chr =  chromosome (must be integer)
 ##' - pos =  base-pair position (must be integer)
 ##' - A1, A2 = allele codes (allele order is not important)
-##' - p = p value of SNP
 ##'
-##' It could have only two columns "id" and "p" if `match_by_id = TRUE`.
 ##' @param x A `bed.matrix` object created using the reference data.
-##' @param match_by_id `TRUE` or `FALSE`. If `TRUE`, SNP matching will be
-##'   performed by SNP IDs instead of base-pair position and allele codes.
-##'   Default is `FALSE`.
-##' @param check_strand_flip `TRUE` or `FALSE`. If `TRUE`, the function 1)
-##'   removes ambiguous A/T and G/C SNPs for which the strand is not obvious,
-##'   and 2) attempts to find additional matching entries by flipping allele
-##'   codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype data ifself is
-##'   used as the reference data, it would be safe to set `FALSE`. With
-##'   `join_by_id_only = TRUE`, it simply determines whether to remove ambiguous
-##'   SNPs. Default is `TRUE`.
-
-##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
-##'   "p".
+##' @param match_by_id If `TRUE`, SNP matching will be performed by SNP IDs
+##'   instead of base-pair position and allele codes. Default is `TRUE`.
+##' @param check_strand_flip If `TRUE`, the function 1) removes ambiguous A/T
+##'   and G/C SNPs for which the strand is not obvious, and 2) attempts to find
+##'   additional matching entries by flipping allele codes (i.e., A->T, T->A,
+##'   C->G, G->A). Only applies when `match_by_id = FALSE`. If the GWAS
+##'   genotype data ifself is used as the reference data, it would be safe to
+##'   set `FALSE`. Default is `TRUE`.
+##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and "p".
 ##' @export
 harmonize_sumstats <- function(sumstats, x,
-                               match_by_id = FALSE,
+                               match_by_id = TRUE,
                                check_strand_flip = TRUE
                                ) {
 
@@ -96,17 +93,10 @@ harmonize_sumstats <- function(sumstats, x,
 
     ## Inner join
     sumstats <- x@snps[ref_keep_ind, ][sumstats[, .(id, p)], on = .(id),
-                                        nomatch = NULL]
+                                       nomatch = NULL]
 
     ## Quick safety check; not strictly necessary
     stopifnot(anyDuplicated(sumstats) == 0L)
-
-    ## Remove ambiguous SNPs and sort
-    if (check_strand_flip) {
-      message(pretty_num(nrow(sumstats)), " SNP IDs are shared.")
-      sumstats <- remove_ambiguous_snps(sumstats)
-      setorder(sumstats, chr, pos) # order by chr & pos
-    }
 
     message(pretty_num(nrow(sumstats)),
             " variants have been matched.")
@@ -148,6 +138,9 @@ harmonize_sumstats <- function(sumstats, x,
     ## Matching taking into account ref allele swaps (optionally strand flip)
     sumstats <- snp_match(sumstats, x@snps[ref_keep_ind, ], check_strand_flip)
   }
+
+  ## Sort output
+  setorder(sumstats, chr, pos)
 
   ## Return
   sumstats[, .(id, chr, pos, A1, A2, p)]
