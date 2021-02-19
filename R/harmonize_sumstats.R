@@ -62,7 +62,7 @@ harmonize_sumstats <- function(sumstats, x,
   if (match_by_id) {
 
     ## Check duplicate SNP IDs in the reference data.
-    ref_dup <- which(duplicated(x@snps$id))
+    ref_dup <- get_duplicate_indice(x@snps$id)
     ## ref_dup <- gaston::SNP.duplicated(x, "id")
     message("Found ", length(ref_dup),
             " duplicate SNP IDs in the reference data.")
