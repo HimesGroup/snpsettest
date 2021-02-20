@@ -16,6 +16,25 @@
 ##' - n.snp.clumped = the number of SNPs in a set after LD clumping
 ##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
 ##' - top.snp.p = The smallest p-value within a set of SNPs
+##' @examples
+##' ## Load GWAS summary data
+##' data(exGWAS)
+##'
+##' ## Load reference genotype data
+##' bfile <- system.file("extdata", "example.bed", package = "snpsettest")
+##' x <- read_reference_bed(path = bfile)
+##'
+##' ## GWAS harmonization with reference data
+##' hsumstats <- harmonize_sumstats(exGWAS, x)
+##'
+##' ## Load gene information data
+##' data(gene.curated.GRCh37)
+##'
+##' ## Map SNPs to genes
+##' snp_sets <- map_snp_to_gene(hsumstats, gene.curated.GRCh37)
+##'
+##' ## Perform set-based (gene-based) association tests
+##' snpset_test(hsumstats, x, snp_sets$sets)
 ##' @export
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, x, snp_sets,

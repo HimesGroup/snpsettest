@@ -3,7 +3,7 @@
 ##' The gene information was extracted from the GENCODE release 19. This data
 ##' only included the following gene biotypes: protein-coding, Immunoglobulin
 ##' (Ig) variable chain and T-cell receptor (TcR) genes. Genes with
-##' `NOVEL/Putative` status were excluded from the data.
+##' NOVEL/Putative status were excluded from the data.
 ##' @source <https://www.gencodegenes.org/human/release_19.html>
 ##' @format Data frame with columns
 ##' \describe{
