@@ -1,8 +1,8 @@
-##' Map SNPs to genomic regions (e.g., genes)
+##' Map SNPs to genomic regions
 ##'
-##' Map SNPs to genomic regions to extract sets of SNPs for set-based tests. A
-##' typical usage would be to annotate SNPs onto their neighboring genes to
-##' perform gene-based tests.
+##' Map SNPs to genomic regions (e.g., genes) to extract sets of SNPs for
+##' set-based tests. A typical usage would be to annotate SNPs onto their
+##' neighboring genes to perform gene-based tests.
 ##'
 ##' @param info_snp A data frame with columns: "id", "chr", and "pos".
 ##' - id = an unique identifier (e.g., rs numbers)
@@ -15,12 +15,13 @@
 ##' - start = start position of genomic region
 ##' - end =  end position of genomic region
 ##' @param extend_region_start A single non-negative integer, allowing for a
-##'   certain kb window before the region to be included. Default is 20 (= 20kb).
+##'   certain kb window before the region to be included. Default is 20 (=
+##'   20kb).
 ##' @param extend_region_end A single non-negative integer, allowing for a
 ##'   certain kb window after the region to be included. Default is 20 (= 20kb).
-##' @param only_sets `TRUE` or `FALSE`. If `TRUE`, sets of SNPs for individual
-##'   regions are returned, otherwise both sets and mapping information are
-##'   returned. Default is `FALSE`.
+##' @param only_sets If `TRUE`, only sets of SNPs for individual regions are
+##'   returned. Otherwise, both sets and mapping information are returned.
+##'   Default is `FALSE`.
 ##' @return A nested list containing following components:
 ##' - sets: a named list where each index represents a separate set of SNPs
 ##' - map: a data frame containing SNP mapping information

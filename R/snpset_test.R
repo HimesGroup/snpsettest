@@ -1,4 +1,4 @@
-##' Set-based association tests.
+##' Set-based association tests
 ##'
 ##' Perform set-based association tests between multiple sets of SNPs and a
 ##' phenotype using GWAS summary statistics.

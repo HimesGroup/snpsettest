@@ -2,7 +2,7 @@
 % Please edit documentation in R/snpset_test.R
 \name{snpset_test}
 \alias{snpset_test}
-\title{Set-based association tests.}
+\title{Set-based association tests}
 \usage{
 snpset_test(hsumstats, x, snp_sets, method = c("davies", "saddle"))
 }

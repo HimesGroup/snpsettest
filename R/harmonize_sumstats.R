@@ -4,18 +4,19 @@
 ##'
 ##' Pre-processing of GWAS summary data is required because the sets of variants
 ##' available to a particular GWAS might be poorly matched to the variants in
-##' reference data. SNP matching is performed using chromosome code, base-pair
-##' position, and allele codes, while taking into account possible strand flips
-##' and reverse reference alleles. For matched entries, the SNP IDs in summary
-##' data are replaced with the ones in the reference data.
+##' reference data. SNP matching can be performed either 1) by SNP ID or 2) by
+##' chromosome code, base-pair position, and allele codes, while taking into
+##' account possible strand flips and reverse reference alleles. For matched
+##' entries, the SNP IDs in GWAS summary data are replaced with the ones in the
+##' reference data.
 ##'
 ##' @param sumstats A data frame with two columns: "id" and "p".
 ##' - id = SNP ID (e.g., rs numbers)
 ##' - p = p value of SNP
-
+##'
 ##' If `match_by_id = FALSE`, it requires additional columns: "chr", "pos", "A1"
 ##' and "A2".
-##' - chr =  chromosome (must be integer)
+##' - chr =  chromosome
 ##' - pos =  base-pair position (must be integer)
 ##' - A1, A2 = allele codes (allele order is not important)
 ##'
@@ -29,6 +30,24 @@
 ##'   genotype data ifself is used as the reference data, it would be safe to
 ##'   set `FALSE`. Default is `FALSE`.
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and "p".
+##' @examples
+##' ## Load GWAS summary data
+##' data(exGWAS)
+##'
+##' ## Load reference genotype data
+##' bfile <- system.file("extdata", "example.bed", package = "snpsettest")
+##' x <- read_reference_bed(path = bfile)
+##'
+##' ## Harmonize by SNP IDs
+##' harmonize_sumstats(exGWAS, x)
+##'
+##' ## Harmonize by genomic position and allele codes
+##' ## Reference allele swap will be taken into account
+##' harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
+##'
+##' ## Check matching entries by flipping allele codes
+##' ## Ambiguous SNPs will be excluded from harmonization
+##' harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_flip = TRUE)
 ##' @export
 harmonize_sumstats <- function(sumstats, x,
                                match_by_id = TRUE,

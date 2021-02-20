@@ -1,12 +1,22 @@
-##' Read in reference PLINK Bed file.
+##' Read a PLINK bed file for reference data
 ##'
-##'
+##' Create a `bed.matrix` object from a .bed file. The function expects
+##' .fam and .bim files under the same directory. See [gaston::read.bed.matrix]
+##' for more details.
 ##' @param path A path to the .bed file
 ##' @param ... Further arguments used in [gaston::read.bed.matrix]
+##' @return A [gaston::bed.matrix] object with a standardized genotype
+##'   matrix
+##' @examples
+##' ## Get a path to the example .bed file
+##' bfile <- system.file("extdata", "example.bed", package = "snpsettest")
+##'
+##' ## Read a .bed file
+##' x <- read_reference_bed(path = bfile)
 ##' @export
 read_reference_bed <- function(path, ...) {
 
-  ## To get basic stats for bed file
+  ## To always get basic stats for bed file
   op <- options(gaston.auto.set.stats = TRUE)
 
   path <- normalizePath(path)

@@ -4,38 +4,37 @@
 \alias{harmonize_sumstats}
 \title{Harmonizing GWAS summary to reference data}
 \usage{
-harmonize_sumstats(sumstats, x, match_by_id = FALSE, check_strand_flip = TRUE)
+harmonize_sumstats(sumstats, x, match_by_id = TRUE, check_strand_flip = FALSE)
 }
 \arguments{
-\item{sumstats}{A data frame with columns: "id", "chr", "pos", "A1",
-"A2" and "p".
+\item{sumstats}{A data frame with two columns: "id" and "p".
 \itemize{
 \item id = SNP ID (e.g., rs numbers)
-\item chr =  chromosome (must be integer)
-\item pos =  base-pair position (must be integer)
-\item A1, A2 = allele codes (allele order is not important)
 \item p = p value of SNP
 }
 
-It could have only two columns "id" and "p" if \code{match_by_id = TRUE}.}
+If \code{match_by_id = FALSE}, it requires additional columns: "chr", "pos", "A1"
+and "A2".
+\itemize{
+\item chr =  chromosome
+\item pos =  base-pair position (must be integer)
+\item A1, A2 = allele codes (allele order is not important)
+}}
 
 \item{x}{A \code{bed.matrix} object created using the reference data.}
 
-\item{match_by_id}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, SNP matching will be
-performed by SNP IDs instead of base-pair position and allele codes.
-Default is \code{FALSE}.}
+\item{match_by_id}{If \code{TRUE}, SNP matching will be performed by SNP IDs
+instead of base-pair position and allele codes. Default is \code{TRUE}.}
 
-\item{check_strand_flip}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, the function 1)
-removes ambiguous A/T and G/C SNPs for which the strand is not obvious,
-and 2) attempts to find additional matching entries by flipping allele
-codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype data ifself is
-used as the reference data, it would be safe to set \code{FALSE}. With
-\code{join_by_id_only = TRUE}, it simply determines whether to remove ambiguous
-SNPs. Default is \code{TRUE}.}
+\item{check_strand_flip}{If \code{TRUE}, the function 1) removes ambiguous A/T
+and G/C SNPs for which the strand is not obvious, and 2) attempts to find
+additional matching entries by flipping allele codes (i.e., A->T, T->A,
+C->G, G->A). Only applies when \code{match_by_id = FALSE}. If the GWAS
+genotype data ifself is used as the reference data, it would be safe to
+set \code{FALSE}. Default is \code{FALSE}.}
 }
 \value{
-A data frame with columns: "id", "chr", "pos", "A1", "A2" and
-"p".
+A data frame with columns: "id", "chr", "pos", "A1", "A2" and "p".
 }
 \description{
 Finds an intersection of variants between GWAS summary and reference data.
@@ -43,8 +42,28 @@ Finds an intersection of variants between GWAS summary and reference data.
 \details{
 Pre-processing of GWAS summary data is required because the sets of variants
 available to a particular GWAS might be poorly matched to the variants in
-reference data. SNP matching is performed using chromosome code, base-pair
-position, and allele codes, while taking into account possible strand flips
-and reverse reference alleles. For matched entries, the SNP IDs in summary
-data are replaced with the ones in the reference data.
+reference data. SNP matching can be performed either 1) by SNP ID or 2) by
+chromosome code, base-pair position, and allele codes, while taking into
+account possible strand flips and reverse reference alleles. For matched
+entries, the SNP IDs in GWAS summary data are replaced with the ones in the
+reference data.
+}
+\examples{
+## Load GWAS summary data
+data(exGWAS)
+
+## Load reference genotype data
+bfile <- system.file("extdata", "example.bed", package = "snpsettest")
+x <- read_reference_bed(path = bfile)
+
+## Harmonize by SNP IDs
+harmonize_sumstats(exGWAS, x)
+
+## Harmonize by genomic position and allele codes
+## Reference allele swap will be taken into account
+harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
+
+## Check matching entries by flipping allele codes
+## Ambiguous SNPs will be excluded from harmonization
+harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_flip = TRUE)
 }

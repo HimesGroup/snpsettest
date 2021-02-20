@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_reference_bed.R
 \name{read_reference_bed}
 \alias{read_reference_bed}
-\title{Read in reference PLINK Bed file.}
+\title{Read a PLINK bed file for reference data}
 \usage{
 read_reference_bed(path, ...)
 }
@@ -11,6 +11,19 @@ read_reference_bed(path, ...)
 
 \item{...}{Further arguments used in \link[gaston:read.bed.matrix]{gaston::read.bed.matrix}}
 }
+\value{
+A \link[gaston:bed.matrix-class]{gaston::bed.matrix} object with a standardized genotype
+matrix
+}
 \description{
-Read in reference PLINK Bed file.
+Create a \code{bed.matrix} object from a .bed file. The function expects
+.fam and .bim files under the same directory. See \link[gaston:read.bed.matrix]{gaston::read.bed.matrix}
+for more details.
+}
+\examples{
+## Get a path to the example .bed file
+bfile <- system.file("extdata", "example.bed", package = "snpsettest")
+
+## Read a .bed file
+x <- read_reference_bed(path = bfile)
 }

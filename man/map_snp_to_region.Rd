@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_snp_to_region.R
 \name{map_snp_to_region}
 \alias{map_snp_to_region}
-\title{Map SNPs to genomic regions (e.g., genes)}
+\title{Map SNPs to genomic regions}
 \usage{
 map_snp_to_region(
   info_snp,
@@ -30,14 +30,15 @@ and "end".
 }}
 
 \item{extend_region_start}{A single non-negative integer, allowing for a
-certain kb window before the region to be included. Default is 20 (= 20kb).}
+certain kb window before the region to be included. Default is 20 (=
+20kb).}
 
 \item{extend_region_end}{A single non-negative integer, allowing for a
 certain kb window after the region to be included. Default is 20 (= 20kb).}
 
-\item{only_sets}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, sets of SNPs for individual
-regions are returned, otherwise both sets and mapping information are
-returned. Default is \code{FALSE}.}
+\item{only_sets}{If \code{TRUE}, only sets of SNPs for individual regions are
+returned. Otherwise, both sets and mapping information are returned.
+Default is \code{FALSE}.}
 }
 \value{
 A nested list containing following components:
@@ -47,7 +48,7 @@ A nested list containing following components:
 }
 }
 \description{
-Map SNPs to genomic regions to extract sets of SNPs for set-based tests. A
-typical usage would be to annotate SNPs onto their neighboring genes to
-perform gene-based tests.
+Map SNPs to genomic regions (e.g., genes) to extract sets of SNPs for
+set-based tests. A typical usage would be to annotate SNPs onto their
+neighboring genes to perform gene-based tests.
 }
