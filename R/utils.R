@@ -1,32 +1,20 @@
 ##  define global variables due to non-standard evaluations
 utils::globalVariables(
          c(".", "id", "chr", "pos", "A1", "A2",
-           "region.id", "region.start", "region.end",
+           "gene.id", "gene.start", "gene.end",
            "p", "i.p", "chisq", "i.chisq",
            "A1_S", "A2_S", "A1_F", "A2_F", "A1_SF", "A2_SF",
            "patterns", "variable", "maf", "callrate")
        )
 
-stop2 <- function(...) {
-  stop(sprintf(...), call. = FALSE)
-}
-
-warning2 <- function(...) {
-  warning(sprintf(...), call. = FALSE, immediate. = TRUE)
-}
-
-message2 <- function(...) {
-  message(sprintf(...))
-}
-
 has_columns <- function(df, columns) {
-  df_label <- deparse(substitute(df))
+  df_name <- deparse(substitute(df))
   df_columns <- names(df)
   diff_columns <- setdiff(columns, df_columns)
   if (length(diff_columns) > 0) {
-    stop2("'%s' doesn't have column(s): %s.",
-      df_label,
-      paste(diff_columns, collapse = ", ")
+    stop("'", df_name, "' doesn't have column(s): ",
+         paste(diff_columns, collapse = ", "), ".",
+         call. = FALSE
     )
   }
 }
@@ -49,9 +37,10 @@ is_bed_matrix <- function(obj) {
 }
 
 is_df <- function(df) {
-  df_label <- deparse(substitute(df))
+  df_name <- deparse(substitute(df))
   if (!is.data.frame(df)) {
-    stop2("'%s' is not a data frame.", df_label)
+    stop("'", df_name, "' is not a data frame.",
+         call. = FALSE)
   }
 }
 
@@ -62,24 +51,26 @@ is_tf <- function(x, arg_name) {
 }
 
 is_named_list <- function(x) {
-  x_label <- deparse(substitute(x))
-  x_names <- names(x)
-  if (!is.list(x) || is.null(x_names) || anyDuplicated(x_names) > 0L) {
-    stop2("'%s' must be a named list with an unique name for each set.",
-          x_label)
+  x_name <- deparse(substitute(x))
+  x_colnames <- names(x)
+  if (!is.list(x) || is.null(x_colnames) || anyDuplicated(x_colnames) > 0L) {
+    stop("'", x_name,
+         "' must be a named list with an unique name for each set.",
+         call. = FALSE)
   }
 }
 
 is_nonnegative_number <- function(x, arg) {
   if (!is.numeric(x) || is.na(x) || x < 0L || length(x) != 1L) {
-    stop2("'%s' must be a non-negative number of length 1.", arg)
+    stop("'", arg, "' must be a non-negative number of length 1.",
+         call. = FALSE)
   }
 }
 
 is_number_between <- function(x, left, right, arg) {
   if (!is.numeric(x) || is.na(x) || x < left || x > right) {
-    stop2("'%s' must be a number of length 1 between %s and %s.",
-          arg, left, right)
+    stop("'", arg, "' must be a number of length 1 between ",
+         left, " and ", right, ".", call. = FALSE)
   }
 }
 
