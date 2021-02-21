@@ -17,10 +17,10 @@ A set-based association test in the **snpsettest** package is based on
 the statistical test described in
 [VEGAS](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896770/)
 (**ve**rsatile **g**ene-based **a**ssociation **s**tudy), which combines
-the effects of a set of SNPs within a set accounting for linkage
-disequilibrium between markers. This package uses a more efficient
-method than the original implementation for computing a set-level
-p-value, significantly reducing computation time.
+the effects of a set of SNPs accounting for linkage disequilibrium
+between markers. This package uses a more efficient method than the
+original VEGAS implementation for computing a set-level p-value,
+significantly reducing computation time.
 
 ## Installation
 

@@ -11,10 +11,10 @@ Description: The goal of 'snpsettest' is to provide simple tools that perform
              using GWAS summary statistics. A set-based association test in this
              package is based on the statistical model described in VEGAS
              (versatile gene-based association study), which combines the
-             effects of a set of SNPs within a set accounting for linkage
-             disequilibrium between markers. This package uses a more efficient
-             method than the original implementation for computing a set-level
-             p-value, significantly reducing computation time.
+             effects of a set of SNPs accounting for linkage disequilibrium
+             between markers. this package uses a more efficient method than the
+             original VEGAS implementation for computing a set-level p-value,
+             significantly reducing computation time.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

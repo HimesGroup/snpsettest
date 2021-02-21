@@ -4,11 +4,17 @@
 \name{snpsettest-package}
 \alias{snpsettest}
 \alias{snpsettest-package}
-\title{snpsettest: A Set-Based Association Test using GWAS Summary Statistics for Complex-Traits}
+\title{snpsettest: A Set-based Association Test using GWAS Summary Statistics}
 \description{
-The goal of 'snpsettest' is to provide simple tools to compute
-             SNP-set level p-values using GWAS summary statistics. The primary
-             application of this package is gene-based tests.
+The goal of 'snpsettest' is to provide simple tools that perform
+             set-based association tests (e.g., gene-based association tests)
+             using GWAS summary statistics. A set-based association test in this
+             package is based on the statistical model described in VEGAS
+             (versatile gene-based association study), which combines the
+             effects of a set of SNPs accounting for linkage disequilibrium
+             between markers. this package uses a more efficient method than the
+             original VEGAS implementation for computing a set-level p-value,
+             significantly reducing computation time.
 }
 \author{
 \strong{Maintainer}: Jaehyun Joo \email{jaehyunjoo@outlook.com}
