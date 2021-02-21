@@ -1,19 +1,27 @@
 Package: snpsettest
-Title: A Set-Based Association Test using GWAS Summary Statistics for Complex-Traits
+Title: A Set-based Association Test using GWAS Summary Statistics
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Jaehyun",
            family = "Joo",
            role = c("aut", "cre"),
            email = "jaehyunjoo@outlook.com")
-Description: The goal of 'snpsettest' is to provide simple tools to compute
-             SNP-set level p-values using GWAS summary statistics. The primary
-             application of this package is gene-based tests.
+Description: The goal of 'snpsettest' is to provide simple tools that perform
+             set-based association tests (e.g., gene-based association tests)
+             using GWAS summary statistics. A set-based association test in this
+             package is based on the statistical model described in VEGAS
+             (versatile gene-based association study), which combines the
+             effects of a set of SNPs within a set accounting for linkage
+             disequilibrium between markers. This package uses a more efficient
+             method than the original implementation for computing a set-level
+             p-value, significantly reducing computation time.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
 Imports: 
     gaston,
     data.table,
@@ -25,5 +33,3 @@ VignetteBuilder: knitr
 LinkingTo: 
     Rcpp,
     RcppArmadillo
-Depends: 
-    R (>= 2.10)
