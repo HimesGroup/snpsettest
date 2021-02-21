@@ -63,7 +63,7 @@ such as the 1000 Genome. This package accepts PLINK 1 binary files
 bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 
 # Read a .bed file using bed.matrix-class in gaston package
-# Genotypes are retrieved on demand to manage large-scale genotype data
+# Genotypes are retrieved only on demand to manage large-scale genotype data
 x <- read_reference_bed(bfile, verbose = FALSE)
 ```
 
@@ -124,7 +124,7 @@ SNPs onto their neighboring genes.
 
 ``` r
 # Load gene information
-data(gene.curated.GRCh37) # extracted from gencode release 19
+data(gene.curated.GRCh37) # extracted from GENCODE release 19
 head(gene.curated.GRCh37, 3)
 #>             gene.id chr  start    end strand  gene.name      gene.type
 #> 1 ENSG00000186092.4   1  69091  70008      +      OR4F5 protein_coding
@@ -153,7 +153,6 @@ snp_sets_50kb <- map_snp_to_gene(
 ``` r
 # Perform gene-based association tests for the first 5 genes
 res <- snpset_test(hsumstats1, x, snp_sets$sets[1:5])
-#> 
 #> -----
 #> 2,630 variants are found in hsumstats1.
 #> 5 set-based association tests will be performed.

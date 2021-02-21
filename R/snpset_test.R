@@ -58,7 +58,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
     setDT(x@snps)
   }
 
-  message("\n-----\n",
+  message("-----\n",
           pretty_num(nrow(hsumstats)),
           " variants are found in ",
           hsumstats_name,
