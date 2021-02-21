@@ -52,7 +52,7 @@ library(snpsettest)
 # Load an example of GWAS summary file
 # snpsettest requires id, chr, pos, A1, A2, and p columns for GWAS summary file
 data(exGWAS)
-head(exGWAS)
+head(exGWAS, 3)
 ```
 
 ### Reference data
@@ -68,7 +68,7 @@ bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 
 # Read a .bed file using bed.matrix-class in gaston package
 # Genotypes are retrieved on demand to manage large-scale genotype data
-x <- read_reference_bed(bfile)
+x <- read_reference_bed(bfile, verbose = FALSE)
 ```
 
 ### Harmonize GWAS summary to the reference data
@@ -100,6 +100,7 @@ their neighboring genes.
 ```{r snp2gene}
 # Load gene information
 data(gene.curated.GRCh37) # extracted from gencode release 19
+head(gene.curated.GRCh37, 3)
 
 # Map SNPs to genes
 snp_sets <- map_snp_to_gene(hsumstats1, gene.curated.GRCh37)

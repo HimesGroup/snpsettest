@@ -43,14 +43,11 @@ library(snpsettest)
 # Load an example of GWAS summary file
 # snpsettest requires id, chr, pos, A1, A2, and p columns for GWAS summary file
 data(exGWAS)
-head(exGWAS)
-#>      id chr   pos A1 A2          p
-#> 1 SNP_0   1 50149  A  C 0.73013485
-#> 2 SNP_2   1 50818  T  C 0.87234011
-#> 3 SNP_3   1 51094  C  T 0.52959587
-#> 4 SNP_5   1 51476  A  C 0.86017713
-#> 5 SNP_6   1 51820  C  A 0.81271456
-#> 6 SNP_7   1 51880  C  G 0.06055741
+head(exGWAS, 3)
+#>      id chr   pos A1 A2         p
+#> 1 SNP_0   1 50149  A  C 0.7301348
+#> 2 SNP_2   1 50818  T  C 0.8723401
+#> 3 SNP_3   1 51094  C  T 0.5295959
 ```
 
 ### Reference data
@@ -67,8 +64,7 @@ bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 
 # Read a .bed file using bed.matrix-class in gaston package
 # Genotypes are retrieved on demand to manage large-scale genotype data
-x <- read_reference_bed(bfile)
-#> Genotype matrix was standardized by means and genotypic standard deviations.
+x <- read_reference_bed(bfile, verbose = FALSE)
 ```
 
 ### Harmonize GWAS summary to the reference data
@@ -129,6 +125,11 @@ SNPs onto their neighboring genes.
 ``` r
 # Load gene information
 data(gene.curated.GRCh37) # extracted from gencode release 19
+head(gene.curated.GRCh37, 3)
+#>             gene.id chr  start    end strand  gene.name      gene.type
+#> 1 ENSG00000186092.4   1  69091  70008      +      OR4F5 protein_coding
+#> 2 ENSG00000237683.5   1 134901 139379      - AL627309.1 protein_coding
+#> 3 ENSG00000235249.1   1 367640 368634      +     OR4F29 protein_coding
 
 # Map SNPs to genes
 snp_sets <- map_snp_to_gene(hsumstats1, gene.curated.GRCh37)
