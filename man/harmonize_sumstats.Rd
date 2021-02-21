@@ -44,7 +44,7 @@ Pre-processing of GWAS summary data is required because the sets of variants
 available in a particular GWAS might be poorly matched to the variants in
 reference data. SNP matching can be performed either 1) by SNP ID or 2) by
 chromosome code, base-pair position, and allele codes, while taking into
-account possible strand flips and reverse reference alleles. For matched
+account possible strand flips and reference allele swap. For matched
 entries, the SNP IDs in GWAS summary data are replaced with the ones in the
 reference data.
 }

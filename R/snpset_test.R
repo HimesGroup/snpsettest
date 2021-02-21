@@ -93,7 +93,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
   hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
 
   ## Perform set tests
-  message("Starting set-based association tests.\n-----\n")
+  message("Starting set-based association tests...\n-----\n")
   rbindlist(
     Map(
       function(snp_set, set_id) {
