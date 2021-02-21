@@ -34,7 +34,9 @@
 ##' snp_sets <- map_snp_to_gene(hsumstats, gene.curated.GRCh37)
 ##'
 ##' ## Perform set-based (gene-based) association tests
+##' \dontrun{
 ##' snpset_test(hsumstats, x, snp_sets$sets)
+##' }
 ##' @export
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, x, snp_sets,
