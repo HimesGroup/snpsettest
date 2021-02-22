@@ -1,5 +1,5 @@
 ---
-title: "Introduction to snpsetttest"
+title: "Introduction to snpsettest"
 author: "Jaehyun Joo"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette

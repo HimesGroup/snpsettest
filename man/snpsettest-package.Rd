@@ -4,7 +4,7 @@
 \name{snpsettest-package}
 \alias{snpsettest}
 \alias{snpsettest-package}
-\title{snpsettest: A Set-based Association Test using GWAS Summary Statistics}
+\title{snpsettest: A Set-Based Association Test using GWAS Summary Statistics}
 \description{
 The goal of 'snpsettest' is to provide simple tools that perform
              set-based association tests (e.g., gene-based association tests)

@@ -103,7 +103,7 @@ done
 ## Read PLINK 1 binary fileset to R session
 
 This package uses a bed.matrix-class from the
-[**gaston**](https://cran.r-project.org/web/packages/gaston/index.html) package
+[**gaston**](https://CRAN.R-project.org/package=gaston) package
 to attach genotype data to R session.
 
 ```{r toR, eval = FALSE}

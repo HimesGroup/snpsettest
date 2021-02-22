@@ -1,5 +1,5 @@
 Package: snpsettest
-Title: A Set-based Association Test using GWAS Summary Statistics
+Title: A Set-Based Association Test using GWAS Summary Statistics
 Version: 0.1.0
 Authors@R: 
     person(given = "Jaehyun",

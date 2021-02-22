@@ -11,14 +11,12 @@ vignette: >
 
 A set-based association test in the **snpsettest** package uses the sum of
 squared normally distributed variables as a test statistic that are transformed
-via SNP-level p-values. The same test has been used in
-[VEGAS](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896770/) (**ve**rsatile
-**g**ene-based **a**ssociation **s**tudy) and it also can be seen as a special
-case of [SKAT](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3135811/#app3)
-(**s**equence **k**ernel **a**ssociation **t**est) where weights to the variants
-are all of the same (i.e., unweighted SKAT). While the VEGAS software used a
-simulation-based approach to compute a set-level p-value, it can be calculated
-more efficiently.
+via SNP-level p-values. The same test has been used in VEGAS (**ve**rsatile
+**g**ene-based **a**ssociation **s**tudy) [1] and it also can be seen as a special
+case of SKAT (**s**equence **k**ernel **a**ssociation **t**est) [2] where weights to
+the variants are all of the same (i.e., unweighted SKAT). While the VEGAS
+software used a simulation-based approach to compute a set-level p-value, it can
+be calculated more efficiently.
 
 Letting a set of $Z$ scores of individual SNPs $z_i$ for $i \in 1:p$ within a
 set $s$, the test statistic $Q_s$ is
@@ -88,12 +86,22 @@ scalar $q$,
 
 $$Pr(Q_s > q)$$
 
-several methods have been proposed, such as [Davies
-method](https://www.jstor.org/stable/2346911?seq=1#metadata_info_tab_contents)
-and [Kuonen's saddlepoint
-approximations](https://www.jstor.org/stable/2673596?seq=1#metadata_info_tab_contents).
-Compared to a simulation-based approach, these methods are more computationally
-efficient, and thus, utilized in the **snpsettest** package.
+several methods have been proposed, such as Davies method [3] and Kuonen's
+saddlepoint approximations [4]. Compared to a simulation-based approach, these
+methods are more computationally efficient, and thus, used in the **snpsettest**
+package.
 
+**References**
 
+1. Liu, J. Z. et al. A Versatile Gene-Based Test for Genome-wide Association
+Studies. Am J Hum Genet 87, 139–145 (2010).
 
+2. Wu, M. C. et al. Rare-Variant Association Testing for Sequencing Data with the
+Sequence Kernel Association Test. Am J Hum Genet 89, 82–93 (2011).
+
+3. Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of χ2
+Random Variables. Journal of the Royal Statistical Society. Series C (Applied
+Statistics) 29, 323–333 (1980).
+
+4. Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms in
+Normal Variables. Biometrika 86, 929–935 (1999).
