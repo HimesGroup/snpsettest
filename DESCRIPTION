@@ -12,7 +12,7 @@ Description: The goal of 'snpsettest' is to provide simple tools that perform
              package is based on the statistical model described in VEGAS
              (versatile gene-based association study), which combines the
              effects of a set of SNPs accounting for linkage disequilibrium
-             between markers. this package uses a more efficient method than the
+             between markers. This package uses a more efficient method than the
              original VEGAS implementation for computing a set-level p-value,
              significantly reducing computation time.
 License: GPL (>= 3)
