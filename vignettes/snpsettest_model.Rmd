@@ -1,6 +1,7 @@
 ---
 title: "A set-based association test in snpsettest"
 author: "Jaehyun Joo"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{A set-based association test in snpsettest}
@@ -17,7 +18,7 @@ case of [SKAT](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3135811/#app3)
 (**s**equence **k**ernel **a**ssociation **t**est) where weights to the variants
 are all of the same (i.e., unweighted SKAT). While the VEGAS software used a
 simulation-based approach to compute a set-level p-value, it can be calculated
-with other methods.
+more efficiently.
 
 Letting a set of $Z$ scores of individual SNPs $z_i$ for $i \in 1:p$ within a
 set $s$, the test statistic $Q_s$ is
@@ -45,7 +46,7 @@ Now, we posit $U = \Sigma^{-\frac12}(Z - \mu)$ so that
 
 $$U \sim N(\mathbf{0}, I_p),~~U = Y - \Sigma^{-\frac12}\mu$$
 
-and express the test statistic $Q_s$ as a quadratic form as follow:
+and express the test statistic $Q_s$ as a quadratic form:
 
 $$
 \begin{aligned}
@@ -92,7 +93,7 @@ method](https://www.jstor.org/stable/2346911?seq=1#metadata_info_tab_contents)
 and [Kuonen's saddlepoint
 approximations](https://www.jstor.org/stable/2673596?seq=1#metadata_info_tab_contents).
 Compared to a simulation-based approach, these methods are more computationally
-efficient, and thus, used in the **snpsettest** package.
+efficient, and thus, utilized in the **snpsettest** package.
 
 
 

@@ -33,15 +33,18 @@ devtools::install_github("HimesGroup/snpsettest")
 ## Getting started
 
 This is a basic example which shows you how to perform gene-based
-association tests using GWAS summary statistics:
+association tests using GWAS summary statistics in which sets of SNPs
+are defined by genes.
 
 ### GWAS summary file
+
+The **snpsettest** requires SNP-level p-values to perform gene-based
+association tests.
 
 ``` r
 library(snpsettest)
 
 # Load an example of GWAS summary file
-# snpsettest requires id, chr, pos, A1, A2, and p columns for GWAS summary file
 data(exGWAS)
 head(exGWAS, 3)
 #>      id chr   pos A1 A2         p
@@ -55,8 +58,9 @@ head(exGWAS, 3)
 To infer the relationships among SNPs, the **snpsettest** package
 requires a reference data set. The GWAS genotype data itself can be used
 as the reference data. Otherwise, you could use publicly available data,
-such as the 1000 Genome. This package accepts PLINK 1 binary files
-(.bed, .bim, .fam) as an input.
+such as the 1000 Genomes. This package accepts PLINK 1 binary files
+(.bed, .bim, .fam) as an input. We can use `read_reference_bed` to load
+them onto R.
 
 ``` r
 # Path to .bed file
@@ -71,10 +75,10 @@ x <- read_reference_bed(bfile, verbose = FALSE)
 
 Pre-processing of GWAS summary data is required because the sets of
 variants available in a particular GWAS might be poorly matched to the
-variants in reference data. SNP matching can be performed either 1) by
-SNP ID or 2) by chromosome code, base-pair position, and allele codes,
-while taking into account possible strand flips and reference allele
-swap.
+variants in reference data. SNP matching can be performed using
+`harmonize_sumstats` either 1) by SNP ID or 2) by chromosome code,
+base-pair position, and allele codes, while taking into account possible
+strand flips and reference allele swap.
 
 ``` r
 # Harmonize by SNP IDs
@@ -120,7 +124,9 @@ hsumstats3 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_fl
 ### Map SNPs to genes
 
 To perform gene-based association tests, it is necessary to annotate
-SNPs onto their neighboring genes.
+SNPs onto their neighboring genes. Mapping SNPs to genes (or genomic
+regions) can be achieved by `map_snp_to_genes` with gene start/end
+information.
 
 ``` r
 # Load gene information
@@ -149,6 +155,9 @@ snp_sets_50kb <- map_snp_to_gene(
 ```
 
 ### Perform gene-based association tests
+
+Once we have SNP sets for genes, `snpset_test` can be used to perform
+gene-based association tests.
 
 ``` r
 # Perform gene-based association tests for the first 5 genes

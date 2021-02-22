@@ -1,6 +1,7 @@
 ---
 title: "Processing 1000 Genomes data for set-based association tests"
 author: "Jaehyun Joo"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Processing 1000 Genomes data for set-based association tests}
@@ -42,7 +43,7 @@ plink2 --zst-decompress all_phase3.pgen.zst > all_phase3.pgen
 
 ## Choose an appropriate population
 
-Patterns of LD could vary among racial/ethnic groups, and thus, it is may
+Patterns of LD could vary among racial/ethnic groups, and thus, it may be
 necessary to choose an appropriate population. For example, if your GWAS is
 based on European descent, you may want to keep **EUR** samples as described in
 the "all_phase3.psam" file.
@@ -95,7 +96,7 @@ plink2 --pfile EUR_phase3_autosomes \
        
 # Split bed/bim/fam by chromosome when memory is limited
 for i in {1..22}
-do plink2 --pfile EUR_phase3_autosomes --chr $i --make-bed --out EUR_phase_chr$i
+do plink2 --bfile EUR_phase3_autosomes --chr $i --make-bed --out EUR_phase_chr$i
 done
 ```
 

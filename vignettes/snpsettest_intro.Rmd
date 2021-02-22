@@ -1,53 +1,30 @@
 ---
-output: github_document
+title: "Introduction to snpsetttest"
+author: "Jaehyun Joo"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to snpsettest}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  comment = "#>"
 )
 ```
 
-# snpsettest
+This vignette shows you how to perform gene-based association tests using GWAS
+summary statistics in which sets of SNPs are defined by genes.
 
-<!-- badges: start -->
-[![R-CMD-check](https://github.com/HimesGroup/snpsettest/workflows/R-CMD-check/badge.svg)](https://github.com/HimesGroup/snpsettest/actions)
-<!-- badges: end -->
+***
 
-The goal of **snpsettest** is to provide simple tools that perform a set-based
-association test (e.g., gene-based association test) using GWAS summary
-statistics. **This package is currently under development.**
-
-A set-based association test in the **snpsettest** package is based on the
-statistical test described in
-[VEGAS](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2896770/) (**ve**rsatile
-**g**ene-based **a**ssociation **s**tudy), which combines the effects of a set
-of SNPs accounting for linkage disequilibrium between markers. This package uses
-a more efficient method than the original VEGAS implementation for computing a
-set-level p-value, significantly reducing computation time.
-
-## Installation
-
-To install this package, 
-
-```{r setup, eval = FALSE}
-devtools::install_github("HimesGroup/snpsettest")
-```
-
-## Getting started
-
-This is a basic example which shows you how to perform gene-based association
-tests using GWAS summary statistics in which sets of SNPs are defined by genes.
-
-### GWAS summary file
+# GWAS summary statistics
 
 The **snpsettest** requires SNP-level p-values to perform gene-based association
-tests.
+tests. 
 
 ```{r GWAS summary}
 library(snpsettest)
@@ -57,7 +34,7 @@ data(exGWAS)
 head(exGWAS, 3)
 ```
 
-### Reference data
+# Reference data
 
 To infer the relationships among SNPs, the **snpsettest** package requires a
 reference data set. The GWAS genotype data itself can be used as the reference
@@ -74,7 +51,7 @@ bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 x <- read_reference_bed(bfile, verbose = FALSE)
 ```
 
-### Harmonize GWAS summary to the reference data
+# Harmonize GWAS summary to the reference data
 
 Pre-processing of GWAS summary data is required because the sets of variants
 available in a particular GWAS might be poorly matched to the variants in
@@ -95,12 +72,11 @@ hsumstats2 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
 hsumstats3 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_flip = TRUE)
 ```
 
-### Map SNPs to genes
+# Map SNPs to genes
 
 To perform gene-based association tests, it is necessary to annotate SNPs onto
 their neighboring genes. Mapping SNPs to genes (or genomic regions) can be
 achieved by `map_snp_to_genes` with gene start/end information.
-
 
 ```{r snp2gene}
 # Load gene information
@@ -118,7 +94,7 @@ snp_sets_50kb <- map_snp_to_gene(
 )
 ```
 
-### Perform gene-based association tests
+# Perform gene-based association tests
 
 Once we have SNP sets for genes, `snpset_test` can be used to perform
 gene-based association tests.
