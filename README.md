@@ -38,8 +38,8 @@ are defined by genes.
 
 ### GWAS summary file
 
-The **snpsettest** requires SNP-level p-values to perform gene-based
-association tests.
+The **snpsettest** package requires SNP-level p-values to perform
+gene-based association tests.
 
 ``` r
 library(snpsettest)

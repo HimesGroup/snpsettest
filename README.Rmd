@@ -46,8 +46,8 @@ tests using GWAS summary statistics in which sets of SNPs are defined by genes.
 
 ### GWAS summary file
 
-The **snpsettest** requires SNP-level p-values to perform gene-based association
-tests.
+The **snpsettest** package requires SNP-level p-values to perform gene-based
+association tests.
 
 ```{r GWAS summary}
 library(snpsettest)
