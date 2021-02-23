@@ -39,15 +39,16 @@
 ##' x <- read_reference_bed(path = bfile)
 ##'
 ##' ## Harmonize by SNP IDs
-##' harmonize_sumstats(exGWAS, x)
+##' hsumstats1 <- harmonize_sumstats(exGWAS, x)
 ##'
 ##' ## Harmonize by genomic position and allele codes
 ##' ## Reference allele swap will be taken into account
-##' harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
+##' hsumstats2 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
 ##'
 ##' ## Check matching entries by flipping allele codes
 ##' ## Ambiguous SNPs will be excluded from harmonization
-##' harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_flip = TRUE)
+##' hsumstats3 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE,
+##'                                  check_strand_flip = TRUE)
 ##' @export
 harmonize_sumstats <- function(sumstats, x,
                                match_by_id = TRUE,

@@ -1,21 +1,19 @@
 ##' Set-based association tests
 ##'
 ##' Perform set-based association tests between multiple sets of SNPs and a
-##' phenotype using GWAS summary statistics.
+##' phenotype using GWAS summary statistics. If the function encounters missing
+##' genotypes in the reference data, they will be imputed with genotype means.
 ##' @param hsumstats A data frame processed by \code{\link{harmonize_sumstats}}.
 ##' @param x A `bed.matrix` object created from the reference data.
 ##' @param snp_sets A named list where each index represents a separate set of
 ##'   SNPs.
 ##' @param method A method to compute a set-level p value.
 ##' @return A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
-##'   "top.snp.id" and "top.snp.p"
-##' - set.id = a name of SNP set
-##' - p = a set-level p value
-##' - n.snp = the number of SNPs in an intersection of set input and the
-##' reference data
-##' - n.snp.clumped = the number of SNPs in a set after LD clumping
-##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
-##' - top.snp.p = The smallest p-value within a set of SNPs
+##'   "top.snp.id" and "top.snp.p" - set.id = a name of SNP set - p = a
+##'   set-level p value - n.snp = the number of SNPs in an intersection of set
+##'   input and the reference data - n.snp.clumped = the number of SNPs in a set
+##'   after LD clumping - top.snp.id = SNP ID with the smallest p-value within a
+##'   set of SNPs - top.snp.p = The smallest p-value within a set of SNPs
 ##' @examples
 ##' ## Load GWAS summary data
 ##' data(exGWAS)
@@ -35,7 +33,7 @@
 ##'
 ##' ## Perform set-based (gene-based) association tests
 ##' \dontrun{
-##' snpset_test(hsumstats, x, snp_sets$sets)
+##' out <- snpset_test(hsumstats, x, snp_sets$sets)
 ##' }
 ##' @export
 ##' @importFrom stats qchisq
@@ -84,7 +82,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
       gaston::standardize(x) <- "mu_sigma", # propagate to subset by columns
       error = function(e) {
         x <- gaston::set.stats(x)
-        gaston:: standardize(x) <- "mu_sigma"
+        gaston::standardize(x) <- "mu_sigma"
       }
     )
   }

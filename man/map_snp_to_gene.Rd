@@ -61,12 +61,12 @@ data(exGWAS)
 data(gene.curated.GRCh37)
 
 ## Map SNPs to genes
-map_snp_to_gene(exGWAS, gene.curated.GRCh37)
+snp_sets <- map_snp_to_gene(exGWAS, gene.curated.GRCh37)
 
-## better to use harmonized GWAS data for gene mapping
+## Better to use harmonized GWAS data for gene mapping
 bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 x <- read_reference_bed(path = bfile)
 hsumstats <- harmonize_sumstats(exGWAS, x)
-map_snp_to_gene(hsumstats, gene.curated.GRCh37)
+snp_sets <- map_snp_to_gene(hsumstats, gene.curated.GRCh37)
 
 }
