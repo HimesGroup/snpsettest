@@ -19,7 +19,7 @@ read_reference_bed <- function(path, ...) {
   ## To always get basic stats for bed file
   op <- options(gaston.auto.set.stats = TRUE)
 
-  path <- normalizePath(path)
+  path <- path.expand(path)
   if (!file.exists(path)) {
     path <- paste0(path, ".bed")
     if (!file.exists(path)) {
