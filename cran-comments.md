@@ -1,9 +1,10 @@
 ## Test environments
 
-* GitHub Actions (ubuntu-20.04): release, devel
-* GitHub Actions (windows): release
-* GitHub Actions (macOS): release
-* win-builder: devel
+* Arch Linux: R 4.0.4
+* GitHub Actions (Ubuntu-20.04): release, devel
+* GitHub Actions (Windows-lastest): release
+* GitHub Actions (macOS-lastest): release
+* Win-builder: devel
 
 ## R CMD check results
 
