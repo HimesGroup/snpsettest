@@ -16,6 +16,14 @@ The goal of 'snpsettest' is to provide simple tools that perform
              original VEGAS implementation for computing a set-level p-value,
              significantly reducing computation time.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/HimesGroup/snpsettest}
+  \item Report bugs at \url{https://github.com/HimesGroup/snpsettest/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Jaehyun Joo \email{jaehyunjoo@outlook.com}
 

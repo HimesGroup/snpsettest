@@ -47,7 +47,7 @@ library(snpsettest)
 # Load an example of GWAS summary file
 data(exGWAS)
 head(exGWAS, 3)
-#>      id chr   pos A1 A2         p
+#>      id chr   pos A1 A2    pvalue
 #> 1 SNP_0   1 50215  G  C 0.1969353
 #> 2 SNP_2   1 50768  A  G 0.6620465
 #> 3 SNP_3   1 50833  T  G 0.5822596
@@ -167,23 +167,18 @@ res <- snpset_test(hsumstats1, x, snp_sets$sets[1:5])
 #> 5 set-based association tests will be performed.
 #> Starting set-based association tests...
 #> -----
-#> +++ Testing: ENSG00000186092.4 with 110 SNPs +++
-#> - P: 0.04207358
-#> +++ Testing: ENSG00000237683.5 with 109 SNPs +++
-#> - P: 0.009377961
-#> +++ Testing: ENSG00000235249.1 with 95 SNPs +++
-#> - P: 0.182509
-#> +++ Testing: ENSG00000185097.2 with 96 SNPs +++
-#> - P: 0.1221249
-#> +++ Testing: ENSG00000187634.6 with 135 SNPs +++
-#> - P: 0.01031829
+#> ENSG00000186092.4: N.SNP = 110, P = 0.04207358
+#> ENSG00000237683.5: N.SNP = 109, P = 0.009377961
+#> ENSG00000235249.1: N.SNP = 95, P = 0.182509
+#> ENSG00000185097.2: N.SNP = 96, P = 0.1221249
+#> ENSG00000187634.6: N.SNP = 135, P = 0.01031829
 
 # Show output
 res
-#>               set.id           p n.snp top.snp.id    top.snp.p
-#> 1: ENSG00000186092.4 0.042073582   110     SNP_78 0.0009143436
-#> 2: ENSG00000237683.5 0.009377961   109    SNP_363 0.0006419257
-#> 3: ENSG00000235249.1 0.182509033    95   SNP_1311 0.0047610286
-#> 4: ENSG00000185097.2 0.122124945    96   SNP_2458 0.0034444534
-#> 5: ENSG00000187634.6 0.010318292   135   SNP_3601 0.0003350840
+#>               set.id    tstat      pvalue n.snp top.snp.id top.snp.pvalue
+#> 1: ENSG00000186092.4 141.7800 0.042073582   110     SNP_78   0.0009143436
+#> 2: ENSG00000237683.5 154.2858 0.009377961   109    SNP_363   0.0006419257
+#> 3: ENSG00000235249.1 109.0270 0.182509033    95   SNP_1311   0.0047610286
+#> 4: ENSG00000185097.2 114.7301 0.122124945    96   SNP_2458   0.0034444534
+#> 5: ENSG00000187634.6 185.7576 0.010318292   135   SNP_3601   0.0003350840
 ```

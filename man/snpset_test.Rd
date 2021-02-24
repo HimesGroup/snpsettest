@@ -46,19 +46,20 @@ x <- read_reference_bed(path = bfile)
 ## GWAS harmonization with reference data
 hsumstats <- harmonize_sumstats(exGWAS, x)
 
+## Perform a set-based test with an arbitrary SNP set
+snpset_test(hsumstats, x, list(test = c("SNP_880", "SNP_1533", "SNP_4189")))
+
 ## Load gene information data
 data(gene.curated.GRCh37)
 
 ## Map SNPs to genes
 snp_sets <- map_snp_to_gene(hsumstats, gene.curated.GRCh37)
 
-## Perform set-based (gene-based) association tests
+## Perform gene-based association tests
 \dontrun{
 out <- snpset_test(hsumstats, x, snp_sets$sets)
 }
 
-## Perform a test with an arbitrary SNP set
-snpset_test(hsumstats, x, list(test = c("SNP_880", "SNP_1533", "SNP_4189")))
 }
 \references{
 Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of
