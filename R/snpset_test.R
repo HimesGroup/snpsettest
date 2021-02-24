@@ -37,6 +37,9 @@
 ##' \dontrun{
 ##' out <- snpset_test(hsumstats, x, snp_sets$sets)
 ##' }
+##'
+##' ## Perform a test with an arbitrary SNP set
+##' snpset_test(hsumstats, x, list(test = c("SNP_880", "SNP_1533", "SNP_4189")))
 ##' @export
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, x, snp_sets,
