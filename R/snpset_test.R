@@ -8,12 +8,14 @@
 ##' @param snp_sets A named list where each index represents a separate set of
 ##'   SNPs.
 ##' @param method A method to compute a set-level p value.
-##' @return A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
-##'   "top.snp.id" and "top.snp.p" - set.id = a name of SNP set - p = a
-##'   set-level p value - n.snp = the number of SNPs in an intersection of set
-##'   input and the reference data - n.snp.clumped = the number of SNPs in a set
-##'   after LD clumping - top.snp.id = SNP ID with the smallest p-value within a
-##'   set of SNPs - top.snp.p = The smallest p-value within a set of SNPs
+##' @return A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
+##'   and "top.snp.pvalue"
+##' - set.id = a name of SNP set
+##' - tstat = a test statistic
+##' - pvalue = a set-level p value
+##' - n.snp = the number of SNPs used in a test
+##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
+##' - top.snp.p = The smallest p-value within a set of SNP
 ##' @examples
 ##' ## Load GWAS summary data
 ##' data(exGWAS)
@@ -44,7 +46,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
 
   is_df(hsumstats)
   is_bed_matrix(x)
-  has_columns(hsumstats, c("id", "chr", "pos", "A1", "A2", "p"))
+  has_columns(hsumstats, c("id", "chr", "pos", "A1", "A2", "pvalue"))
   is_named_list(snp_sets)
   method <- match.arg(method)
 
@@ -88,7 +90,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
   }
 
   ## Compute Chi-square stat from p
-  hsumstats[, chisq := qchisq(p, df = 1, lower.tail = FALSE)]
+  hsumstats[, chisq := qchisq(pvalue, df = 1, lower.tail = FALSE)]
 
   ## Perform set tests
   message("Starting set-based association tests...\n-----\n")
@@ -117,9 +119,9 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   }
 
   set_df <- hsumstats[snp_ind, ]
-  set_p_min_ind <- which.min(set_df$p)
+  set_p_min_ind <- which.min(set_df$pvalue)
   top_snp_id <- set_df$id[set_p_min_ind]
-  top_snp_p <- set_df$p[set_p_min_ind]
+  top_snp_p <- set_df$pvalue[set_p_min_ind]
 
   message(
     "+++ Testing: ", set_id, " with ", pretty_num(nrow(set_df)),
@@ -177,9 +179,9 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   message("- P: ", prettyNum(p))
 
   ## Return output
-  data.frame(
-    set.id = set_id, p = p, n.snp = length(snp_ind),
-    top.snp.id = top_snp_id, top.snp.p = top_snp_p
+  data.table(
+    set.id = set_id, tstat = t_obs, pvalue = p, n.snp = length(snp_ind),
+    top.snp.id = top_snp_id, top.snp.pvalue = top_snp_p
   )
 
 }

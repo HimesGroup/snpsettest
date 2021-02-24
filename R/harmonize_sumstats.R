@@ -10,9 +10,9 @@
 ##' entries, the SNP IDs in GWAS summary data are replaced with the ones in the
 ##' reference data.
 ##'
-##' @param sumstats A data frame with two columns: "id" and "p".
+##' @param sumstats A data frame with two columns: "id" and "pvalue".
 ##' - id = SNP ID (e.g., rs numbers)
-##' - p = p value of SNP
+##' - pvalue = SNP-level p value
 ##'
 ##' If `match_by_id = FALSE`, it requires additional columns: "chr", "pos", "A1"
 ##' and "A2".
@@ -29,7 +29,8 @@
 ##'   C->G, G->A). Only applies when `match_by_id = FALSE`. If the GWAS
 ##'   genotype data ifself is used as the reference data, it would be safe to
 ##'   set `FALSE`. Default is `FALSE`.
-##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and "p".
+##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
+##'   "pvalue".
 ##' @examples
 ##' ## Load GWAS summary data
 ##' data(exGWAS)
@@ -81,9 +82,9 @@ harmonize_sumstats <- function(sumstats, x,
 
   if (match_by_id) {
 
-    ## Check duplicate SNP IDs in the reference data.
+    ## Check duplicate SNP IDs in the reference data
+    ## All duplicate-id variants are excluded from harmonization
     ref_dup <- get_duplicate_indice(x@snps$id)
-    ## ref_dup <- gaston::SNP.duplicated(x, "id")
     message("Found ", length(ref_dup),
             " duplicate SNP IDs in the reference data.")
 
@@ -95,7 +96,7 @@ harmonize_sumstats <- function(sumstats, x,
     message("-----")
 
     ## Check mandatory columns for `ID` matching
-    has_columns(sumstats, c("id", "p"))
+    has_columns(sumstats, c("id", "pvalue"))
 
     ## Input SNP IDs must be unique
     if (anyDuplicated(sumstats$id) > 0L) {
@@ -112,7 +113,7 @@ harmonize_sumstats <- function(sumstats, x,
     message(pretty_num(nrow(sumstats)), " variants to be matched.")
 
     ## Inner join
-    sumstats <- x@snps[ref_keep_ind, ][sumstats[, .(id, p)], on = .(id),
+    sumstats <- x@snps[ref_keep_ind, ][sumstats[, .(id, pvalue)], on = .(id),
                                        nomatch = NULL]
 
     ## Quick safety check; not strictly necessary
@@ -123,9 +124,9 @@ harmonize_sumstats <- function(sumstats, x,
 
   } else {
 
-    ## Check duplicate SNP IDs in the reference data.
+    ## Check duplicate SNP IDs in the reference data
+    ## Keep one instance of duplicate-ID variants
     ref_dup <- which(duplicated((x@snps[, .(chr, pos, A1, A2)])))
-    ## ref_dup <- gaston::SNP.duplicated(x, "chr:pos:alleles")
     message("Found ", length(ref_dup),
             " duplicate SNPs in the reference data",
             " by base-pair position and alleles codes.")
@@ -141,7 +142,7 @@ harmonize_sumstats <- function(sumstats, x,
     message("Checking the GWAS summary statistics...")
 
     ## Check mandatory columns for `chr:pos:A1:A2` matching
-    has_columns(sumstats, c("chr", "pos", "A1", "A2", "p"))
+    has_columns(sumstats, c("chr", "pos", "A1", "A2", "pvalue"))
 
     ## Input `chr:pos:A1:A2` combination must be unique
     if (anyDuplicated(sumstats[, .(chr, pos, A1, A2)])) {
@@ -163,7 +164,7 @@ harmonize_sumstats <- function(sumstats, x,
   setorder(sumstats, chr, pos)
 
   ## Return
-  sumstats[, .(id, chr, pos, A1, A2, p)]
+  sumstats[, .(id, chr, pos, A1, A2, pvalue)]
 
 }
 

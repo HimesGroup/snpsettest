@@ -17,12 +17,16 @@ SNPs.}
 \item{method}{A method to compute a set-level p value.}
 }
 \value{
-A data.table with columns: "set.id", "p", "n.snp", "n.snp.clumped",
-"top.snp.id" and "top.snp.p" - set.id = a name of SNP set - p = a
-set-level p value - n.snp = the number of SNPs in an intersection of set
-input and the reference data - n.snp.clumped = the number of SNPs in a set
-after LD clumping - top.snp.id = SNP ID with the smallest p-value within a
-set of SNPs - top.snp.p = The smallest p-value within a set of SNPs
+A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
+and "top.snp.pvalue"
+\itemize{
+\item set.id = a name of SNP set
+\item tstat = a test statistic
+\item pvalue = a set-level p value
+\item n.snp = the number of SNPs used in a test
+\item top.snp.id = SNP ID with the smallest p-value within a set of SNPs
+\item top.snp.p = The smallest p-value within a set of SNP
+}
 }
 \description{
 Perform set-based association tests between multiple sets of SNPs and a

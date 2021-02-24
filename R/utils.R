@@ -2,7 +2,7 @@
 utils::globalVariables(
          c(".", "id", "chr", "pos", "A1", "A2",
            "gene.id", "gene.start", "gene.end",
-           "p", "i.p", "chisq", "i.chisq",
+           "pvalue", "i.pvalue", "chisq", "i.chisq",
            "A1_S", "A2_S", "A1_F", "A2_F", "A1_SF", "A2_SF",
            "patterns", "variable", "maf", "callrate")
        )

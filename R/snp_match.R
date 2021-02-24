@@ -2,7 +2,7 @@
 ##'
 ##' Match alleles between summary statistics and SNP information. This function
 ##' is a modified version of [bigsnpr::snp_match()], which removed unnecessary
-##' requirements for set-based tests and improved speed with [data.table] syntax.
+##' requirements for this package and improved speed with [data.table] syntax.
 ##' @noRd
 snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
 
@@ -16,7 +16,7 @@ snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
   ## narrow down the scope of SNP matching by physical position
   ind <- sumstats[, .(chr, pos)][info_snp[, .(chr, pos)], on = .(chr, pos),
                                  which = TRUE]
-  sumstats <- sumstats[ind, .(chr, pos, A1, A2, p)]
+  sumstats <- sumstats[ind, .(chr, pos, A1, A2, pvalue)]
 
   if (nrow(sumstats) == 0L) {
     stop("No variant has been matched.", call. = FALSE)

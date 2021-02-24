@@ -7,10 +7,10 @@
 harmonize_sumstats(sumstats, x, match_by_id = TRUE, check_strand_flip = FALSE)
 }
 \arguments{
-\item{sumstats}{A data frame with two columns: "id" and "p".
+\item{sumstats}{A data frame with two columns: "id" and "pvalue".
 \itemize{
 \item id = SNP ID (e.g., rs numbers)
-\item p = p value of SNP
+\item pvalue = SNP-level p value
 }
 
 If \code{match_by_id = FALSE}, it requires additional columns: "chr", "pos", "A1"
@@ -34,7 +34,8 @@ genotype data ifself is used as the reference data, it would be safe to
 set \code{FALSE}. Default is \code{FALSE}.}
 }
 \value{
-A data frame with columns: "id", "chr", "pos", "A1", "A2" and "p".
+A data frame with columns: "id", "chr", "pos", "A1", "A2" and
+"pvalue".
 }
 \description{
 Finds an intersection of variants between GWAS summary and reference data.
