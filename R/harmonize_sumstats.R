@@ -23,12 +23,12 @@
 ##' @param x A `bed.matrix` object created using the reference data.
 ##' @param match_by_id If `TRUE`, SNP matching will be performed by SNP IDs
 ##'   instead of base-pair position and allele codes. Default is `TRUE`.
-##' @param check_strand_flip If `TRUE`, the function 1) removes ambiguous A/T
-##'   and G/C SNPs for which the strand is not obvious, and 2) attempts to find
-##'   additional matching entries by flipping allele codes (i.e., A->T, T->A,
-##'   C->G, G->A). Only applies when `match_by_id = FALSE`. If the GWAS
-##'   genotype data ifself is used as the reference data, it would be safe to
-##'   set `FALSE`. Default is `FALSE`.
+##' @param check_strand_flip Only applies when `match_by_id = FALSE`. If `TRUE`,
+##'   the function 1) removes ambiguous A/T and G/C SNPs for which the strand is
+##'   not obvious, and 2) attempts to find additional matching entries by
+##'   flipping allele codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype
+##'   data ifself is used as the reference data, it would be safe to set
+##'   `FALSE`. Default is `FALSE`.
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 ##'   "pvalue".
 ##' @examples

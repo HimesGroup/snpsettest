@@ -14,7 +14,9 @@ snpset_test(hsumstats, x, snp_sets, method = c("davies", "saddle"))
 \item{snp_sets}{A named list where each index represents a separate set of
 SNPs.}
 
-\item{method}{A method to compute a set-level p value.}
+\item{method}{A method to compute a set-level p value. "davies" uses the
+algorithm of Davies (1980) and "saddle" uses Kuonen's saddlepoint
+approximation (1999).}
 }
 \value{
 A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
@@ -25,7 +27,7 @@ and "top.snp.pvalue"
 \item pvalue = a set-level p value
 \item n.snp = the number of SNPs used in a test
 \item top.snp.id = SNP ID with the smallest p-value within a set of SNPs
-\item top.snp.p = The smallest p-value within a set of SNP
+\item top.snp.pvalue = The smallest p-value within a set of SNP
 }
 }
 \description{

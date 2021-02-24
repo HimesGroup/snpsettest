@@ -7,7 +7,9 @@
 ##' @param x A `bed.matrix` object created from the reference data.
 ##' @param snp_sets A named list where each index represents a separate set of
 ##'   SNPs.
-##' @param method A method to compute a set-level p value.
+##' @param method A method to compute a set-level p value. "davies" uses the
+##'   algorithm of Davies (1980) and "saddle" uses Kuonen's saddlepoint
+##'   approximation (1999).
 ##' @return A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
 ##'   and "top.snp.pvalue"
 ##' - set.id = a name of SNP set
@@ -15,7 +17,7 @@
 ##' - pvalue = a set-level p value
 ##' - n.snp = the number of SNPs used in a test
 ##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
-##' - top.snp.p = The smallest p-value within a set of SNP
+##' - top.snp.pvalue = The smallest p-value within a set of SNP
 ##' @references
 ##' Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of
 ##' Chi-Square Random Variables. Journal of the Royal Statistical Society.
@@ -133,11 +135,6 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
   top_snp_id <- set_df$id[set_p_min_ind]
   top_snp_p <- set_df$pvalue[set_p_min_ind]
 
-  message(
-    "+++ Testing: ", set_id, " with ", pretty_num(nrow(set_df)),
-    " SNPs +++"
-  )
-
   ## Use set_df$id instead of snp_set for testing; there could be redundant SNPs
   ## in snp_set where they are not found in hsumstats but possibly in ref data.
   cor_ind <- match_cpp(set_df$id, x@snps$id)
@@ -185,8 +182,8 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
     }
 
   }
-  ## Print set-based association p
-  message("- P: ", prettyNum(p))
+  message(set_id, ": N.SNP = " , pretty_num(length(ev)),
+          ", P = ", pretty_num(p))
 
   ## Return output
   data.table(
