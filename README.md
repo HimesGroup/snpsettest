@@ -48,9 +48,9 @@ library(snpsettest)
 data(exGWAS)
 head(exGWAS, 3)
 #>      id chr   pos A1 A2         p
-#> 1 SNP_0   1 50149  A  C 0.7301348
-#> 2 SNP_2   1 50818  T  C 0.8723401
-#> 3 SNP_3   1 51094  C  T 0.5295959
+#> 1 SNP_0   1 50215  G  C 0.1969353
+#> 2 SNP_2   1 50768  A  G 0.6620465
+#> 3 SNP_3   1 50833  T  G 0.5822596
 ```
 
 ### Reference data
@@ -77,8 +77,8 @@ Pre-processing of GWAS summary data is required because the sets of
 variants available in a particular GWAS might be poorly matched to the
 variants in reference data. SNP matching can be performed using
 `harmonize_sumstats` either 1) by SNP ID or 2) by chromosome code,
-base-pair position, and allele codes, while taking into account possible
-strand flips and reference allele swap.
+base-pair position, and allele codes, while taking into account
+reference allele swap and possible strand flips.
 
 ``` r
 # Harmonize by SNP IDs
@@ -104,7 +104,7 @@ hsumstats2 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
 #> -----
 #> Checking the GWAS summary statistics...
 #> 2,753 variants to be matched.
-#> 2,625 variants have been matched.
+#> 2,618 variants have been matched.
 
 # Check matching entries by flipping allele codes (e.g., A/C match T/G)
 # Ambiguous SNPs will be excluded from harmonization
@@ -117,8 +117,8 @@ hsumstats3 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_fl
 #> -----
 #> Checking the GWAS summary statistics...
 #> 2,753 variants to be matched.
-#> 859 ambiguous SNPs have been removed.
-#> 1,771 variants have been matched.
+#> 835 ambiguous SNPs have been removed.
+#> 1,795 variants have been matched.
 ```
 
 ### Map SNPs to genes
@@ -141,11 +141,11 @@ head(gene.curated.GRCh37, 3)
 snp_sets <- map_snp_to_gene(hsumstats1, gene.curated.GRCh37)
 str(snp_sets$sets[1:5])
 #> List of 5
-#>  $ ENSG00000186092.4: chr [1:92] "SNP_0" "SNP_2" "SNP_3" "SNP_5" ...
-#>  $ ENSG00000237683.5: chr [1:112] "SNP_307" "SNP_308" "SNP_310" "SNP_311" ...
-#>  $ ENSG00000235249.1: chr [1:99] "SNP_1303" "SNP_1305" "SNP_1307" "SNP_1309" ...
-#>  $ ENSG00000185097.2: chr [1:89] "SNP_2392" "SNP_2394" "SNP_2395" "SNP_2397" ...
-#>  $ ENSG00000187634.6: chr [1:116] "SNP_3440" "SNP_3442" "SNP_3448" "SNP_3449" ...
+#>  $ ENSG00000186092.4: chr [1:110] "SNP_0" "SNP_2" "SNP_3" "SNP_4" ...
+#>  $ ENSG00000237683.5: chr [1:109] "SNP_317" "SNP_320" "SNP_321" "SNP_323" ...
+#>  $ ENSG00000235249.1: chr [1:95] "SNP_1283" "SNP_1285" "SNP_1287" "SNP_1288" ...
+#>  $ ENSG00000185097.2: chr [1:96] "SNP_2392" "SNP_2396" "SNP_2397" "SNP_2398" ...
+#>  $ ENSG00000187634.6: chr [1:135] "SNP_3455" "SNP_3456" "SNP_3458" "SNP_3459" ...
 
 # Allows a certain kb window before/after the gene to be included for SNP mapping
 snp_sets_50kb <- map_snp_to_gene(
@@ -167,23 +167,23 @@ res <- snpset_test(hsumstats1, x, snp_sets$sets[1:5])
 #> 5 set-based association tests will be performed.
 #> Starting set-based association tests...
 #> -----
-#> +++ Testing: ENSG00000186092.4 with 92 SNPs +++
-#> - P: 0.006626555
-#> +++ Testing: ENSG00000237683.5 with 112 SNPs +++
-#> - P: 0.002337155
-#> +++ Testing: ENSG00000235249.1 with 99 SNPs +++
-#> - P: 0.329092
-#> +++ Testing: ENSG00000185097.2 with 89 SNPs +++
-#> - P: 0.1582166
-#> +++ Testing: ENSG00000187634.6 with 116 SNPs +++
-#> - P: 0.01333011
+#> +++ Testing: ENSG00000186092.4 with 110 SNPs +++
+#> - P: 0.04207358
+#> +++ Testing: ENSG00000237683.5 with 109 SNPs +++
+#> - P: 0.009377961
+#> +++ Testing: ENSG00000235249.1 with 95 SNPs +++
+#> - P: 0.182509
+#> +++ Testing: ENSG00000185097.2 with 96 SNPs +++
+#> - P: 0.1221249
+#> +++ Testing: ENSG00000187634.6 with 135 SNPs +++
+#> - P: 0.01031829
 
 # Show output
 res
 #>               set.id           p n.snp top.snp.id    top.snp.p
-#> 1: ENSG00000186092.4 0.006626555    92    SNP_162 0.0009888022
-#> 2: ENSG00000237683.5 0.002337155   112    SNP_436 0.0029226968
-#> 3: ENSG00000235249.1 0.329092035    99   SNP_1440 0.0003399570
-#> 4: ENSG00000185097.2 0.158216569    89   SNP_2397 0.0170853467
-#> 5: ENSG00000187634.6 0.013330114   116   SNP_3524 0.0032527617
+#> 1: ENSG00000186092.4 0.042073582   110     SNP_78 0.0009143436
+#> 2: ENSG00000237683.5 0.009377961   109    SNP_363 0.0006419257
+#> 3: ENSG00000235249.1 0.182509033    95   SNP_1311 0.0047610286
+#> 4: ENSG00000185097.2 0.122124945    96   SNP_2458 0.0034444534
+#> 5: ENSG00000187634.6 0.010318292   135   SNP_3601 0.0003350840
 ```

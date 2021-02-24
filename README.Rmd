@@ -80,7 +80,7 @@ Pre-processing of GWAS summary data is required because the sets of variants
 available in a particular GWAS might be poorly matched to the variants in
 reference data. SNP matching can be performed using `harmonize_sumstats` either
 1) by SNP ID or 2) by chromosome code, base-pair position, and allele codes,
-while taking into account possible strand flips and reference allele swap.
+while taking into account reference allele swap and  possible strand flips.
 
 ```{r harmonization}
 # Harmonize by SNP IDs
