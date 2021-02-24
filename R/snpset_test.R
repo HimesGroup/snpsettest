@@ -172,10 +172,6 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
       p <- tryCatch(
         davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-8)$Qq,
         warning = function(w) {
-          message(
-            "- Davies method failed to produce a meaningful results. ",
-            "Use Saddlepoint approximation instead."
-          )
           pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
         }
       )
