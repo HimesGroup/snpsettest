@@ -144,6 +144,7 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
 
     ## If only one SNP in a set, the set-based association p would be top_snp_p
     p <- top_snp_p
+    t_obs <- set_df$chisq
 
   } else {
 
