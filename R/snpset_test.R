@@ -106,7 +106,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
   hsumstats[, chisq := qchisq(pvalue, df = 1, lower.tail = FALSE)]
 
   ## Perform set tests
-  message("Starting set-based association tests...\n-----\n")
+  message("Starting set-based association tests...\n-----")
   rbindlist(
     Map(
       function(snp_set, set_id) {
@@ -183,7 +183,7 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
     }
 
   }
-  message(set_id, ": N.SNP = " , pretty_num(length(ev)),
+  message(set_id, ": N.SNP = ", pretty_num(length(cor_ind)),
           ", P = ", pretty_num(p))
 
   ## Return output
