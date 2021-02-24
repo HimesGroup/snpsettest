@@ -58,3 +58,11 @@ out <- snpset_test(hsumstats, x, snp_sets$sets)
 ## Perform a test with an arbitrary SNP set
 snpset_test(hsumstats, x, list(test = c("SNP_880", "SNP_1533", "SNP_4189")))
 }
+\references{
+Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of
+Chi-Square Random Variables. Journal of the Royal Statistical Society.
+Series C (Applied Statistics) 29, 323–333 (1980).
+
+Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
+in Normal Variables. Biometrika 86, 929–935 (1999).
+}

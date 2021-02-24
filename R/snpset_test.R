@@ -16,6 +16,13 @@
 ##' - n.snp = the number of SNPs used in a test
 ##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
 ##' - top.snp.p = The smallest p-value within a set of SNP
+##' @references
+##' Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of
+##' Chi-Square Random Variables. Journal of the Royal Statistical Society.
+##' Series C (Applied Statistics) 29, 323–333 (1980).
+##'
+##' Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
+##' in Normal Variables. Biometrika 86, 929–935 (1999).
 ##' @examples
 ##' ## Load GWAS summary data
 ##' data(exGWAS)
