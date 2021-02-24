@@ -26,7 +26,8 @@ davies <- function(q, lambda, h = rep(1, length(lambda)),
 
   out$res <- 1 - out$res
 
-  if (out$res > 1) {
+  ## Prevent negative p by checking out$res is negative
+  if (out$res > 1 || out$res < 0) {
     warning("Consider playing with 'lim' or 'acc'.")
   }
 
