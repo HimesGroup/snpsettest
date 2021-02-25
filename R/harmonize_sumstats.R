@@ -22,7 +22,7 @@
 ##'
 ##' @param x A `bed.matrix` object created using the reference data.
 ##' @param match_by_id If `TRUE`, SNP matching will be performed by SNP IDs
-##'   instead of base-pair position and allele codes. Default is `TRUE`.
+##'   instead of genomic position and allele codes. Default is `TRUE`.
 ##' @param check_strand_flip Only applies when `match_by_id = FALSE`. If `TRUE`,
 ##'   the function 1) removes ambiguous A/T and G/C SNPs for which the strand is
 ##'   not obvious, and 2) attempts to find additional matching entries by
@@ -129,7 +129,7 @@ harmonize_sumstats <- function(sumstats, x,
     ref_dup <- which(duplicated((x@snps[, .(chr, pos, A1, A2)])))
     message("Found ", length(ref_dup),
             " duplicate SNPs in the reference data",
-            " by base-pair position and alleles codes.")
+            " by genomic position and alleles codes.")
 
     ## Get the indices of SNPs to exclude from ref-sumstats harmonization
     ref_remove_ind <- unique(c(ref_monomorphic, ref_dup))
@@ -149,7 +149,7 @@ harmonize_sumstats <- function(sumstats, x,
       stop(
         "Some variants in ",
         "'", sumstats_name, "' ",
-        "share the same base-pair position and allele codes. ",
+        "share the same genomic position and allele codes. ",
         "Remove duplicate SNPs in ",
         "'", sumstats_name, "'.",
         call. = FALSE

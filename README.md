@@ -67,7 +67,7 @@ them onto R.
 bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 
 # Read a .bed file using bed.matrix-class in gaston package
-# Genotypes are retrieved only on demand to manage large-scale genotype data
+# Genotypes are retrieved on demand to manage large-scale genotype data
 x <- read_reference_bed(bfile, verbose = FALSE)
 ```
 
@@ -99,7 +99,7 @@ hsumstats2 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE)
 #> -----
 #> Checking the reference data for harmonization...
 #> Found 0 monomoprhic SNPs in the reference data.
-#> Found 0 duplicate SNPs in the reference data by base-pair position and alleles codes.
+#> Found 0 duplicate SNPs in the reference data by genomic position and alleles codes.
 #> Excluded 0 SNPs from the harmonization.
 #> -----
 #> Checking the GWAS summary statistics...
@@ -112,7 +112,7 @@ hsumstats3 <- harmonize_sumstats(exGWAS, x, match_by_id = FALSE, check_strand_fl
 #> -----
 #> Checking the reference data for harmonization...
 #> Found 0 monomoprhic SNPs in the reference data.
-#> Found 0 duplicate SNPs in the reference data by base-pair position and alleles codes.
+#> Found 0 duplicate SNPs in the reference data by genomic position and alleles codes.
 #> Excluded 0 SNPs from the harmonization.
 #> -----
 #> Checking the GWAS summary statistics...
@@ -167,11 +167,11 @@ res <- snpset_test(hsumstats1, x, snp_sets$sets[1:5])
 #> 5 set-based association tests will be performed.
 #> Starting set-based association tests...
 #> -----
-#> ENSG00000186092.4: N.SNP = 110, P = 0.04207358
-#> ENSG00000237683.5: N.SNP = 109, P = 0.009377961
-#> ENSG00000235249.1: N.SNP = 95, P = 0.182509
-#> ENSG00000185097.2: N.SNP = 96, P = 0.1221249
-#> ENSG00000187634.6: N.SNP = 135, P = 0.01031829
+#> ENSG00000186092.4: nSNP = 110, P = 0.0421
+#> ENSG00000237683.5: nSNP = 109, P = 0.00938
+#> ENSG00000235249.1: nSNP = 95, P = 0.183
+#> ENSG00000185097.2: nSNP = 96, P = 0.122
+#> ENSG00000187634.6: nSNP = 135, P = 0.0103
 
 # Show output
 res

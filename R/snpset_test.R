@@ -180,7 +180,8 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
     }
 
   }
-  message(set_id, ": N.SNP = ", pretty_num(length(cor_ind)), ", P = ", p)
+  message(set_id, ": nSNP = ", pretty_num(length(cor_ind)), ", P = ",
+          format(p, digit = 3))
 
   ## Return output
   data.table(

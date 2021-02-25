@@ -70,7 +70,7 @@ input. We can use `read_reference_bed` to load them onto R.
 bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 
 # Read a .bed file using bed.matrix-class in gaston package
-# Genotypes are retrieved only on demand to manage large-scale genotype data
+# Genotypes are retrieved on demand to manage large-scale genotype data
 x <- read_reference_bed(bfile, verbose = FALSE)
 ```
 

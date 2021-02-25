@@ -80,11 +80,15 @@ The **snpsettest** package uses PLINK 1 binary files to load them onto R. The
 PLINK2 binary fileset (pgen/pvar/psam) can be easily converted to PLINK 1 binary
 fileset (bed/bim/fam).
 
-Although genotypes are retrieved only on demand in the **snpsettest** package,
-the relevant SNP and sample information may not fit to your system memory
-(8-16GB memory would be fine for most cases). In that case, simply split the
-reference data by chromosome, and perform set-based association tests on one
-chromosome at a time.
+It could be useful to split your reference data by chromosome. Sometimes it is
+required to perform gene-based association tests one chromosome at a time due to
+the limited amount of memory available on computers. Intuitively, as more
+redundant SNPs are included in the reference data, you tests will consume more
+memory and get slower. (For instance, when you are testing genes on chromosome
+1, you don't have to consider genotypes on other chromosomes). Although
+genotypes are retrieved on demand to efficiently handle large genotype data,
+loading information for > 10M markers (in .bim file) into R at once can be
+demanding.
 
 ```{bash pgen2bed, eval = FALSE}
 # pgen to bed
@@ -94,7 +98,7 @@ plink2 --pfile EUR_phase3_autosomes \
        --maf 0.005 \
        --out EUR_phase3_autosomes
        
-# Split bed/bim/fam by chromosome when memory is limited
+# Split bed/bim/fam by chromosome
 for i in {1..22}
 do plink2 --bfile EUR_phase3_autosomes --chr $i --make-bed --out EUR_phase_chr$i
 done
@@ -103,12 +107,13 @@ done
 ## Read PLINK 1 binary fileset to R session
 
 This package uses a bed.matrix-class from the
-[**gaston**](https://CRAN.R-project.org/package=gaston) package
-to attach genotype data to R session.
+[**gaston**](https://CRAN.R-project.org/package=gaston) package to attach
+genotype data to R session. Genotypes are retrieved only on demand to manage
+large-scale genotype data.
 
 ```{r toR, eval = FALSE}
 library(snpsettest)
 
-# Read bed/bim/fam file; may take 1-2 min
-x <- read_reference_bed("/path/to/EUR_phase3_autosomes")
+# Read chromosome 1 bed/bim/fam files
+x <- read_reference_bed("/path/to/EUR_phase3_chr1.bed")
 ```
