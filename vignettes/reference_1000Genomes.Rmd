@@ -76,19 +76,9 @@ plink2 --pfile all_phase3_autosomes \
 
 ## Convert the 1000 Genomes data to PLINK 1 binary format
 
-The **snpsettest** package uses PLINK 1 binary files to load them onto R. The
+The **snpsettest** package uses PLINK 1 binary files to read them into R. The
 PLINK2 binary fileset (pgen/pvar/psam) can be easily converted to PLINK 1 binary
 fileset (bed/bim/fam).
-
-It could be useful to split your reference data by chromosome. Sometimes it is
-required to perform gene-based association tests one chromosome at a time due to
-the limited amount of memory available on computers. Intuitively, as more
-redundant SNPs are included in the reference data, you tests will consume more
-memory and get slower. (For instance, when you are testing genes on chromosome
-1, you don't have to consider genotypes on other chromosomes). Although
-genotypes are retrieved on demand to efficiently handle large genotype data,
-loading information for > 10M markers (in .bim file) into R at once can be
-demanding.
 
 ```{bash pgen2bed, eval = FALSE}
 # pgen to bed
@@ -105,11 +95,18 @@ do plink2 --bfile EUR_phase3_autosomes --chr $i --make-bed --out EUR_phase_chr$i
 done
 ```
 
+For the **snpsettest** package, it is better to split your reference data by
+chromosome and run set-based association tests with per-chromosome binary files.
+For instance, when you perform set-based association tests for genes on
+chromosome 1, you don't have to load genotype data for other chromosomes into R.
+Intuitively, as more redundant SNPs are included in the reference data, your
+tests will get (often significantly) slower and consume more memory.
+
 ## Read PLINK 1 binary fileset to R session
 
 This package uses a bed.matrix-class from the
 [**gaston**](https://CRAN.R-project.org/package=gaston) package to attach
-genotype data to R session. Genotypes are retrieved only on demand to manage
+genotype data to R session. Genotypes are retrieved on demand to manage
 large-scale genotype data.
 
 ```{r toR, eval = FALSE}
