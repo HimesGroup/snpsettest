@@ -60,7 +60,7 @@ plink2 --pfile all_phase3 vzs \
        --output-chr 26 \
        --max-alleles 2 \
        --rm-dup exclude-mismatch \
-       --set-missing-var-ids `@_#_$1_$2` \
+       --set-missing-var-ids '@_#_$1_$2' \
        --make-pgen \
        --out all_phase3_autosomes
 
