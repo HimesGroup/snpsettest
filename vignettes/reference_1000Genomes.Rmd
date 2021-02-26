@@ -96,6 +96,7 @@ demanding.
 # (still may have some when all samples are heterozyguous -> maf=0.5)
 plink2 --pfile EUR_phase3_autosomes \
        --maf 0.005 \
+       --make-bed \
        --out EUR_phase3_autosomes
        
 # Split bed/bim/fam by chromosome
