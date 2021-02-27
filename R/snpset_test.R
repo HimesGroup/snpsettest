@@ -161,7 +161,8 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
 
     ## Get eigenvalues
     ## ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
-    ev <- get_ev_from_cor(geno)
+    ## ev <- get_ev_from_evd(geno)
+    ev <- get_ev_from_svd(geno)
 
     ## Replacing negative or "almost zero" eigen values with a tolerance
     ## (adapted from sfsmisc::posdefify).

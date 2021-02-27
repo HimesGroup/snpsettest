@@ -3,11 +3,22 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::export]]
-arma::mat get_ev_from_cor(const arma::mat& mat) {
+arma::mat get_ev_from_evd(const arma::mat& mat) {
   arma::mat cor_mat(mat.n_cols, mat.n_cols);
   cor_mat = arma::cor(mat);
   return arma::eig_sym(cor_mat);
 }
+
+// [[Rcpp::export]]
+arma::mat get_ev_from_svd(const arma::mat& mat) {
+  const int df = mat.n_rows - 1;
+  arma::mat U;
+  arma::vec s;
+  arma::mat V;
+  svd_econ(U, s, V, mat, "left");
+  return arma::square(s) / df;
+}
+
 
 // arma::mat cor_cpp(const arma::mat& mat) {
 //   arma::mat cor_mat(mat.n_cols, mat.n_cols);
