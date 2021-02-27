@@ -11,11 +11,10 @@ arma::mat get_ev_from_evd(const arma::mat& mat) {
 
 // [[Rcpp::export]]
 arma::mat get_ev_from_svd(const arma::mat& mat) {
+  // standard SVD
   const int df = mat.n_rows - 1;
-  arma::mat U;
   arma::vec s;
-  arma::mat V;
-  svd_econ(U, s, V, mat, "left");
+  s = arma::svd(mat);
   return arma::square(s) / df;
 }
 
@@ -30,5 +29,16 @@ arma::mat get_ev_from_svd(const arma::mat& mat) {
 //   }
 
 //   return cor_mat;
+// }
+
+
+// arma::mat get_ev_from_svd(const arma::mat& mat) {
+//   // economic SVD
+//   const int df = mat.n_rows - 1;
+//   arma::mat U;
+//   arma::vec s;
+//   arma::mat V;
+//   svd_econ(U, s, V, mat, "left");
+//   return arma::square(s) / df;
 // }
 
