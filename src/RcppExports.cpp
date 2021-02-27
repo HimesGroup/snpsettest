@@ -6,14 +6,14 @@
 
 using namespace Rcpp;
 
-// cor_cpp
-arma::mat cor_cpp(const arma::mat& mat);
-RcppExport SEXP _snpsettest_cor_cpp(SEXP matSEXP) {
+// get_ev_from_cor
+arma::mat get_ev_from_cor(const arma::mat& mat);
+RcppExport SEXP _snpsettest_get_ev_from_cor(SEXP matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type mat(matSEXP);
-    rcpp_result_gen = Rcpp::wrap(cor_cpp(mat));
+    rcpp_result_gen = Rcpp::wrap(get_ev_from_cor(mat));
     return rcpp_result_gen;
 END_RCPP
 }

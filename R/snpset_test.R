@@ -157,10 +157,11 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
       geno[is.na(geno)] <- 0 # remember geno is the Z-standardized matrix
     }
 
-    cor_mat <- cor_cpp(geno)
+    ## cor_mat <- cor_cpp(geno)
 
     ## Get eigenvalues
-    ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
+    ## ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
+    ev <- get_ev_from_cor(geno)
 
     ## Replacing negative or "almost zero" eigen values with a tolerance
     ## (adapted from sfsmisc::posdefify).
