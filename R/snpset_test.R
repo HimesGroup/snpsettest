@@ -157,12 +157,16 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
       geno[is.na(geno)] <- 0 # remember geno is the Z-standardized matrix
     }
 
-    ## cor_mat <- cor_cpp(geno)
-
-    ## Get eigenvalues
-    ## ev <- eigen(cor_mat, symmetric = TRUE, only.values = TRUE)$values
-    ## ev <- get_ev_from_evd(geno)
-    ev <- get_ev_from_svd(geno)
+    ## Get eigenvalues using eigendecomposition of correlation matrix
+    ## For a genotype matrix with n << p, use SVD instead
+    if (ncol(geno) < 5 * nrow(geno)) {
+      ev <- get_ev_from_evd(geno)
+    } else {
+      ev <- tryCatch(
+        get_ev_from_svd(geno),
+        error = function(e) get_ev_from_evd(geno)
+      )
+    }
 
     ## Replacing negative or "almost zero" eigen values with a tolerance
     ## (adapted from sfsmisc::posdefify).
