@@ -7,9 +7,9 @@
 ##' @param x A `bed.matrix` object created from the reference data.
 ##' @param snp_sets A named list where each index represents a separate set of
 ##'   SNPs.
-##' @param method A method to compute a set-level p value. "davies" uses the
-##'   algorithm of Davies (1980) and "saddle" uses Kuonen's saddlepoint
-##'   approximation (1999).
+##' @param method A method to compute a set-level p value. "saddle" uses
+##'   Kuonen's saddlepoint approximation (1999) and "davies" uses the algorithm
+##'   of Davies (1980). Default is "saddle".
 ##' @return A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
 ##'   and "top.snp.pvalue"
 ##' - set.id = a name of SNP set
@@ -19,12 +19,12 @@
 ##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
 ##' - top.snp.pvalue = The smallest p-value within a set of SNP
 ##' @references
+##' Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
+##' in Normal Variables. Biometrika 86, 929–935 (1999).
+##'
 ##' Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of
 ##' Chi-Square Random Variables. Journal of the Royal Statistical Society.
 ##' Series C (Applied Statistics) 29, 323–333 (1980).
-##'
-##' Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
-##' in Normal Variables. Biometrika 86, 929–935 (1999).
 ##' @examples
 ##' ## Load GWAS summary data
 ##' data(exGWAS)
@@ -53,7 +53,7 @@
 ##' @export
 ##' @importFrom stats qchisq
 snpset_test <- function(hsumstats, x, snp_sets,
-                        method = c("davies", "saddle")) {
+                        method = c("saddle", "davies")) {
 
   hsumstats_name <- deparse(substitute(hsumstats))
 
@@ -120,7 +120,7 @@ snpset_test <- function(hsumstats, x, snp_sets,
 }
 
 set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
-                     pd_tol = 1e-7, method = c("davies", "saddle")) {
+                     pd_tol = 1e-7, method = c("saddle", "davies")) {
 
   ## Assertion is not necessary since this function is only used internally.
   ## method <- match.arg(method)
@@ -174,15 +174,15 @@ set_test <- function(hsumstats, x, snp_set, set_id, missing_in_geno,
 
     ## Calculate a test-statistic
     t_obs <- sum(set_df$chisq)
-    if (method == "davies") {
+    if (method == "saddle") {
+      p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
+    } else {
       p <- tryCatch(
         davies(t_obs, lambda = ev, lim = 1e6, acc = 1e-8)$Qq,
         warning = function(w) {
           pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
         }
       )
-    } else {
-      p <- pchisqsum(t_obs, df = rep(1, length(ev)), a = ev, lower.tail = FALSE)
     }
 
   }
