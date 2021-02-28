@@ -20,15 +20,17 @@ Data frame with columns
 \url{https://www.gencodegenes.org/human/release_37.html}
 }
 \usage{
-gene.curated.GRCh38
+data(gene.curated.GRCh38)
 }
 \description{
-The gene information was extracted from the GENCODE release 37. This data
-only included the following gene biotypes: protein-coding, Immunoglobulin
-(Ig) variable chain and T-cell receptor (TcR) genes.
+Human gene information was extracted from the GENCODE release 37. This data
+only contains genes with the following gene biotypes: protein-coding,
+Immunoglobulin (Ig) variable chain and T-cell receptor (TcR) genes.
 }
 \examples{
 ## Load data
 data(gene.curated.GRCh38)
+
+head(gene.curated.GRCh38)
 }
 \keyword{datasets}

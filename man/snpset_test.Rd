@@ -4,7 +4,7 @@
 \alias{snpset_test}
 \title{Set-based association tests}
 \usage{
-snpset_test(hsumstats, x, snp_sets, method = c("davies", "saddle"))
+snpset_test(hsumstats, x, snp_sets, method = c("saddle", "davies"))
 }
 \arguments{
 \item{hsumstats}{A data frame processed by \code{\link{harmonize_sumstats}}.}
@@ -14,9 +14,9 @@ snpset_test(hsumstats, x, snp_sets, method = c("davies", "saddle"))
 \item{snp_sets}{A named list where each index represents a separate set of
 SNPs.}
 
-\item{method}{A method to compute a set-level p value. "davies" uses the
-algorithm of Davies (1980) and "saddle" uses Kuonen's saddlepoint
-approximation (1999).}
+\item{method}{A method to compute a set-level p value. "saddle" uses
+Kuonen's saddlepoint approximation (1999) and "davies" uses the algorithm
+of Davies (1980). Default is "saddle".}
 }
 \value{
 A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
@@ -62,10 +62,10 @@ out <- snpset_test(hsumstats, x, snp_sets$sets)
 
 }
 \references{
+Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
+in Normal Variables. Biometrika 86, 929–935 (1999).
+
 Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of
 Chi-Square Random Variables. Journal of the Royal Statistical Society.
 Series C (Applied Statistics) 29, 323–333 (1980).
-
-Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
-in Normal Variables. Biometrika 86, 929–935 (1999).
 }

@@ -24,7 +24,7 @@ and "A2".
 \item{x}{A \code{bed.matrix} object created using the reference data.}
 
 \item{match_by_id}{If \code{TRUE}, SNP matching will be performed by SNP IDs
-instead of base-pair position and allele codes. Default is \code{TRUE}.}
+instead of genomic position and allele codes. Default is \code{TRUE}.}
 
 \item{check_strand_flip}{Only applies when \code{match_by_id = FALSE}. If \code{TRUE},
 the function 1) removes ambiguous A/T and G/C SNPs for which the strand is

@@ -1,9 +1,10 @@
 ##' Human gene information from the GENCODE GRCh37 version
 ##'
-##' The gene information was extracted from the GENCODE release 19. This data
-##' only included the following gene biotypes: protein-coding, Immunoglobulin
-##' (Ig) variable chain and T-cell receptor (TcR) genes. Genes with
-##' NOVEL/Putative status were excluded from the data.
+##' Human gene information was extracted from the GENCODE release 19. This data
+##' only contains 'KNOWN' status genes with the following gene biotypes:
+##' protein-coding, Immunoglobulin (Ig) variable chain and T-cell receptor (TcR)
+##' genes.
+##' @usage data(gene.curated.GRCh37)
 ##' @source <https://www.gencodegenes.org/human/release_19.html>
 ##' @format Data frame with columns
 ##' \describe{
@@ -18,13 +19,16 @@
 ##' @examples
 ##' ## Load data
 ##' data(gene.curated.GRCh37)
+##'
+##' head(gene.curated.GRCh37)
 "gene.curated.GRCh37"
 
 ##' Human gene information from the GENCODE GRCh38 version
 ##'
-##' The gene information was extracted from the GENCODE release 37. This data
-##' only included the following gene biotypes: protein-coding, Immunoglobulin
-##' (Ig) variable chain and T-cell receptor (TcR) genes.
+##' Human gene information was extracted from the GENCODE release 37. This data
+##' only contains genes with the following gene biotypes: protein-coding,
+##' Immunoglobulin (Ig) variable chain and T-cell receptor (TcR) genes.
+##' @usage data(gene.curated.GRCh38)
 ##' @source <https://www.gencodegenes.org/human/release_37.html>
 ##' @format Data frame with columns
 ##' \describe{
@@ -39,4 +43,6 @@
 ##' @examples
 ##' ## Load data
 ##' data(gene.curated.GRCh38)
+##'
+##' head(gene.curated.GRCh38)
 "gene.curated.GRCh38"
