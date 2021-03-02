@@ -9,7 +9,8 @@
 ##'   SNPs.
 ##' @param method A method to compute a set-level p value. "saddle" uses
 ##'   Kuonen's saddlepoint approximation (1999) and "davies" uses the algorithm
-##'   of Davies (1980). Default is "saddle".
+##'   of Davies (1980). When "davies" method failed to produce a meaningful
+##'   result, "saddle" method is used as a fallback. Default is "saddle".
 ##' @return A data.table with columns: "set.id", "pvalue", "n.snp", "top.snp.id"
 ##'   and "top.snp.pvalue"
 ##' - set.id = a name of SNP set
