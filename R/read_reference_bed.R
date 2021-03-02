@@ -39,5 +39,8 @@ read_reference_bed <- function(path, ...) {
   options(op)
 
   ## Return bed.matrix
-  x
+  message("Created a bed.matrix with ",
+          pretty_num(nrow(x)), " individuals and ",
+          pretty_num(ncol(x)), " markers.")
+  invisible(x)
 }

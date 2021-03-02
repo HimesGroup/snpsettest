@@ -75,6 +75,7 @@ harmonize_sumstats <- function(sumstats, x,
 
   message("-----")
   message("Checking the reference data for harmonization...")
+
   ## Check monomorphic SNPs in the reference data
   ref_monomorphic <- which(x@sigma == 0) # due to possible heterozyguous mono (maf = 0.05)
   message("Found ", length(ref_monomorphic),
