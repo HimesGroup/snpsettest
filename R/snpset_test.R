@@ -26,8 +26,8 @@
 ##' Chi-Square Random Variables. Journal of the Royal Statistical Society.
 ##' Series C (Applied Statistics) 29, 323–333 (1980).
 ##' @examples
-##' ## Load GWAS summary data
-##' data(exGWAS)
+##' ## GWAS summary statistics
+##' head(exGWAS)
 ##'
 ##' ## Load reference genotype data
 ##' bfile <- system.file("extdata", "example.bed", package = "snpsettest")
@@ -39,8 +39,8 @@
 ##' ## Perform a set-based test with an arbitrary SNP set
 ##' snpset_test(hsumstats, x, list(test = c("SNP_880", "SNP_1533", "SNP_4189")))
 ##'
-##' ## Load gene information data
-##' data(gene.curated.GRCh37)
+##' ## Gene information data
+##' head(gene.curated.GRCh37)
 ##'
 ##' ## Map SNPs to genes
 ##' snp_sets <- map_snp_to_gene(hsumstats, gene.curated.GRCh37)

@@ -32,8 +32,8 @@
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 ##'   "pvalue".
 ##' @examples
-##' ## Load GWAS summary data
-##' data(exGWAS)
+##' ## GWAS summary statistics
+##' head(exGWAS)
 ##'
 ##' ## Load reference genotype data
 ##' bfile <- system.file("extdata", "example.bed", package = "snpsettest")

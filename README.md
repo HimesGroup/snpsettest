@@ -44,9 +44,8 @@ gene-based association tests.
 ``` r
 library(snpsettest)
 
-# Load an example of GWAS summary file
-data(exGWAS)
-head(exGWAS, 3)
+# Check an example of GWAS summary file
+head(exGWAS, 3) # data set in snpsettest package
 #>      id chr   pos A1 A2    pvalue
 #> 1 SNP_0   1 50215  G  C 0.1969353
 #> 2 SNP_2   1 50768  A  G 0.6620465
@@ -74,6 +73,7 @@ bfile <- system.file("extdata", "example.bed", package = "snpsettest")
 # Read a .bed file using bed.matrix-class in gaston package
 # Genotypes are retrieved on demand to manage large-scale genotype data
 x <- read_reference_bed(bfile, verbose = FALSE)
+#> Created a bed.matrix with 300 individuals and 2,942 markers.
 ```
 
 ### Harmonize GWAS summary to the reference data
@@ -134,9 +134,8 @@ regions) can be achieved by `map_snp_to_genes` with gene start/end
 information.
 
 ``` r
-# Load gene information
-data(gene.curated.GRCh37) # extracted from GENCODE release 19
-head(gene.curated.GRCh37, 3)
+# Check gene information from the GENCODE project
+head(gene.curated.GRCh37, 3) # data set in snpsettest package
 #>             gene.id chr  start    end strand  gene.name      gene.type
 #> 1 ENSG00000186092.4   1  69091  70008      +      OR4F5 protein_coding
 #> 2 ENSG00000237683.5   1 134901 139379      - AL627309.1 protein_coding

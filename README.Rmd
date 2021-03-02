@@ -52,9 +52,8 @@ association tests.
 ```{r GWAS summary}
 library(snpsettest)
 
-# Load an example of GWAS summary file
-data(exGWAS)
-head(exGWAS, 3)
+# Check an example of GWAS summary file
+head(exGWAS, 3) # data set in snpsettest package
 ```
 
 ### Reference data
@@ -108,9 +107,8 @@ achieved by `map_snp_to_genes` with gene start/end information.
 
 
 ```{r snp2gene}
-# Load gene information
-data(gene.curated.GRCh37) # extracted from GENCODE release 19
-head(gene.curated.GRCh37, 3)
+# Check gene information from the GENCODE project
+head(gene.curated.GRCh37, 3) # data set in snpsettest package
 
 # Map SNPs to genes
 snp_sets <- map_snp_to_gene(hsumstats1, gene.curated.GRCh37)

@@ -27,11 +27,11 @@
 ##' - sets: a named list where each index represents a separate set of SNPs
 ##' - map: a data frame containing SNP mapping information
 ##' @examples
-##' ## Load GWAS summary data
-##' data(exGWAS)
+##' ## GWAS summary statistics
+##' head(exGWAS)
 ##'
-##' ## Load gene information data
-##' data(gene.curated.GRCh37)
+##' ## Gene information data
+##' head(gene.curated.GRCh37)
 ##'
 ##' ## Map SNPs to genes
 ##' snp_sets <- map_snp_to_gene(exGWAS, gene.curated.GRCh37)

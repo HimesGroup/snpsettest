@@ -20,7 +20,7 @@ Data frame with columns
 \url{https://www.gencodegenes.org/human/release_19.html}
 }
 \usage{
-data(gene.curated.GRCh37)
+gene.curated.GRCh37
 }
 \description{
 Human gene information was extracted from the GENCODE release 19. This data
@@ -29,9 +29,6 @@ protein-coding, Immunoglobulin (Ig) variable chain and T-cell receptor (TcR)
 genes.
 }
 \examples{
-## Load data
-data(gene.curated.GRCh37)
-
 head(gene.curated.GRCh37)
 }
 \keyword{datasets}

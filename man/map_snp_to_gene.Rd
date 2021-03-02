@@ -54,11 +54,11 @@ Annotate SNPs onto their neighboring genes (or arbitrary genomic regions) to
 perform set-based association tests.
 }
 \examples{
-## Load GWAS summary data
-data(exGWAS)
+## GWAS summary statistics
+head(exGWAS)
 
-## Load gene information data
-data(gene.curated.GRCh37)
+## Gene information data
+head(gene.curated.GRCh37)
 
 ## Map SNPs to genes
 snp_sets <- map_snp_to_gene(exGWAS, gene.curated.GRCh37)

@@ -29,8 +29,7 @@ tests.
 ```{r GWAS summary}
 library(snpsettest)
 
-# Load an example of GWAS summary file
-data(exGWAS)
+# Check an example of GWAS summary file (included in this package)
 head(exGWAS, 3)
 ```
 
@@ -84,8 +83,7 @@ their neighboring genes. Mapping SNPs to genes (or genomic regions) can be
 achieved by `map_snp_to_genes` with gene start/end information.
 
 ```{r snp2gene}
-# Load gene information
-data(gene.curated.GRCh37) # extracted from GENCODE release 19
+# Check gene information from the GENCODE project (included in this package)
 head(gene.curated.GRCh37, 3)
 
 # Map SNPs to genes

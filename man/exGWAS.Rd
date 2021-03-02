@@ -21,7 +21,6 @@ exGWAS
 An example file of GWAS summary statistics
 }
 \examples{
-## Load data
-data(exGWAS)
+head(exGWAS)
 }
 \keyword{datasets}

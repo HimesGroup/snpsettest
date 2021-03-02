@@ -9,6 +9,5 @@
 ##' \item{p}{p value.}
 ##' }
 ##' @examples
-##' ## Load data
-##' data(exGWAS)
+##' head(exGWAS)
 "exGWAS"

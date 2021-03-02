@@ -50,8 +50,8 @@ entries, the SNP IDs in GWAS summary data are replaced with the ones in the
 reference data.
 }
 \examples{
-## Load GWAS summary data
-data(exGWAS)
+## GWAS summary statistics
+head(exGWAS)
 
 ## Load reference genotype data
 bfile <- system.file("extdata", "example.bed", package = "snpsettest")
