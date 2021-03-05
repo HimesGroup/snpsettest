@@ -12,6 +12,13 @@
 
 * This is a new submission.
 
+from Win-builder:
+
+Possibly mis-spelled words in DESCRIPTION:
+  GWAS (2:43, 11:20)
+  
+- It is a correctly spelled technical term (genome-wide association study)
+
 ## Downstream dependencies
 
 There are currently no downstream dependencies for this package.

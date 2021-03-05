@@ -60,11 +60,9 @@ as the reference data (If the GWAS cohort is large, it is impractical to
 use genotype data of all individuals. It would be sufficient to randomly
 select 1,000 unrelated individuals for inferring pairwise LD
 correlations among common SNPs). Otherwise, you could use publicly
-available data, such as the 1000 Genomes (please see the companion
-vignette for [processing the 1000 Genomes
-data](reference_1000Genomes.html)). This package accepts PLINK 1 binary
-files (.bed, .bim, .fam) as an input. We can use `read_reference_bed` to
-read them into R.
+available data, such as the 1000 Genomes. This package accepts PLINK 1
+binary files (.bed, .bim, .fam) as an input. We can use
+`read_reference_bed` to read them into R.
 
 ``` r
 # Path to .bed file
