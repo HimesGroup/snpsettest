@@ -30,7 +30,7 @@ instead of genomic position and allele codes. Default is \code{TRUE}.}
 the function 1) removes ambiguous A/T and G/C SNPs for which the strand is
 not obvious, and 2) attempts to find additional matching entries by
 flipping allele codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype
-data ifself is used as the reference data, it would be safe to set
+data itself is used as the reference data, it would be safe to set
 \code{FALSE}. Default is \code{FALSE}.}
 }
 \value{

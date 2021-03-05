@@ -12,8 +12,7 @@ read_reference_bed(path, ...)
 \item{...}{Further arguments used in \link[gaston:read.bed.matrix]{gaston::read.bed.matrix}}
 }
 \value{
-A \link[gaston:bed.matrix-class]{gaston::bed.matrix} object with a standardized genotype
-matrix
+A \link[gaston:bed.matrix-class]{gaston::bed.matrix} object with a Z-standardized genotype matrix
 }
 \description{
 Create a \code{bed.matrix} object from a .bed file. The function expects

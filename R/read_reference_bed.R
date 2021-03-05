@@ -5,8 +5,7 @@
 ##' for more details.
 ##' @param path A path to the .bed file
 ##' @param ... Further arguments used in [gaston::read.bed.matrix]
-##' @return A [gaston::bed.matrix] object with a standardized genotype
-##'   matrix
+##' @return A [gaston::bed.matrix] object with a Z-standardized genotype matrix
 ##' @examples
 ##' ## Get a path to the example .bed file
 ##' bfile <- system.file("extdata", "example.bed", package = "snpsettest")
