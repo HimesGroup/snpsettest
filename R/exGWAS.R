@@ -6,7 +6,7 @@
 ##' \item{chr}{chromosome.}
 ##' \item{pos}{base-pair position.}
 ##' \item{A1, A2}{allele codes.}
-##' \item{p}{p value.}
+##' \item{pvalue}{p value.}
 ##' }
 ##' @examples
 ##' head(exGWAS)
