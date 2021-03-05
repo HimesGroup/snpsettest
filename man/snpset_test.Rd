@@ -28,7 +28,7 @@ and "top.snp.pvalue"
 \item pvalue = a set-level p value
 \item n.snp = the number of SNPs used in a test
 \item top.snp.id = SNP ID with the smallest p-value within a set of SNPs
-\item top.snp.pvalue = The smallest p-value within a set of SNP
+\item top.snp.pvalue = The smallest p-value within a set of SNPs
 }
 }
 \description{

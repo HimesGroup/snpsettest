@@ -18,7 +18,7 @@
 ##' - pvalue = a set-level p value
 ##' - n.snp = the number of SNPs used in a test
 ##' - top.snp.id = SNP ID with the smallest p-value within a set of SNPs
-##' - top.snp.pvalue = The smallest p-value within a set of SNP
+##' - top.snp.pvalue = The smallest p-value within a set of SNPs
 ##' @references
 ##' Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms
 ##' in Normal Variables. Biometrika 86, 929–935 (1999).
