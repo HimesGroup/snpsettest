@@ -1,3 +1,9 @@
+## CRAN package review response
+
+Fixed the issues pointed out by Gregor Seyer
+* Replaced \dontrun{} with \donttest{}.
+* Added reference URL enclosed in angle brackets.
+
 ## Test environments
 
 * Arch Linux: R 4.0.4

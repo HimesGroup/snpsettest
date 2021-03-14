@@ -13,10 +13,9 @@ The goal of 'snpsettest' is to provide simple tools that perform
              statistical model described in VEGAS (versatile gene-based
              association study), which combines the effects of a set of SNPs
              accounting for linkage disequilibrium between markers. This package
-             uses a more efficient method than the original VEGAS implementation
-             for computing a set-level p-value, significantly reducing
-             computation time (see
-             <[Statistical-test-in-snpsettest]https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>).
+             uses a different approach from the original VEGAS implementation to
+             compute set-level p values more efficiently, as described in
+             <https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>.
 }
 \seealso{
 Useful links:
