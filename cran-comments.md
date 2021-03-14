@@ -1,8 +1,9 @@
 ## CRAN package review response
 
-Fixed the issues pointed out by Gregor Seyer
-* Replaced \dontrun{} with \donttest{}.
+Fixed the issues pointed out by Gregor Seyer.
+
 * Added reference URL enclosed in angle brackets.
+* Replaced \dontrun{} with \donttest{}.
 
 ## Test environments
 

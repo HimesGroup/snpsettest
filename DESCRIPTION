@@ -9,7 +9,7 @@ Authors@R: c(
     person(given = "Blanca",
            family = "Himes",
            role = c("aut"),
-           email = "bhimes@pennmeidicine.upenn.edu"))
+           email = "bhimes@pennmedicine.upenn.edu"))
 Description: The goal of 'snpsettest' is to provide simple tools that perform
              set-based association tests (e.g., gene-based association tests)
              using GWAS (genome-wide association study) summary statistics. A
