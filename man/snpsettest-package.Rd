@@ -15,7 +15,8 @@ The goal of 'snpsettest' is to provide simple tools that perform
              accounting for linkage disequilibrium between markers. This package
              uses a more efficient method than the original VEGAS implementation
              for computing a set-level p-value, significantly reducing
-             computation time.
+             computation time (see
+             <[Statistical-test-in-snpsettest]https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>).
 }
 \seealso{
 Useful links:
@@ -27,6 +28,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Jaehyun Joo \email{jaehyunjoo@outlook.com}
+
+Authors:
+\itemize{
+  \item Blanca Himes \email{bhimes@pennmeidicine.upenn.edu}
+}
 
 }
 \keyword{internal}

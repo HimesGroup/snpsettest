@@ -9,24 +9,29 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-A set-based association test in the **snpsettest** package uses the sum of
-squared normally distributed variables as a test statistic that are transformed
-via SNP-level p-values. The same test has been used in VEGAS (**ve**rsatile
-**g**ene-based **a**ssociation **s**tudy) [1]. While the VEGAS software used a
-simulation-based approach to compute a set-level p-value, it can be calculated
-more efficiently.
-
-Letting a set of $Z$ scores of individual SNPs $z_i$ for $i \in 1:p$ within a
-set $s$, the test statistic $Q_s$ is
+For set-based association tests, the **snpsettest** package employed the
+statistical model described in VEGAS (**ve**rsatile **g**ene-based
+**a**ssociation **s**tudy) [1], which takes as input variant-level p values and
+reference likage disequilibrium (LD) data. Briefly, the test statistics is
+defined as the sum of squared variant-level Z-statistics. Letting a set of $Z$
+scores of individual SNPs $z_i$ for $i \in 1:p$ within a set $s$, the test
+statistic $Q_s$ is
 
 $$Q_s = \sum_{i=1}^p z_i^2$$
 
 Here, $Z = \{z_1,...,z_p\}'$ is a vector of multivariate normal distribution
 with a mean vector $\mu$ and a covariance matrix $\Sigma$ in which $\Sigma$
-represents linkage disequilibrium (LD) among SNPs. To test a set-level
-association, we are interested in the null distribution of $Q_s$.
+represents LD among SNPs. To test a set-level association, we need to evaluate
+the distribution of $Q_s$. VEGAS uses Monte Carlo simulations to approximate the
+distribution of $Q_s$ (directly simulate $Z$ from multivariate normal
+distribution), and thus, compute a set-level p value. However, its use is
+hampered in practice when set-based p values are very small because the number
+of simulations required to obtain such p values is be very large. The
+**snpsettest** package utilizes a different approach to evaluate the
+distribution of $Q_s$ more efficiently.
 
-Let $Y = \Sigma^{-\frac12}Z$ (instead of $\Sigma^{-\frac12}$, we could use any
+Let $Y
+= \Sigma^{-\frac12}Z$ (instead of $\Sigma^{-\frac12}$, we could use any
 decomposition that satisfies $\Sigma = AA'$ with a $p \times p$ non-singular
 matrix $A$ such that $Y = A^{-1}Z$). Then,
 
@@ -73,30 +78,34 @@ $$
 \end{aligned}
 $$
 
-Under the null hypothesis, $\mu$ is typically assumed to be $\mathbf{0}$. Hence,
+Under the null hypothesis, $\mu$ is assumed to be $\mathbf{0}$. Hence,
 
 $$Q_s = X'\Lambda X = \sum_{i=1}^p \lambda_i x_i^2$$
 
 where $X = \{x_1,...,x_p\}'$. Thus, the null distribution of $Q_s$ is a linear
 combination of independent chi-square variables $x_i^2 \sim \chi_{(1)}^2$ (i.e.,
-central quadratic form of normal variables). For computing a probability with a
-scalar $q$,
+central quadratic form in independent normal variables). For computing a
+probability with a scalar $q$,
 
 $$Pr(Q_s > q)$$
 
-several methods have been proposed, such as Davies method [2] and Kuonen's
-saddlepoint approximations [3]. Compared to a simulation-based approach, these
-methods are more computationally efficient, and thus, used in the **snpsettest**
-package.
+several methods have been proposed, such as numerical inversion of the
+characteristic function [2]. The **snpsettest** package uses the algorithm of
+Davies [3] or saddlepoint approximation [4] to obtain set-based p values.
+
 
 **References**
 
-1. Liu, J. Z. et al. A Versatile Gene-Based Test for Genome-wide Association
-Studies. Am J Hum Genet 87, 139–145 (2010).
+1. Liu JZ, Mcrae AF, Nyholt DR, Medland SE, Wray NR, Brown KM, et al. A
+Versatile Gene-Based Test for Genome-wide Association Studies. Am J Hum Genet.
+2010 Jul 9;87(1):139–45.
 
-2. Davies, R. B. Algorithm AS 155: The Distribution of a Linear Combination of χ2
-Random Variables. Journal of the Royal Statistical Society. Series C (Applied
-Statistics) 29, 323–333 (1980).
+2. Duchesne P, De Micheaux P. Computing the distribution of quadratic forms:
+Further comparisons between the Liu-Tang-Zhang approximation and exact methods.
+Comput Stat Data Anal. 2010;54:858–62.
 
-3. Kuonen, D. Saddlepoint Approximations for Distributions of Quadratic Forms in
-Normal Variables. Biometrika 86, 929–935 (1999).
+3. Davies RB. Algorithm AS 155: The Distribution of a Linear Combination of
+Chi-square Random Variables. J R Stat Soc Ser C Appl Stat. 1980;29(3):323–33.
+
+4. Kuonen D. Saddlepoint Approximations for Distributions of Quadratic Forms in
+Normal Variables. Biometrika. 1999;86(4):929–35.

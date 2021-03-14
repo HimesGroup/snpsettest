@@ -57,9 +57,7 @@ head(gene.curated.GRCh37)
 snp_sets <- map_snp_to_gene(hsumstats, gene.curated.GRCh37)
 
 ## Perform gene-based association tests
-\dontrun{
-out <- snpset_test(hsumstats, x, snp_sets$sets)
-}
+\donttest{out <- snpset_test(hsumstats, x, snp_sets$sets)}
 
 }
 \references{

@@ -1,11 +1,15 @@
 Package: snpsettest
 Title: A Set-Based Association Test using GWAS Summary Statistics
 Version: 0.1.0
-Authors@R: 
+Authors@R: c(
     person(given = "Jaehyun",
            family = "Joo",
            role = c("aut", "cre"),
-           email = "jaehyunjoo@outlook.com")
+           email = "jaehyunjoo@outlook.com"),
+    person(given = "Blanca",
+           family = "Himes",
+           role = c("aut"),
+           email = "bhimes@pennmeidicine.upenn.edu"))
 Description: The goal of 'snpsettest' is to provide simple tools that perform
              set-based association tests (e.g., gene-based association tests)
              using GWAS (genome-wide association study) summary statistics. A
@@ -15,7 +19,8 @@ Description: The goal of 'snpsettest' is to provide simple tools that perform
              accounting for linkage disequilibrium between markers. This package
              uses a more efficient method than the original VEGAS implementation
              for computing a set-level p-value, significantly reducing
-             computation time.
+             computation time (see
+             <[Statistical-test-in-snpsettest]https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>).
 License: GPL (>= 3)
 Depends: 
     R (>= 3.1.0)
