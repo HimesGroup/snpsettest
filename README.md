@@ -27,5 +27,6 @@ To install this package,
 install.packages("snpsettest")
 ```
 
-Here is Wiki for tutorial:
-\[<https://github.com/HimesGroup/snpsettest/wiki>\].
+Here is a [wiki
+page](https://github.com/HimesGroup/snpsettest/wiki/Getting-started) for
+tutorial.
