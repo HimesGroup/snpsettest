@@ -4,7 +4,8 @@ utils::globalVariables(
            "gene.id", "gene.start", "gene.end",
            "pvalue", "i.pvalue", "chisq", "i.chisq",
            "A1_S", "A2_S", "A1_F", "A2_F", "A1_SF", "A2_SF",
-           "patterns", "variable", "maf", "callrate")
+           "patterns", "variable", "maf", "callrate",
+           "key_", "swapped_", "flipped_", "tag")
        )
 
 has_columns <- function(df, columns) {

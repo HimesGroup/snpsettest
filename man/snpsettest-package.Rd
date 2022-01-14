@@ -6,16 +6,7 @@
 \alias{snpsettest-package}
 \title{snpsettest: A Set-Based Association Test using GWAS Summary Statistics}
 \description{
-The goal of 'snpsettest' is to provide simple tools that perform
-             set-based association tests (e.g., gene-based association tests)
-             using GWAS (genome-wide association study) summary statistics. A
-             set-based association test in this package is based on the
-             statistical model described in VEGAS (versatile gene-based
-             association study), which combines the effects of a set of SNPs
-             accounting for linkage disequilibrium between markers. This package
-             uses a different approach from the original VEGAS implementation to
-             compute set-level p values more efficiently, as described in
-             <https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>.
+The goal of 'snpsettest' is to provide simple tools that perform set-based association tests (e.g., gene-based association tests) using GWAS (genome-wide association study) summary statistics. A set-based association test in this package is based on the statistical model described in VEGAS (versatile gene-based association study), which combines the effects of a set of SNPs accounting for linkage disequilibrium between markers. This package uses a different approach from the original VEGAS implementation to compute set-level p values more efficiently, as described in <https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>.
 }
 \seealso{
 Useful links:
@@ -30,7 +21,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Blanca Himes \email{bhimes@pennmeidicine.upenn.edu}
+  \item Blanca Himes \email{bhimes@pennmedicine.upenn.edu}
 }
 
 }

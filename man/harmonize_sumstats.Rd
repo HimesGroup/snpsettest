@@ -4,7 +4,13 @@
 \alias{harmonize_sumstats}
 \title{Harmonizing GWAS summary to reference data}
 \usage{
-harmonize_sumstats(sumstats, x, match_by_id = TRUE, check_strand_flip = FALSE)
+harmonize_sumstats(
+  sumstats,
+  x,
+  match_by_id = TRUE,
+  check_strand_flip = FALSE,
+  return_indice = FALSE
+)
 }
 \arguments{
 \item{sumstats}{A data frame with two columns: "id" and "pvalue".
@@ -32,10 +38,22 @@ not obvious, and 2) attempts to find additional matching entries by
 flipping allele codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype
 data itself is used as the reference data, it would be safe to set
 \code{FALSE}. Default is \code{FALSE}.}
+
+\item{return_indice}{Only applied when \code{match_by_id = FALSE}. If \code{TRUE}, the
+function provides an additional column indicating whether the match is
+with swapped alleles. If \code{check_strand_flip = TRUE}, the function also
+provides an additional column indicating whether the match is with flipped
+strand. Unnecessary for gene-based tests in this package, but may be
+useful for other purposes (e.g., harmonization for meta-analysis that
+needs to flip the sign of beta).}
 }
 \value{
 A data frame with columns: "id", "chr", "pos", "A1", "A2" and
-"pvalue".
+"pvalue". If \code{return_indice = TRUE}, the data frame includes additional
+columns \code{key_}, \code{swapped_}, and \code{flipped_}. \code{key_} is "chr_pos_A1_A2" in
+\code{sumstat} (the original input before harmonization). \code{swapped_} contains a
+logical vector indicating reference allele swap. \code{flipped_} contains a
+logical vector indicating strand flip.
 }
 \description{
 Finds an intersection of variants between GWAS summary and reference data.

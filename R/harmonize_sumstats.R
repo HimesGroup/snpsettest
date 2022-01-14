@@ -29,8 +29,20 @@
 ##'   flipping allele codes (i.e., A->T, T->A, C->G, G->A). If the GWAS genotype
 ##'   data itself is used as the reference data, it would be safe to set
 ##'   `FALSE`. Default is `FALSE`.
+##' @param return_indice Only applied when `match_by_id = FALSE`. If `TRUE`, the
+##'   function provides an additional column indicating whether the match is
+##'   with swapped alleles. If `check_strand_flip = TRUE`, the function also
+##'   provides an additional column indicating whether the match is with flipped
+##'   strand. Unnecessary for gene-based tests in this package, but may be
+##'   useful for other purposes (e.g., harmonization for meta-analysis that
+##'   needs to flip the sign of beta).
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
-##'   "pvalue".
+##'   "pvalue". If `return_indice = TRUE`, the data frame includes additional
+##'   columns `key_`, `swapped_`, and `flipped_`. `key_` is "chr_pos_A1_A2" in
+##'   `sumstat` (the original input before harmonization). `swapped_` contains a
+##'   logical vector indicating reference allele swap. `flipped_` contains a
+##'   logical vector indicating strand flip.
+##' 
 ##' @examples
 ##' ## GWAS summary statistics
 ##' head(exGWAS)
@@ -53,7 +65,8 @@
 ##' @export
 harmonize_sumstats <- function(sumstats, x,
                                match_by_id = TRUE,
-                               check_strand_flip = FALSE
+                               check_strand_flip = FALSE,
+                               return_indice = FALSE
                                ) {
 
   ## Save the names of data input for error message
@@ -158,14 +171,20 @@ harmonize_sumstats <- function(sumstats, x,
     }
 
     ## Matching taking into account ref allele swaps (optionally strand flip)
-    sumstats <- snp_match(sumstats, x@snps[ref_keep_ind, ], check_strand_flip)
+    sumstats <- snp_match(sumstats, x@snps[ref_keep_ind, ], check_strand_flip,
+                          return_indice)
   }
 
-  ## Sort output
-  setorder(sumstats, chr, pos)
-
   ## Return
-  sumstats[, .(id, chr, pos, A1, A2, pvalue)]
+  if (!return_indice) {
+    sumstats[, .(id, chr, pos, A1, A2, pvalue)]
+  } else {
+    if (!check_strand_flip) {
+      sumstats[, .(id, chr, pos, A1, A2, pvalue, key_, swapped_)]
+    } else {
+      sumstats[, .(id, chr, pos, A1, A2, pvalue, key_, swapped_, flipped_)]
+    }
+  }
 
 }
 

@@ -1,10 +1,11 @@
 ##' Match alleles
 ##'
 ##' Match alleles between summary statistics and SNP information. This function
-##' is a modified version of [bigsnpr::snp_match()], which removed unnecessary
+##' is a modified version of `bigsnpr::snp_match()`, which removed unnecessary
 ##' requirements for this package and improved speed with [data.table] syntax.
 ##' @noRd
-snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
+snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE,
+                      return_indice = FALSE) {
 
   ## comment out assertions since this function is used only internally
   ## is_df(sumstats)
@@ -36,14 +37,39 @@ snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
                      A2_SF = flip_strand(A2_S))]
   }
 
-  sumstats <-  melt(sumstats, measure = patterns("^A1", "^A2"),
-                    value.name = c("A1", "A2"))
+  if (!return_indice) {
+    sumstats <-  melt(sumstats, measure = patterns("^A1", "^A2"),
+                      value.name = c("A1", "A2"))
+
+
+    ## Drop unnecessary variable from data.table::melt
+    ## sumstats[, variable := NULL]
+  } else {
+    if (!requireNamespace("tidyr", quietly = TRUE)) {
+      stop("Package 'tidyr' is required. Please install and try again.")
+    }
+    sumstats[, key_ := paste(chr, pos, A1, A2, sep = "_")]
+    setnames(sumstats, old = c("A1", "A2"), new = c("A1_O", "A2_O"))
+    cols <- c("A1_O", "A2_O", "A1_S", "A2_S")
+    if (check_strand_flip) {
+      cols <- c(cols, c("A1_F", "A2_F", "A1_SF", "A2_SF"))
+    }
+    sumstats <- tidyr::pivot_longer(sumstats, cols = cols,
+                                    names_to = c(".value", "tag"),
+                                    names_pattern = "(.*)_(.*)")
+
+    setDT(sumstats)
+    if (!check_strand_flip) {
+      sumstats[, swapped_ := ifelse(tag == "S", TRUE, FALSE)]
+    } else {
+      sumstats[, swapped_ := ifelse(tag %in% c("S", "SF"), TRUE, FALSE)]
+      sumstats[, flipped_ := ifelse(tag %in% c("F", "SF"), TRUE, FALSE)]
+    }
+
+  }
 
   ## Inner_join
   sumstats <- info_snp[sumstats, on = .(chr, pos, A1, A2), nomatch = NULL]
-
-  ## Drop unnecessary variable from data.table::melt
-  sumstats[, variable := NULL]
 
   ## Get the duplicate indices by genomic position and allele codes
   ## The sumstats still have some duplicates due to variants with unique IDs
@@ -56,6 +82,7 @@ snp_match <- function(sumstats, info_snp, check_strand_flip = TRUE) {
 
   ## Return with sort
   setorder(sumstats, chr, pos)
+
   sumstats
 
 }
