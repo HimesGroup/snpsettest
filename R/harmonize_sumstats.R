@@ -35,14 +35,14 @@
 ##'   provides an additional column indicating whether the match is with flipped
 ##'   strand. Unnecessary for gene-based tests in this package, but may be
 ##'   useful for other purposes (e.g., harmonization for meta-analysis that
-##'   needs to flip the sign of beta).
+##'   needs to flip the sign of beta for a match with swapped alleles).
 ##' @return A data frame with columns: "id", "chr", "pos", "A1", "A2" and
 ##'   "pvalue". If `return_indice = TRUE`, the data frame includes additional
 ##'   columns `key_`, `swapped_`, and `flipped_`. `key_` is "chr_pos_A1_A2" in
 ##'   `sumstat` (the original input before harmonization). `swapped_` contains a
 ##'   logical vector indicating reference allele swap. `flipped_` contains a
 ##'   logical vector indicating strand flip.
-##' 
+
 ##' @examples
 ##' ## GWAS summary statistics
 ##' head(exGWAS)

@@ -45,7 +45,7 @@ with swapped alleles. If \code{check_strand_flip = TRUE}, the function also
 provides an additional column indicating whether the match is with flipped
 strand. Unnecessary for gene-based tests in this package, but may be
 useful for other purposes (e.g., harmonization for meta-analysis that
-needs to flip the sign of beta).}
+needs to flip the sign of beta for a match with swapped alleles).}
 }
 \value{
 A data frame with columns: "id", "chr", "pos", "A1", "A2" and
