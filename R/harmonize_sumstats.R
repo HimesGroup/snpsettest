@@ -42,8 +42,9 @@
 ##'   `sumstat` (the original input before harmonization). `swapped_` contains a
 ##'   logical vector indicating reference allele swap. `flipped_` contains a
 ##'   logical vector indicating strand flip.
-
+##'
 ##' @examples
+##' \dontshow{data.table::setDTthreads(1)}
 ##' ## GWAS summary statistics
 ##' head(exGWAS)
 ##'

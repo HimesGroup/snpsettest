@@ -37,6 +37,7 @@ phenotype using GWAS summary statistics. If the function encounters missing
 genotypes in the reference data, they will be imputed with genotype means.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
 ## GWAS summary statistics
 head(exGWAS)
 

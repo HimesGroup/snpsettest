@@ -27,6 +27,7 @@
 ##' - sets: a named list where each index represents a separate set of SNPs
 ##' - map: a data frame containing SNP mapping information
 ##' @examples
+##' \dontshow{data.table::setDTthreads(1)}
 ##' ## GWAS summary statistics
 ##' head(exGWAS)
 ##'

@@ -17,6 +17,7 @@ read_reference_bed <- function(path, ...) {
 
   ## To always get basic stats for bed file
   op <- options(gaston.auto.set.stats = TRUE)
+  on.exit(options(op))
 
   path <- path.expand(path)
   if (!file.exists(path)) {
@@ -33,9 +34,6 @@ read_reference_bed <- function(path, ...) {
   ## If missing values exist in genotypes, we can impute them by;
   ## replacing NA with 0 -> imputing missing genotypes by the mean dosage
   gaston::standardize(x) <- "mu_sigma"
-
-  ## Reset options
-  options(op)
 
   ## Return bed.matrix
   message("Created a bed.matrix with ",

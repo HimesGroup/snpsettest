@@ -27,6 +27,7 @@
 ##' Chi-Square Random Variables. Journal of the Royal Statistical Society.
 ##' Series C (Applied Statistics) 29, 323–333 (1980).
 ##' @examples
+##' \dontshow{data.table::setDTthreads(1)}
 ##' ## GWAS summary statistics
 ##' head(exGWAS)
 ##'

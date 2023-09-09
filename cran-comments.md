@@ -1,10 +1,9 @@
 ## Test environments
 
-* Ubuntu 20.04 LTS: R 4.1.2
-* GitHub Actions (Ubuntu-20.04): release
-* GitHub Actions (Windows-lastest): release
-* GitHub Actions (macOS-lastest): release
-* Win-builder: release, devel
+* Ubuntu 22.04 LTS: R 4.3.1
+* GitHub Actions (Ubuntu-latest): release, devel
+* GitHub Actions (Windows-lastest): release, devel
+* GitHub Actions (mac-lastest): release
 
 ## R CMD check results
 

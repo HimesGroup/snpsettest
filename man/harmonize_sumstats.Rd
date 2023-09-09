@@ -68,6 +68,7 @@ entries, the SNP IDs in GWAS summary data are replaced with the ones in the
 reference data.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
 ## GWAS summary statistics
 head(exGWAS)
 

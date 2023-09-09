@@ -54,6 +54,7 @@ Annotate SNPs onto their neighboring genes (or arbitrary genomic regions) to
 perform set-based association tests.
 }
 \examples{
+\dontshow{data.table::setDTthreads(1)}
 ## GWAS summary statistics
 head(exGWAS)
 
