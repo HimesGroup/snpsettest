@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/HimesGroup/snpsettest/workflows/R-CMD-check/badge.svg)](https://github.com/HimesGroup/snpsettest/actions)
+[![R-CMD-check](https://github.com/HimesGroup/snpsettest/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/HimesGroup/snpsettest/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of ‘snpsettest’ is to provide simple tools that perform

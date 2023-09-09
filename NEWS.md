@@ -1,3 +1,7 @@
+# snpsettest 0.1.2
+
+* Dropped C++11 specification
+
 # snpsettest 0.1.1
 
 * Added the **return_indice** argument for the `harmonize_sumstats` function,

@@ -12,7 +12,7 @@ vignette: >
 For set-based association tests, the **snpsettest** package employed the
 statistical model described in VEGAS (**ve**rsatile **g**ene-based
 **a**ssociation **s**tudy) [1], which takes as input variant-level p values and
-reference likage disequilibrium (LD) data. Briefly, the test statistics is
+reference linkage disequilibrium (LD) data. Briefly, the test statistics is
 defined as the sum of squared variant-level Z-statistics. Letting a set of $Z$
 scores of individual SNPs $z_i$ for $i \in 1:p$ within a set $s$, the test
 statistic $Q_s$ is

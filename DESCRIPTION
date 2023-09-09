@@ -1,6 +1,6 @@
 Package: snpsettest
 Title: A Set-Based Association Test using GWAS Summary Statistics
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(
     person(given = "Jaehyun",
            family = "Joo",
@@ -21,9 +21,9 @@ Description: The goal of 'snpsettest' is to provide simple tools that perform
              compute set-level p values more efficiently, as described in
              <https://github.com/HimesGroup/snpsettest/wiki/Statistical-test-in-snpsettest>.
 License: GPL (>= 3)
-Depends: 
+Depends:
     R (>= 3.1.0)
-Imports: 
+Imports:
     gaston,
     data.table,
     Rcpp
@@ -32,12 +32,12 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-LinkingTo: 
+LinkingTo:
     Rcpp,
     RcppArmadillo
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 URL: https://github.com/HimesGroup/snpsettest
 BugReports: https://github.com/HimesGroup/snpsettest/issues
